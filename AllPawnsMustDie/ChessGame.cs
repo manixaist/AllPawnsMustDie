@@ -137,6 +137,11 @@ namespace AllPawnsMustDie
 
             // Tell the engine we want the responses from the commands processed
             chessEngine.Engine.OnChessEngineResponseReceived += ChessEngineResponseReceivedEventHandler;
+
+            chessEngine.Engine.SendCommand("isready", "readyok");
+            chessEngine.Engine.SendCommand("uci", "uciok");
+            chessEngine.Engine.SendCommand("setoption name Skill Level value 0", "");
+            chessEngine.Engine.SendCommand("ucinewgame", "");
         }
 
         ~ChessGame()

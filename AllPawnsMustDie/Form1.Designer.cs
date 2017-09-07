@@ -144,7 +144,7 @@
             // 
             this.showFENToolStripMenuItem.Enabled = false;
             this.showFENToolStripMenuItem.Name = "showFENToolStripMenuItem";
-            this.showFENToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.showFENToolStripMenuItem.Size = new System.Drawing.Size(127, 22);
             this.showFENToolStripMenuItem.Text = "Show &FEN";
             // 
             // APMD_Form
@@ -156,6 +156,7 @@
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
             this.Name = "APMD_Form";
             this.Text = "All Pawns Must Die";
+            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.APMD_Form_FormClosing);
             this.Load += new System.EventHandler(this.APMD_Form_Load);
             this.Paint += new System.Windows.Forms.PaintEventHandler(this.APMD_Form_Paint);
             this.MouseUp += new System.Windows.Forms.MouseEventHandler(this.APMD_Form_MouseUp);

@@ -155,5 +155,10 @@ namespace AllPawnsMustDie
 
         private string fullPathToChessExe;
         private ChessGame chessGame;
+
+        private void APMD_Form_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            chessGame?.Quit();
+        }
     }
 }
