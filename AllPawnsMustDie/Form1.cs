@@ -18,11 +18,14 @@ namespace AllPawnsMustDie
     /// </summary>
     public partial class APMD_Form : Form
     {
+        #region Public Methods
         public APMD_Form()
         {
             InitializeComponent();
         }
-        
+        #endregion
+
+        #region Private Methods
         /// <summary>
         /// Form needs painting.  This routes to the ChessGame class
         /// </summary>
@@ -31,23 +34,6 @@ namespace AllPawnsMustDie
         private void APMD_Form_Paint(object sender, PaintEventArgs e)
         {
             chessGame?.Render(e.Graphics);
-        }
-
-        /// <summary>
-        /// Set the form client size if we know it.  Otherwise we must wait until
-        /// we load an engine
-        /// </summary>
-        /// <param name="sender">Ignored</param>
-        /// <param name="e">Ignored</param>
-        private void APMD_Form_Load(object sender, EventArgs e)
-        {
-            // Set the size of the client area - we won't have this class yet
-            // since there is no caching of the last used engine so this cannot
-            // be created (since we don't have the path to the engine)
-            if (chessGame != null)
-            {
-                ClientSize = ChessGame.RequestedSize;
-            }
         }
 
         /// <summary>
@@ -72,17 +58,7 @@ namespace AllPawnsMustDie
         /// <param name="e">Ignored</param>
         private void newGameToolStripNewGame_Click(object sender, EventArgs e)
         {
-            // If we have a game instance, then start a new game
-            // It's possible we don't have this yet if an engine is not loaded.
-            if (chessGame != null)
-            {
-                chessGame.NewGame(PieceColor.White);
-            }
-            else
-            {
-                MessageBox.Show(this, "No Engine is loaded yet...", "Error",
-                    MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
+            NewGame();
         }
 
         /// <summary>
@@ -93,45 +69,43 @@ namespace AllPawnsMustDie
         /// <param name="e">Ignored</param>
         private void newPositionToolStripNewPosition_Click(object sender, EventArgs e)
         {
-            if (chessGame != null)
+            // Opens a dialog to read the FEN string and then passes it to engine
+            FenInputDialog fenDialog = new FenInputDialog();
+            DialogResult result = fenDialog.ShowDialog(); // Modal
+
+            if (result == DialogResult.OK)
             {
-                // Opens a dialog to read the FEN string and then passes it to engine
-                FenInputDialog fenDialog = new FenInputDialog();
-                DialogResult result = fenDialog.ShowDialog(); // Modal
+                string fenInput = fenDialog.FEN;
+                // TODO - validate the FEN input - sounds like a job for another class...
+                // Calculate the active player
+                // Extract other relevant info (castling rights, move counts, etc)
 
-                if (result == DialogResult.OK)
-                {
-                    string fenInput = fenDialog.FEN;
-
-                    // TODO - validate the FEN input - sounds like a job for another class...
-                    // Calculate the active player
-                    // Extract other relevant info (castling rights, move counts, etc)
-
-                    // Really the FEN does not indicate anything for the 'human'
-                    // player, but for now we will consider the 'player to move'
-                    // in the FEN as the player
-
-                    //chessGame.NewPosition(extractedPlayerColor, fenInput);
-                }
-            }
-            else
-            {
-                MessageBox.Show(this, "No Engine is loaded yet...", "Error", 
-                    MessageBoxButtons.OK, MessageBoxIcon.Error);
+                // Really the FEN does not indicate anything for the 'human'
+                // player, but for now we will consider the 'player to move'
+                // in the FEN as the player
             }
         }
 
+        /// <summary>
+        /// Menu handler for File->Exit
+        /// </summary>
+        /// <param name="sender">Ignored</param>
+        /// <param name="e">Ignored</param>
         private void exitToolStripExit_Click(object sender, EventArgs e)
         {
-            chessGame?.Quit();
-            Close(); // Form
+            if (chessGame != null)
+            {
+                chessGame.OnChessGameSelfPlayGameOver -= ChessGameSelfPlayGameOverEventHandler;
+            }
+            chessGame?.Quit();  // Quit the game
+            Close();            // Close the form
         }
 
         /// <summary>
         /// Menu handler for "File->Load Engine..."
         /// </summary>
-        /// <param name="sender">Control sending command, ignored in code</param>
-        /// <param name="e">Event sent, also ignored, it was a click</param>
+        /// <param name="sender">Ignored</param>
+        /// <param name="e">Ignored</param>
         private void loadEngineToolStripLoadEngine_Click(object sender, EventArgs e)
         {
             OpenFileDialog openFileDialog = new OpenFileDialog();
@@ -142,23 +116,100 @@ namespace AllPawnsMustDie
             {
                 fullPathToChessExe = openFileDialog.FileName;
 
-                // Now we have the engine, so create an instance of the game class
-                chessGame = new ChessGame(this, fullPathToChessExe);
-
                 // Resize the form if needed
                 ClientSize = ChessGame.RequestedSize;
 
-                // Forces a redraw
+                // Trigger Paint event
                 Invalidate();
             }
         }
 
-        private string fullPathToChessExe;
-        private ChessGame chessGame;
+        /// <summary>
+        /// Menu handler for File->Self Play
+        /// </summary>
+        /// <param name="sender">Ignored</param>
+        /// <param name="e">Ignored</param>
+        private void selfPlayToolStripSelfPlay_Click(object sender, EventArgs e)
+        {
+            NewGame();
+            chessGame?.StartEngineSelfPlay();
+        }
 
+        /// <summary>
+        /// Event handler fired when a self play game has finished
+        /// </summary>
+        /// <param name="sender">Ignored/passed through</param>
+        /// <param name="e">Ignored/passed through</param>
+        private void ChessGameSelfPlayGameOverEventHandler(object sender, EventArgs e)
+        {
+            // Start a new game - for now just forward it to the menu handler.
+            // Really we could subcribe there directly, but this will allow more
+            // to happen on this path later
+            if (InvokeRequired)
+            {
+                Invoke((MethodInvoker)delegate
+                {
+                    // Running on the UI thread now, so this is safe
+                    selfPlayToolStripSelfPlay_Click(sender, e);
+                });
+            }
+        }
+
+        /// <summary>
+        /// Starts a new game if an engine is loaded
+        /// </summary>
+        private void NewGame()
+        {
+            if (fullPathToChessExe != null)
+            {
+                // Old game is dead to us
+                if (chessGame != null)
+                {
+                    chessGame.OnChessGameSelfPlayGameOver -= ChessGameSelfPlayGameOverEventHandler;
+                }
+                chessGame?.Dispose();
+
+                // Now we have the engine path, so create an instance of the game class
+                chessGame = new ChessGame(this, fullPathToChessExe);
+                chessGame.OnChessGameSelfPlayGameOver += ChessGameSelfPlayGameOverEventHandler;
+                chessGame.NewGame(PieceColor.White);
+
+                // Trigger Paint event (draws the initial board)
+                Invalidate();
+            }
+            else
+            {
+                // No engine loaded, so no new game can be created.  Inform the user
+                MessageBox.Show(this, APMD_ErrorNoEngineLoaded, APMD_ErrorTitle,
+                    MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        /// <summary>
+        /// Called when the form is closing.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void APMD_Form_FormClosing(object sender, FormClosingEventArgs e)
         {
-            chessGame?.Quit();
+            if (chessGame != null)
+            {
+                chessGame.OnChessGameSelfPlayGameOver -= ChessGameSelfPlayGameOverEventHandler;
+            }
+            chessGame?.Quit(); // Quit any current game
         }
+        #endregion
+
+        #region Public Fields
+        public static string VerboseOutputControlName = "labelVerbose";
+        #endregion
+
+        #region Private Fields
+        private static string APMD_ErrorNoEngineLoaded = "No Engine is loaded yet...";
+        private static string APMD_ErrorTitle = "Error";
+        private string fullPathToChessExe;
+        private ChessGame chessGame;
+        #endregion
+
     }
 }

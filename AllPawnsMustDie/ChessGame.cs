@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Threading;
+using System.Diagnostics;
 using System.Drawing;
 using System.Collections.Generic;
 using System.Linq;
@@ -8,6 +10,7 @@ using System.Windows.Forms;
 
 namespace AllPawnsMustDie
 {
+    #region Public Enums
     /// <summary>
     /// Chess piece color, only two options, pretty well known....
     /// </summary>
@@ -27,8 +30,10 @@ namespace AllPawnsMustDie
     /// The Chess Board is split into two sides, King and Queen (left or right)
     /// depending on which color you are.
     /// </summary>
-    [Flags] public enum BoardSide { King, Queen };
+    [Flags] public enum BoardSide { None = 0, King = 1, Queen = 2 };
+    #endregion
 
+    #region Public Structs
     /// <summary>
     /// Encapsulates a file on the Chess Board.  files are [a-h] and are basically
     /// "columns" on the board.
@@ -50,13 +55,63 @@ namespace AllPawnsMustDie
             pieceFile = f;
         }
 
+        /// <summary>
+        /// Initialize the file.  If the int is not in [1-8], ArgumentOutOfRangeException
+        /// </summary>
+        /// <param name="file">int version of the file [1-8]</param>
         public PieceFile(int file)
         {
             if (file < 1 || file > 8)
             {
                 throw new ArgumentOutOfRangeException();
             }
-            pieceFile = Convert.ToChar(Convert.ToInt16('a') - file);
+            pieceFile = Convert.ToChar(Convert.ToInt16('a') + file - 1);
+        }
+
+        /// <summary>
+        /// Override for equality tests
+        /// </summary>
+        /// <param name="obj">object testing</param>
+        /// <returns>true if obj is the same as this instance</returns>
+        public override bool Equals(System.Object obj)
+        {
+            return (obj is PieceFile) && (this == (PieceFile)obj);
+        }
+
+        /// <summary>
+        /// Override for equality tests
+        /// </summary>
+        /// <returns>hashcode for the object</returns>
+        public override int GetHashCode()
+        {
+            return pieceFile.GetHashCode();
+        }
+
+        /// <summary>
+        /// Override for equality tests
+        /// </summary>
+        /// <param name="p1">object1</param>
+        /// <param name="p2">object2</param>
+        /// <returns>true if the value of object1 and object2 are the same</returns>
+        public static bool operator ==(PieceFile p1, PieceFile p2)
+        {
+            // If both are null, or both are same instance, return true.
+            if (System.Object.ReferenceEquals(p1, p2))
+            {
+                return true;
+            }
+            return p1.File == p2.File;
+        }
+
+        /// <summary>
+        /// Override for equality tests
+        /// </summary>
+        /// <param name="p1">Object1</param>
+        /// <param name="p2">Onject2</param>
+        /// <returns>True if the values of Object1 and Object2 are NOT the same</returns>
+        public static bool operator !=(PieceFile p1, PieceFile p2)
+        {
+            return !(p1 == p2);
         }
 
         /// <summary>
@@ -67,21 +122,30 @@ namespace AllPawnsMustDie
         /// <returns>An integer between 1 and 8 inclusive.</returns>
         public int ToInt()
         {
-            return Convert.ToInt16('a') - Convert.ToInt16(pieceFile);
+            return Convert.ToInt16(pieceFile) - Convert.ToInt16('a');
         }
 
         /// <summary>
-        /// The stored file (verified as valid)
+        /// Override to return the string version of the file e.g. "a", "b"..."h"
         /// </summary>
-        private char pieceFile;
+        /// <returns></returns>
+        public override string ToString()
+        {
+            return Convert.ToString(pieceFile);
+        }
 
         /// <summary>
         /// Returns the stored file.  It must have been valid on creation, so this
         /// is ensured to return a char [a-h] and it will always be lowercase
         /// </summary>
         public char File { get { return pieceFile; } }
-    }
 
+        /// <summary>
+        /// The stored file (verified as valid)
+        /// </summary>
+        private char pieceFile;
+    }
+    #endregion
 
     /// <summary>
     /// ChessGame encapsulates a game "session".  It can either start from scratch
@@ -95,21 +159,15 @@ namespace AllPawnsMustDie
     /// </summary>
     public sealed class ChessGame : IDisposable
     {
+        #region Public Events
         /// <summary>
-        /// Callback for the engine.  This only gets invoked for final responses
-        /// and not every output from the engine.
+        /// EventHandler (delegate(s)) that will get the response event
+        /// this is only used internally to the class
         /// </summary>
-        /// <param name="commandResponse">The final response string</param>
-        public delegate void EngineCallback(string commandResponse);
+        public event EventHandler<EventArgs> OnChessGameSelfPlayGameOver;
+        #endregion
 
-        /// <summary>
-        /// The ClientSize that ChessGame would like.  Some extra room for now.
-        /// </summary>
-        public static Size RequestedSize
-        {
-            get { return new Size(720, 720); }
-        }
-
+        #region Public Methods
         /// <summary>
         /// Create a new ChessGame object
         /// </summary>
@@ -121,66 +179,38 @@ namespace AllPawnsMustDie
             form = clientForm;
 
             // Create the board, the view, and the engine
-            board = new ChessBoard();
-            view = new ChessBoardView(form);
-
             chessEngine = new ChessEngineWrapper(fullPathToEngine);
-
-            // Uncomment to test orientation flip (defaults to WhiteOnBottom)
-            //board.Orientation = BoardOrientation.BlackOnBottom;
-
-            // Set the data for the view
-            ((IChessBoardView)view).ViewData = board;
-
-            // Testing the offset code, it could easily draw at (0, 0) for now
-            ((IChessBoardView)view).Offset = new Point(25, 50);
-
-            // Tell the engine we want the responses from the commands processed
+            
+            // Subscribe to events from the engine (commands and verbose)
             chessEngine.Engine.OnChessEngineResponseReceived += ChessEngineResponseReceivedEventHandler;
+            chessEngine.Engine.OnChessEngineVerboseOutputReceived += ChessEngineVerboseOutputReceivedEventHandler;
 
-            chessEngine.Engine.SendCommand("isready", "readyok");
-            chessEngine.Engine.SendCommand("uci", "uciok");
-            chessEngine.Engine.SendCommand("setoption name Skill Level value 0", "");
-            chessEngine.Engine.SendCommand("ucinewgame", "");
+            // Initialize the chess engine with optional parameters
+            chessEngine.Engine.SendCommandAsync("setoption name Skill Level value 15", "");
         }
 
+        /// <summary>
+        /// Finalizer
+        /// </summary>
         ~ChessGame()
         {
             Dispose();
         }
 
+        /// <summary>
+        /// Dispose of disposable objects and unsubscribe from events
+        /// </summary>
         public void Dispose()
         {
-            ((IDisposable)view).Dispose();
-            ((ChessEngineWrapper)chessEngine).Dispose();
-            GC.SuppressFinalize(this);
-        }
-
-        private void ChessEngineResponseReceivedEventHandler(object sender, ChessEngineResponseReceivedEventArgs e)
-        {
-            // Raised on completion of commands
-
-            // Right now this can be "uciready" "readyok" or "bestmove"
-            // many commands give no response, so "isready/readyok" is used
-            // to sync up with the chess engine
-        }
-
-        private PieceColor playerColor;
-        
-        /// <summary>
-        /// Color for the human player
-        /// </summary>
-        public PieceColor PlayerColor
-        {
-            get { return playerColor; } 
-        }
-        
-        /// <summary>
-        /// Color for the active player.
-        /// </summary>
-        public PieceColor ActivePlayer
-        {
-            get { return board.ActivePlayer; } 
+            if (!disposed)
+            {
+                chessEngine.Engine.OnChessEngineResponseReceived -= ChessEngineResponseReceivedEventHandler;
+                chessEngine.Engine.OnChessEngineVerboseOutputReceived -= ChessEngineVerboseOutputReceivedEventHandler;
+                ((IDisposable)view).Dispose();
+                ((ChessEngineWrapper)chessEngine).Dispose();
+                GC.SuppressFinalize(this);
+                disposed = true;
+            }
         }
 
         /// <summary>
@@ -189,12 +219,52 @@ namespace AllPawnsMustDie
         /// <param name="playerColor">Color for the human player</param>
         public void NewGame(PieceColor playerColor)
         {
-            this.playerColor = playerColor;
+            this.playerColor = playerColor; // save the player color
+
+            // Create the board and view
+            board = new ChessBoard();
+            view = new ChessBoardView(form);
+
+            // Initialize the board and view
+            board.NewGame();
+
+            // Set the data for the view
+            ((IChessBoardView)view).ViewData = board;
+
+            // Set the Offset for the view
+            ((IChessBoardView)view).Offset = new Point(25, 50);
+
+            // Create and initialize the board and view
+            ((IChessBoardView)view).ViewData = board;
+
+            // Initialize the engine with a new game
             chessEngine.NewGame();
         }
 
         /// <summary>
-        /// Create a new position
+        /// Start requesting moves from the engine for the board.  This will alternate
+        /// and apply moves for both sides, not just the player color (human)
+        /// </summary>
+        public void StartEngineSelfPlay()
+        {
+            selfPlay = true;
+            UpdateEnginePosition();
+        }
+
+        /// <summary>
+        /// Ask the engine to evaluate the current board for the best move.  This
+        /// is an asynchronous call.  ChessEngineResponseReceivedEventHandler will
+        /// fired when the command is processed
+        /// </summary>
+        public void GetBestMoveAsync()
+        {
+            // TODO - Really this layer should not have this knoweledge, but the only
+            // supported engine type is UCI right now
+            chessEngine.Engine.SendCommandAsync("go movetime 250", UCIChessEngine.BestMoveResponse);
+        }
+
+        /// <summary>
+        /// Create a new position based on a FEN
         /// </summary>
         /// <param name="playerColor">Color for the human player</param>
         /// <param name="fenNotation">FEN string that describes the position 
@@ -214,7 +284,13 @@ namespace AllPawnsMustDie
         /// <param name="y">y coordinate relative to top-left</param>
         public void ProcessClick(int x, int y)
         {
-            // State dependent - but a minumum is converting this to a board cell
+            // Do nothing at all here for now.  The application only supports
+            // the engine playing with itself for now, so clicking is meaningless
+
+            // Later, this is where we would convert this (X,Y) to a square and
+            // then based on the current state, check if this is a valid piece, 
+            // or a legal followup move, or just a click elsewhere
+            // TODO...
         }
 
         /// <summary>
@@ -234,10 +310,196 @@ namespace AllPawnsMustDie
             // Close the engine (external process)
             chessEngine.Quit();
         }
+        #endregion
 
+        #region Private Methods
+        /// <summary>
+        /// EventHandler for the chess engine.  This handler is invoked (after
+        /// subscription) when the engine has finished processing a command
+        /// </summary>
+        /// <param name="sender">Ignored</param>
+        /// <param name="e">Contains the final response string</param>
+        private void ChessEngineResponseReceivedEventHandler(object sender, ChessEngineResponseReceivedEventArgs e)
+        {
+            Debug.WriteLine(String.Concat("Response: ", e.Response));
+
+            // If this is true, it means we're updating our position with the engine
+            // (e.g. syncing up after a move was applied locally to our object)
+            if (updatingPosition)
+            {
+                updatingPosition = false;
+                // Now trigger getting the next move from the engine and exit
+                GetBestMoveAsync();
+            }
+            else if (selfPlay && e.Response.StartsWith("Checkers:"))
+            {
+                // Fire event if there is a listener
+                if (OnChessGameSelfPlayGameOver != null)
+                {
+                    OnChessGameSelfPlayGameOver(this, null);
+                }
+            }
+            // If this is a "bestmove" response, apply it, then ask for the next one
+            // We also need to update the ChessBoard class so the view updates
+            else if (selfPlay && e.Response.StartsWith("bestmove"))
+            {
+                thinkingIndex = 0;  // index counter for simple progress text
+
+                // Get it from the engine
+                string bestMove = chessEngine.BestMove;
+                if ((String.Compare(bestMove, "(none)") == 0) || // Probably mate
+                    (board.HalfMoveCount >= HalfMovesUntilDraw)) // Propably spinning
+                {
+                    if (board.HalfMoveCount >= HalfMovesUntilDraw)
+                    {
+                        Debug.WriteLine("Draw by 50 moves rule...");
+                    }
+
+                    // Debug at the end to compare the board states
+                    chessEngine.Engine.SendCommandAsync("d", "Checkers:");
+                }
+                else
+                {
+                    PieceFile startFile = new PieceFile(bestMove[0]);
+                    int startRank = Convert.ToInt16(bestMove[1]) - Convert.ToInt16('0');
+                    PieceFile destFile = new PieceFile(bestMove[2]);
+                    int destRank = Convert.ToInt16(bestMove[3]) - Convert.ToInt16('0');
+
+                    // When coming from the engine, we get the promotion detection for free
+                    if (bestMove.Length == 5)
+                    {
+                        // Applied on the next move
+                        board.PromotePiece(startFile, startRank, destFile, destRank, ChessBoard.PieceClassFromFen(bestMove[4]));
+                    }
+
+                    // Always returns true now
+                    board.MovePiece(startFile, startRank, destFile, destRank);
+                    board.Moves.Add(bestMove);
+                    form.Invalidate();
+                    
+                    Debug.WriteLine(String.Format("Fullmoves: {0}", board.FullMoveCount));
+                    Debug.WriteLine(String.Format("Halfmoves: {0}", board.HalfMoveCount));
+
+                    // Start getting the next move
+                    UpdateEnginePosition();
+                }
+            }
+        }
+
+        /// <summary>
+        /// EventHandler for the chess engine.This handler is invoked(after
+        /// subscription) when the engine has received any output from the engine
+        /// </summary>
+        /// <param name="sender">Ignored</param>
+        /// <param name="e">string response from the chess engine</param>
+        private void ChessEngineVerboseOutputReceivedEventHandler(object sender, ChessEngineResponseReceivedEventArgs e)
+        {
+            // Removing the thinking lines to declutter the debug outbput
+            if (!e.Response.StartsWith("info"))
+            {
+                Debug.WriteLine(String.Concat("<=Engine: ", e.Response));
+            }
+
+            // Get the control name w're using to output verbose for now (it's a label)
+            Control verboseControl = form.Controls[APMD_Form.VerboseOutputControlName];
+
+            // Build the progress text bar
+            StringBuilder sb = new StringBuilder("Thinking: [");
+            sb.Append('\u25AB', 75);
+            sb.Append(']');
+            // Replace the current spinning index to the marker character
+            sb.Replace('\u25AB', '\u25AA', 11, thinkingIndex);
+            thinking = sb.ToString();
+
+            // Wrap the progress counter index.  It moves between the '[' and ']' chars
+            if (thinkingIndex < 75)
+            {
+                thinkingIndex++;
+            }
+            else
+            {
+                thinkingIndex = 0;
+            }
+
+            // Check if we're on the UI thread, the answer is almostly certainly no
+            if (verboseControl.InvokeRequired)
+            {
+                // Invoke is synchronous - this will block this thread
+                verboseControl.Invoke((MethodInvoker)delegate
+                {
+                    // Running on the UI thread now, so this is safe
+                    verboseControl.Text = thinking;
+                });
+            }
+            else
+            {
+                // If for some reason we are on the UI thread, then we can just update it
+                verboseControl.Text = thinking;
+            }
+        }
+
+        /// <summary>
+        /// Update the position with the chess engine.  Once a move is applied wit the
+        /// board, then engine needs to know, so it can analyze the next move whether
+        /// this came from a player or the engine iteself
+        /// </summary>
+        private void UpdateEnginePosition()
+        {
+            // Get the current moves list from the board
+            // build the command string to find the best move
+            // send the command.  This block of code will be reused in
+            // ChessEngineResponseReceivedEventHandler as well
+            //chessEngine.Engine.SendCommand()
+            string movesList = String.Join(" ", board.Moves.ToArray());
+
+            updatingPosition = true;
+            chessEngine.Engine.SendCommandAsync(String.Concat("position startpos moves ", movesList), "");
+        }
+        #endregion
+
+        #region Public Properties
+        /// <summary>
+        /// The ClientSize that ChessGame would like.  Some extra room for now.
+        /// </summary>
+        public static Size RequestedSize
+        {
+            get
+            {
+                int delta = ChessBoardView.BoardSizeInPixels + 50;
+                return new Size(delta, delta + 50);
+            }
+
+        }
+
+        /// <summary>
+        /// Color for the human player
+        /// </summary>
+        public PieceColor PlayerColor
+        {
+            get { return playerColor; }
+        }
+
+        /// <summary>
+        /// Color for the active player.
+        /// </summary>
+        public PieceColor ActivePlayer
+        {
+            get { return board.ActivePlayer; }
+        }
+        #endregion
+
+        #region Private Fields
+        private bool disposed = false;
+        private bool selfPlay = false;
+        private string thinking = String.Empty;
+        private int thinkingIndex = 0;
+        private bool updatingPosition = false;
+        private PieceColor playerColor;
         private ChessBoard board;
         private ChessBoardView view;
         private ChessEngineWrapper chessEngine;
         private Form form;
+        private static int HalfMovesUntilDraw = 50;
+        #endregion
     }
 }

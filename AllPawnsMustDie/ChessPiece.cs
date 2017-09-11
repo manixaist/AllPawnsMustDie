@@ -12,6 +12,7 @@ namespace AllPawnsMustDie
     /// </summary>
     public class ChessPiece
     {
+        #region Public Methods
         /// <summary>
         /// Create a new ChessPiece
         /// </summary>
@@ -21,64 +22,97 @@ namespace AllPawnsMustDie
         /// <param name="pieceRank">rank location</param>
         public ChessPiece(PieceColor pieceColor, PieceClass pieceClass, PieceFile pieceFile, int pieceRank)
         {
+            if (pieceClass == PieceClass.EnPassantTarget)
+            {
+                throw new ArgumentException();
+            }
+
             // Save the parameters as fields
             color = pieceColor;
             job = pieceClass;
             rank = pieceRank;
             file = pieceFile;
-            deployed = false;   // Initially not moved
+            deployed = false;
+            visible = true;
+            isReadyForPromotion = false;
         }
 
         /// <summary>
-        /// Moves the piece to a new location
+        /// Moves the piece to a new location. Does not validate if move is legal
         /// </summary>
         /// <param name="newFile">new file for the piece</param>
         /// <param name="newRank">new rank for the piece</param>
         public void Move(PieceFile newFile, int newRank)
         {
-            // Does not validate is move is legal
+            // Pieces are marked for promotion prior to the move being applied
+            // if the current piece is so marked, promote it now.
+            if (isReadyForPromotion)
+            {
+                job = promotionClass;
+            }
             rank = newRank;
             file = newFile;
+            deployed = true;
         }
 
         /// <summary>
         /// Promote the piece to a new class
         /// </summary>
-        /// <param name="promotionClass"></param>
-        public void Promote(PieceClass promotionClass)
+        /// <param name="promotionClass">PieceClass after promotion e.g. Queen 
+        /// 99.99999% of the time</param>
+        public void PromoteOnNextMove(PieceClass newLotInLife)
         {
-            job = promotionClass;
+            isReadyForPromotion = true;
+            promotionClass = newLotInLife;
         }
+        #endregion
 
-        private PieceColor color;
+        #region Public Properties
         /// <summary>
         /// Piece color
         /// </summary>
         public PieceColor Color { get { return color; } }
 
-        private PieceClass job;
         /// <summary>
         /// Piece class (King, Queen, etc)
         /// </summary>
         public PieceClass Job { get { return job; } }
 
-        private int rank;
         /// <summary>
         /// Piece Rank [1-8]
         /// </summary>
         public int Rank { get { return rank; } }
 
-        private PieceFile file;
         /// <summary>
         /// Piece file [a-h]
         /// </summary>
         public PieceFile File { get { return file; } }
 
-        private bool deployed;
         /// <summary>
         /// Has the piece ever moved?  Used for pawns and
         /// castling rights
         /// </summary>
         public bool Deployed { get { return deployed; } }
+
+        /// <summary>
+        /// Is the piece visible?  False after being captured
+        /// </summary>
+        public bool Visible
+        {
+            get { return visible; }
+            set { visible = value; }
+        }
+        #endregion
+
+        #region Private Fields
+        private PieceClass promotionClass;
+        private bool isReadyForPromotion;
+        private PieceColor color;
+        private PieceClass job;
+        private int rank;
+        private PieceFile file;
+        private bool deployed;
+        private bool visible;
+        #endregion
     }
 }

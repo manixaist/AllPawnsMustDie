@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Drawing;
+using System.Drawing.Drawing2D;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -8,6 +9,24 @@ using System.Windows.Forms;
 
 namespace AllPawnsMustDie
 {
+    #region Extension Methods
+    public static class RectangleExtensionMethods
+    {
+        /// <summary>
+        /// Returns the center point of the Rectangle.  The fact this needs adding
+        /// is sad, but extension methods let us correct this injustice
+        /// </summary>
+        /// <param name="rect">Rectangle to get the center of</param>
+        /// <returns>A Point struct for the center of the given rect</returns>
+        public static Point Center(this Rectangle rect)
+        {
+            return new Point(rect.Left + rect.Width / 2,
+                             rect.Top + rect.Height / 2);
+        }
+    }
+    #endregion
+
+    #region Interfaces
     /// <summary>
     /// Interface for drawing the chessboard
     /// </summary>
@@ -39,17 +58,14 @@ namespace AllPawnsMustDie
         /// </summary>
         Size Dimensions { get; set; }
     }
+    #endregion
 
     /// <summary>
     /// Encapsulates the view for the chess board.  This is the drawing code
     /// </summary>
     public sealed class ChessBoardView : IChessBoardView, IDisposable
     {
-        private static int BoardSizeInPixels = 640;
-        private static int SquaresPerSide = 8;
-        private static int ChessFontSize = 48;
-        private static string ChessFont = "Segoe UI Symbols";
-
+        #region Public Methods
         /// <summary>
         /// Create a new view
         /// </summary>
@@ -57,21 +73,30 @@ namespace AllPawnsMustDie
         public ChessBoardView(Form form)
         {
             dimensions = new Size(BoardSizeInPixels, BoardSizeInPixels);
+
+            // Must be careful with this, as many operations are not allowed
+            // cross thread.  Invalidate is ok though
             viewForm = form;
             squareSizeInPixels = BoardSizeInPixels / SquaresPerSide;
 
+            // Cache font information
             stringFormat = new StringFormat();
             stringFormat.LineAlignment = StringAlignment.Center;
             stringFormat.Alignment = StringAlignment.Center;
             stringFont = new Font(ChessFont, ChessFontSize);
         }
 
+        /// <summary>
+        /// Finalizer
+        /// </summary>
         ~ChessBoardView()
         {
             Dispose();
         }
 
-        private bool disposed = false;
+        /// <summary>
+        /// Dispose of disposable objects we own if we haven't already disposed
+        /// </summary>
         public void Dispose()
         {
             if (!disposed)
@@ -89,7 +114,7 @@ namespace AllPawnsMustDie
         void IChessBoardView.Invalidate()
         {
             // Only need to invalidate the board portion of the form
-            viewForm.Invalidate(new Rectangle(topLeft.X, topLeft.Y, 
+            viewForm.Invalidate(new Rectangle(topLeft.X, topLeft.Y,
                 BoardSizeInPixels, BoardSizeInPixels), true);
         }
 
@@ -102,45 +127,130 @@ namespace AllPawnsMustDie
             // Dimensions and ViewData should be set before this call
             IChessBoardView view = (IChessBoardView)this;
 
-            // Get the pieces
-            List<ChessPiece> pieces = data.WhitePieces;
-            pieces.AddRange(data.BlackPieces);
-
             // Draw the board (orientation does not matter)
             DrawBoard(g);
 
+            Rectangle s;
+            Rectangle e;
+            bool drawLast = LastMoveRects(out s, out e);
+
+            if (drawLast)
+            {
+                DrawLastMoveStart(g, s);
+                DrawLastMoveEnd(g, e);
+            }
+
             // Draw the pieces (orientation does matter)
-            foreach (ChessPiece piece in pieces)
+            foreach (ChessPiece piece in data.WhitePieces)
             {
                 DrawPiece(g, piece);
             }
 
-            // Draw others?  Highlighting legal moves maybe?
-            //...
+            foreach (ChessPiece piece in data.BlackPieces)
+            {
+                DrawPiece(g, piece);
+            }
+
+            if (drawLast)
+            {
+                DrawLastMoveLine(g, s, e);
+            }
+
+            // TODO.. highlight checks as well?  Data will need to support this
+        }
+        #endregion
+
+        #region Private Methods
+        /// <summary>
+        /// Draw an arrow for the last move, indicating direction and placement.  
+        /// The line connects the center of the given rect and has an arrow to 
+        /// indicate direction of the move (though the piece would as well)
+        /// </summary>
+        /// <param name="g">Graphics object</param>
+        /// <param name="startRect">Staring rect to use</param>
+        /// <param name="endRect">Ending rect to use</param>
+        private void DrawLastMoveLine(Graphics g, Rectangle startRect, Rectangle endRect)
+        {
+            using (Pen p = new Pen(Brushes.MidnightBlue, 6))
+            {
+                // This is the arrow on the end of the line
+                p.StartCap = LineCap.Round;
+                p.EndCap = LineCap.ArrowAnchor;
+                p.CustomEndCap = new AdjustableArrowCap(5, 5);
+                p.DashStyle = DashStyle.Solid;
+
+                // Get the center of each rect using our handy extension
+                // It's criminal this isn't a part of the default struct...
+                Point centerStart = startRect.Center();
+                Point centerEnd = endRect.Center();
+                
+                // Draw a line from A->B
+                g.DrawLine(p, centerStart, centerEnd);
+            }
         }
 
+        /// <summary>
+        /// Renders a visual indicator for the start position of the last move
+        /// </summary>
+        /// <param name="g">Graphics object</param>
+        /// <param name="rect">Rectangle to draw within</param>
+        private void DrawLastMoveStart(Graphics g, Rectangle rect)
+        {
+            // Draws a green circle (assuming the rect is square which it will be)
+            using (Pen p = new Pen(Brushes.ForestGreen, 4))
+            {
+                g.DrawEllipse(p, rect);
+            }
+        }
+
+        /// <summary>
+        /// Renders a visual indicator for the end position of the last move
+        /// </summary>
+        /// <param name="g">Graphics object</param>
+        /// <param name="rect">Rectangle to draw within</param>
+        private void DrawLastMoveEnd(Graphics g, Rectangle rect)
+        {
+            // Red square for capture
+            if (data.LastMoveWasCapture)
+            {
+                g.FillRectangle(Brushes.Red, rect);
+            }
+            // Yellow square for a normal move
+            else
+            {
+                g.FillRectangle(Brushes.Yellow, rect);
+            }
+        }
+
+        /// <summary>
+        /// Renders the chess board minus any pieces or highlights
+        /// </summary>
+        /// <param name="g">Graphics object</param>
         private void DrawBoard(Graphics g)
         {
-            // Draw the board
-            // Divide the client area into 8x8 grid
+            // Divide the client area into 8x8 grid, start with the top-left square
             Rectangle rect = new Rectangle(topLeft.X, topLeft.Y, squareSizeInPixels, squareSizeInPixels);
-            
+
             // Draws a checkerboard pattern - the pattern in the same regardless
             // of board orientation - this draws from the top down
-            bool fillRect = false;
+            bool darkSquare = false;
             for (int r = 0; r < 8; r++)
             {
-                bool fillRowStart = fillRect;
+                bool fillRowStart = darkSquare;
                 for (int c = 0; c < 8; c++)
                 {
-                    if (fillRect == true)
+                    if (darkSquare)
                     {
                         g.FillRectangle(Brushes.Gray, rect);
                     }
-                    fillRect = !fillRect;
+                    else
+                    {
+                        g.FillRectangle(Brushes.White, rect);
+                    }
+                    darkSquare = !darkSquare;
                     rect.X += rect.Width;
                 }
-                fillRect = !fillRect;
+                darkSquare = !darkSquare;
                 fillRowStart = !fillRowStart;
 
                 rect.X = topLeft.X;
@@ -148,24 +258,26 @@ namespace AllPawnsMustDie
             }
 
             // Draws a border around the board
-            Pen p = new Pen(Color.Black, 1);
-            g.DrawRectangle(p, new Rectangle(topLeft.X, topLeft.Y, BoardSizeInPixels, BoardSizeInPixels));
-            p.Dispose();
+            using (Pen p = new Pen(Color.Black, 1))
+            {
+                g.DrawRectangle(p, new Rectangle(topLeft.X, topLeft.Y, BoardSizeInPixels, BoardSizeInPixels));
+            }
         }
 
-        private readonly StringFormat stringFormat;
-        private readonly Font stringFont;
-
         /// <summary>
-        /// Draw a single piece
+        /// Draw a single piece.  This is a simple draw, but the board shows through
+        /// the transparent portions of the piece since it's text.
         /// </summary>
         /// <param name="g">Graphics object</param>
         /// <param name="piece">ChessPiece to draw</param>
         private void DrawPiece(Graphics g, ChessPiece piece)
         {
-            // Fetch the unicode for the given piece and draw it in the rect
-            Rectangle pieceRect = GetRect(piece.File, piece.Rank);
-            g.DrawString(PieceChar(piece).ToString(), stringFont, Brushes.Black, pieceRect, stringFormat);
+            if (piece.Visible)
+            {
+                // Find the screen rect for the piece and 'draw' it
+                Rectangle pieceRect = GetRect(piece.File, piece.Rank);
+                g.DrawString(PieceChar(piece).ToString(), stringFont, Brushes.Black, pieceRect, stringFormat);
+            }
         }
 
         /// <summary>
@@ -204,13 +316,13 @@ namespace AllPawnsMustDie
 
             if (data.Orientation == BoardOrientation.WhiteOnBottom)
             {
-                X = (file.ToInt() - 1) * squareSizeInPixels;
+                X = (file.ToInt()) * squareSizeInPixels;
                 Y = (8 - rank) * squareSizeInPixels;
             }
             else
             {
                 X = (8- file.ToInt()) * squareSizeInPixels;
-                Y = (rank - 1) * squareSizeInPixels;
+                Y = (rank) * squareSizeInPixels;
             }
             
             // Return the calculated rect offset from the overall topLeft location
@@ -243,8 +355,50 @@ namespace AllPawnsMustDie
             throw new ArgumentOutOfRangeException();
         }
 
-        private Point topLeft = new Point(0, 0);
-        
+        /// <summary>
+        /// Helper method to return the rects of the starting and ending squares
+        /// of the last move
+        /// </summary>
+        /// <param name="startRect">starting position rect</param>
+        /// <param name="endRect">ending position rect</param>
+        /// <returns></returns>
+        private bool LastMoveRects(out Rectangle startRect, out Rectangle endRect)
+        {
+            bool result = false;
+            if (data.Moves.Count > 0) // There has to be at least 1 move
+            {
+                result = true;
+                // Get the move e.g. "e2e4"
+                string lastMove = data.Moves.Last();
+
+                // Divide the move into start and end e.g. "e2" and "e4"
+                string lastMoveStart = lastMove.Substring(0, 2);
+                string lastMoveEnd = lastMove.Substring(2, 2);
+
+                // Convert the text moves to a rank and file
+                PieceFile startFile = new PieceFile(lastMoveStart[0]);
+                int startRank = Convert.ToInt16((char)lastMoveStart[1]) - Convert.ToInt16('0');
+                PieceFile endFile = new PieceFile(lastMoveEnd[0]);
+                int endRank = Convert.ToInt16((char)lastMoveEnd[1]) - Convert.ToInt16('0');
+
+                // Get the rects for the squares
+                startRect = GetRect(startFile, startRank);
+                endRect = GetRect(endFile, endRank);
+
+                // Shrink the start rect (currently draws a smaller circle inside the square)
+                startRect.Inflate(new Size(-squareSizeInPixels / 10, -squareSizeInPixels / 10));
+            }
+            else
+            {
+                // No moves, so no rects (or 0 sized ones in this case)
+                startRect = new Rectangle();
+                endRect = new Rectangle();
+            }
+            return result;
+        }
+        #endregion
+
+        #region Public Properties
         /// <summary>
         /// Sets the starting offset for the board inside the Form client
         /// </summary>
@@ -253,8 +407,6 @@ namespace AllPawnsMustDie
             get { return topLeft; }
             set { topLeft = value; }
         }
-
-        private Size dimensions;
 
         /// <summary>
         /// Size of the board
@@ -265,8 +417,6 @@ namespace AllPawnsMustDie
             set { dimensions = value; }
         }
 
-        private ChessBoard data;
-
         /// <summary>
         /// The data that drives the view, the ChessBoard class
         /// </summary>
@@ -275,8 +425,39 @@ namespace AllPawnsMustDie
             get { return data; }
             set { data = value; }
         }
+        #endregion
 
-        private Form viewForm;
+        #region Public Fields
+        /// <summary>
+        /// The size of one edge of the board in pixels.  A square is 1/8 of this
+        /// </summary>
+        public static int BoardSizeInPixels = 640;
+        #endregion
+
+        #region Private Fields
+        // Standard chessboard is (8 x 8)
+        private static int SquaresPerSide = 8; 
+        
+        // Using Unicode font for the chess pieces
+        private static int ChessFontSize = 48;  
+        private static string ChessFont = "Segoe UI Symbols";
+        private readonly StringFormat stringFormat;
+        private readonly Font stringFont;
+
+        private bool disposed = false;      // Disposed flag
+
+        // Pixel size of a single chess square edge
         private int squareSizeInPixels;
+
+        // Overall size and offset from the topLeft of the form
+        private Point topLeft = new Point(0, 0);
+        private Size dimensions;
+
+        // Form this class renders to
+        private Form viewForm;
+
+        // Data that drives the view
+        private ChessBoard data;
+        #endregion
     }
 }

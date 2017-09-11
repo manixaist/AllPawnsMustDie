@@ -14,6 +14,7 @@ namespace AllPawnsMustDie
     /// </summary>
     class ChessEngineWrapper : IDisposable
     {
+        #region Public Methods
         /// <summary>
         /// Create a new engine wrapper object
         /// </summary>
@@ -26,16 +27,20 @@ namespace AllPawnsMustDie
 
             // This will launch the process
             engine.LoadEngine(fullPathToEngine);
-
-            engine.SendCommand(UCIChessEngine.IsReady, UCIChessEngine.ReadyOk);
-            engine.SendCommand(UCIChessEngine.Uci, UCIChessEngine.UciOk);
+            engine.SendCommandAsync(UCIChessEngine.Uci, UCIChessEngine.UciOk);
         }
 
+        /// <summary>
+        /// Finalizer
+        /// </summary>
         ~ChessEngineWrapper()
         {
             Dispose();
         }
 
+        /// <summary>
+        /// Dispose of underlying engine
+        /// </summary>
         public void Dispose()
         {
             // Don't have to track this being called since the target will
@@ -49,16 +54,16 @@ namespace AllPawnsMustDie
         /// </summary>
         public void NewGame()
         {
-            engine.SendCommand(UCIChessEngine.UciNewGame, "");
+            engine.Reset();
         }
 
         /// <summary>
         /// Set a new position with the engine
         /// </summary>
-        /// <param name="fenString"></param>
+        /// <param name="fenString">FEN for the new position</param>
         public void NewPosition(string fenString)
         {
-            engine.SendCommand(String.Concat("position fen ", fenString), "");
+            engine.SendCommandAsync(String.Concat("position fen ", fenString), "");
         }
 
         /// <summary>
@@ -66,21 +71,10 @@ namespace AllPawnsMustDie
         /// of the game, plus the latest move (e.g. the string gets longer as you
         /// play)
         /// </summary>
-        /// <param name="san"></param>
+        /// <param name="san">Send a move in standard algebraic notation</param>
         public void SendMove(string san)
         {
-            engine.SendCommand(String.Concat("position startpos moves ", san), "");
-        }
-
-        /// <summary>
-        /// Gets the best move from the engine.  This should only be called
-        /// after the engine has responded (which will also have the move) so this
-        /// is really a cache of that last best move
-        /// </summary>
-        /// <param name="bestMove"></param>
-        public void GetBestMove(out string bestMove)
-        {
-            bestMove = ((UCIChessEngine)engine).BestMove;
+            engine.SendCommandAsync(String.Concat("position startpos moves ", san), "");
         }
 
         /// <summary>
@@ -90,11 +84,30 @@ namespace AllPawnsMustDie
         {
             engine.Quit();
         }
+        #endregion
 
-        private IChessEngine engine;
+        #region Public Properties
+        /// <summary>
+        /// Gets the best move from the engine.  This should only be called
+        /// after the engine has responded (which will also have the move) so this
+        /// is really a cache of that last best move
+        /// </summary>
+        public string BestMove
+        {
+            get { return ((UCIChessEngine)engine).BestMove; }
+        }
+
+        /// <summary>
+        /// Returns the current underlying IChessEngine interface
+        /// </summary>
         public IChessEngine Engine
         {
             get { return engine; }
         }
+        #endregion
+
+        #region Private Fields
+        private IChessEngine engine;
+        #endregion
     }
 }

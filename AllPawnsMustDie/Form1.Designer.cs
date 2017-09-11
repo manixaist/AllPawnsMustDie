@@ -48,6 +48,8 @@
             this.exitToolStripExit = new System.Windows.Forms.ToolStripMenuItem();
             this.editToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.showFENToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.labelVerbose = new System.Windows.Forms.Label();
+            this.selfPlayToolStripSelfPlay = new System.Windows.Forms.ToolStripMenuItem();
             this.menuStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -91,6 +93,7 @@
             // 
             this.fileToolStripMenuItem1.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.newGameToolStripNewGame,
+            this.selfPlayToolStripSelfPlay,
             this.newPositionToolStripNewPosition,
             this.loadEngineToolStripLoadEngine,
             this.toolStripSeparator2,
@@ -147,17 +150,34 @@
             this.showFENToolStripMenuItem.Size = new System.Drawing.Size(127, 22);
             this.showFENToolStripMenuItem.Text = "Show &FEN";
             // 
+            // labelVerbose
+            // 
+            this.labelVerbose.AutoSize = true;
+            this.labelVerbose.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.labelVerbose.Location = new System.Drawing.Point(12, 24);
+            this.labelVerbose.Name = "labelVerbose";
+            this.labelVerbose.Size = new System.Drawing.Size(0, 21);
+            this.labelVerbose.TabIndex = 1;
+            // 
+            // selfPlayToolStripSelfPlay
+            // 
+            this.selfPlayToolStripSelfPlay.Name = "selfPlayToolStripSelfPlay";
+            this.selfPlayToolStripSelfPlay.Size = new System.Drawing.Size(153, 22);
+            this.selfPlayToolStripSelfPlay.Text = "Sel&f Play";
+            this.selfPlayToolStripSelfPlay.Click += new System.EventHandler(this.selfPlayToolStripSelfPlay_Click);
+            // 
             // APMD_Form
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(484, 461);
+            this.Controls.Add(this.labelVerbose);
             this.Controls.Add(this.menuStrip1);
+            this.DoubleBuffered = true;
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
             this.Name = "APMD_Form";
             this.Text = "All Pawns Must Die";
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.APMD_Form_FormClosing);
-            this.Load += new System.EventHandler(this.APMD_Form_Load);
             this.Paint += new System.Windows.Forms.PaintEventHandler(this.APMD_Form_Paint);
             this.MouseUp += new System.Windows.Forms.MouseEventHandler(this.APMD_Form_MouseUp);
             this.menuStrip1.ResumeLayout(false);
@@ -182,6 +202,8 @@
         private System.Windows.Forms.ToolStripMenuItem editToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem showFENToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem loadEngineToolStripLoadEngine;
+        private System.Windows.Forms.Label labelVerbose;
+        private System.Windows.Forms.ToolStripMenuItem selfPlayToolStripSelfPlay;
     }
 }
 
