@@ -237,6 +237,9 @@ namespace AllPawnsMustDie
             // Create and initialize the board and view
             ((IChessBoardView)view).ViewData = board;
 
+            // Override the unicode drawing with bmp images
+            ((IChessBoardView)view).SetBitmapImages(new Bitmap(Properties.Resources.chesspieces), new Size(64,64));
+
             // Initialize the engine with a new game
             chessEngine.NewGame();
         }
@@ -260,7 +263,7 @@ namespace AllPawnsMustDie
         {
             // TODO - Really this layer should not have this knoweledge, but the only
             // supported engine type is UCI right now
-            chessEngine.Engine.SendCommandAsync("go movetime 250", UCIChessEngine.BestMoveResponse);
+            chessEngine.Engine.SendCommandAsync(MoveCommandWithTime, UCIChessEngine.BestMoveResponse);
         }
 
         /// <summary>
@@ -500,6 +503,7 @@ namespace AllPawnsMustDie
         private ChessEngineWrapper chessEngine;
         private Form form;
         private static int HalfMovesUntilDraw = 50;
+        private static string MoveCommandWithTime = "go movetime 250";
         #endregion
     }
 }

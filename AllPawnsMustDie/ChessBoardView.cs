@@ -33,6 +33,16 @@ namespace AllPawnsMustDie
     interface IChessBoardView
     {
         /// <summary>
+        /// Load piece images from a bitmap sheet.  This overrides the unicode
+        /// text drawing for the pieces
+        /// </summary>
+        /// <param name="pieceImages">Bitmap image that contains the piece data.
+        /// It is assumed the pieces are arranged in 2 rows, with white on top
+        /// and black on bottom.  The piece order should be K Q R B N P</param>
+        /// <param name="pieceSize">The size of a single piece</param>
+        void SetBitmapImages(Bitmap pieceImages, Size pieceSize);
+
+        /// <summary>
         /// Invalidate the view, this should force a redraw
         /// </summary>
         void Invalidate();
@@ -104,7 +114,67 @@ namespace AllPawnsMustDie
                 stringFormat.Dispose();
                 stringFont.Dispose();
                 disposed = true;
+                chessPieceImageMap.Clear();
                 GC.SuppressFinalize(this);
+            }
+        }
+
+        /// <summary>
+        /// Load piece images from a bitmap sheet.  This overrides the unicode
+        /// text drawing for the pieces
+        /// </summary>
+        /// <param name="pieceImages">Bitmap image that contains the piece data.
+        /// It is assumed the pieces are arranged in 2 rows, with white on top
+        /// and black on bottom.  The piece order should be K Q R B N P</param>
+        /// <param name="pieceSize">The size of a single piece</param>
+        void IChessBoardView.SetBitmapImages(Bitmap pieceImages, Size pieceSize)
+        {
+            // Extract each image from the bitmap and store it in a map (job+color:image)
+            chessPieceImageMap = new Dictionary<string, Bitmap>();
+
+            // This will not change in the loop (all destinations are the same size)
+            Rectangle destRect = new Rectangle(0, 0, pieceSize.Width, pieceSize.Height);
+
+            // This one will based on where we are in the image loop
+            Rectangle srcRect = new Rectangle(0, 0, pieceSize.Width, pieceSize.Height);
+
+            // Array of jobs in the order we expect to find them in the image
+            // This is the same for each row (top white, bottom black)
+            PieceClass[] jobs = new PieceClass[] { PieceClass.King, PieceClass.Queen,
+                PieceClass.Rook, PieceClass.Bishop, PieceClass.Knight, PieceClass.Pawn };
+
+            // Init loop variables
+            int jobIndex = 0;
+            PieceColor pieceColor = PieceColor.White;
+
+            // Loop over the assumed layout (2x6)
+            for (int imageRow = 0; imageRow < 2; imageRow++)
+            {
+                for (int imageCol = 0; imageCol < 6; imageCol++)
+                {
+                    // Create a new bitmap of the reequired size
+                    Bitmap b = new Bitmap(pieceSize.Width, pieceSize.Height);
+                    using (Graphics g = Graphics.FromImage(b))
+                    {
+                        // Draw the portion of the larger image into the smaller one
+                        // we just created for the piece
+                        g.DrawImage(pieceImages, destRect, srcRect, GraphicsUnit.Pixel);
+                    }
+
+                    // Add the image to the map (mangle the color and the job for the key)
+                    chessPieceImageMap.Add(GetPieceImageKey(jobs[jobIndex++], pieceColor), b);
+
+                    // Shift over to the right by one piece width
+                    srcRect.X += pieceSize.Width;
+                }
+
+                // Reset row variables
+                jobIndex = 0;
+                srcRect.X = 0;
+                srcRect.Y += pieceSize.Height;
+
+                // Switch colors
+                pieceColor = PieceColor.Black;
             }
         }
 
@@ -274,9 +344,18 @@ namespace AllPawnsMustDie
         {
             if (piece.Visible)
             {
-                // Find the screen rect for the piece and 'draw' it
                 Rectangle pieceRect = GetRect(piece.File, piece.Rank);
-                g.DrawString(PieceChar(piece).ToString(), stringFont, Brushes.Black, pieceRect, stringFormat);
+                if (chessPieceImageMap == null)
+                {
+                    // Find the screen rect for the piece and 'draw' it
+                    g.DrawString(PieceChar(piece).ToString(), stringFont, Brushes.Black, pieceRect, stringFormat);
+                }
+                else
+                {
+                    Bitmap b = chessPieceImageMap[GetPieceImageKey(piece.Job, piece.Color)];
+                    b.MakeTransparent(Color.Magenta);
+                    g.DrawImage(b, pieceRect);
+                }
             }
         }
 
@@ -396,6 +475,17 @@ namespace AllPawnsMustDie
             }
             return result;
         }
+
+        /// <summary>
+        /// Small helper to get the mangled key for an image
+        /// </summary>
+        /// <param name="job"></param>
+        /// <param name="color"></param>
+        /// <returns></returns>
+        private static string GetPieceImageKey(PieceClass job, PieceColor color)
+        {
+            return String.Concat(job.ToString(), color.ToString());
+        }
         #endregion
 
         #region Public Properties
@@ -458,6 +548,10 @@ namespace AllPawnsMustDie
 
         // Data that drives the view
         private ChessBoard data;
+
+        // Holds images for the pieces if specified
+        private Dictionary<string, Bitmap> chessPieceImageMap;
+
         #endregion
     }
 }
