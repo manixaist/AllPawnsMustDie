@@ -287,13 +287,45 @@ namespace AllPawnsMustDie
         /// <param name="y">y coordinate relative to top-left</param>
         public void ProcessClick(int x, int y)
         {
-            // Do nothing at all here for now.  The application only supports
-            // the engine playing with itself for now, so clicking is meaningless
+            if (selfPlay)
+            {
+                return; // Do nothing in the self play case here
+            }
 
-            // Later, this is where we would convert this (X,Y) to a square and
-            // then based on the current state, check if this is a valid piece, 
-            // or a legal followup move, or just a click elsewhere
-            // TODO...
+            // Cache the interface pointer to cut down on the casting
+            IChessBoardView viewInterface = ((IChessBoardView)view);
+
+            // Only clicks on the board mean anything right now, so get that rect
+            Rectangle boardViewRect = viewInterface.BoardRect;
+
+            // If the point sent to us is inside that rect, then deal with it
+            // otherwise just ignore it
+            if (boardViewRect.Contains(x, y))
+            {
+                if (PlayerColor == ActivePlayer) // else ignore
+                {
+                    ChessPiece foundPiece = viewInterface.GetPiece(x, y);
+                    if (foundPiece != null)
+                    {
+                        if (foundPiece.Color == PlayerColor)
+                        {
+                            // if (Legal Moves > 0)
+                            //      legalmoves.clear
+                            // else
+                            //      legalMoves = GetLegalMoves()
+                        }
+                        else
+                        {
+                            // if (Legal Moves > 0)
+                            //      if (legalmoves.Contains(x,y))
+                            //          done
+                            // else
+                            //      legalmoves.clear
+                        }
+                    }
+
+                }
+            }
         }
 
         /// <summary>

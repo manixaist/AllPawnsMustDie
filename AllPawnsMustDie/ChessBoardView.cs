@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics;
 using System.Drawing;
 using System.Drawing.Drawing2D;
 using System.Collections.Generic;
@@ -54,6 +55,14 @@ namespace AllPawnsMustDie
         void Render(Graphics g);
 
         /// <summary>
+        /// Returns a piece given an X,Y in relation to the board+offset
+        /// </summary>
+        /// <param name="x"></param>
+        /// <param name="y"></param>
+        /// <returns>ChessPiece found or null if none</returns>
+        ChessPiece GetPiece(int x, int y);
+
+        /// <summary>
         /// Property for the data that drives the view
         /// </summary>
         ChessBoard ViewData { get; set; }
@@ -67,6 +76,11 @@ namespace AllPawnsMustDie
         /// Property to set the size of the view
         /// </summary>
         Size Dimensions { get; set; }
+
+        /// <summary>
+        /// Returns a rect (including the offset) for the board
+        /// </summary>
+        Rectangle BoardRect { get; }
     }
     #endregion
 
@@ -227,6 +241,48 @@ namespace AllPawnsMustDie
             }
 
             // TODO.. highlight checks as well?  Data will need to support this
+        }
+
+        /// <summary>
+        /// Returns a piece given an X,Y in relation to the board+offset
+        /// </summary>
+        /// <param name="x">x coordinate from the left of the form</param>
+        /// <param name="y">y coordinate from the top of the form</param>
+        /// <returns>ChessPiece found or null if none</returns>
+        ChessPiece IChessBoardView.GetPiece(int x, int y)
+        {
+            Rectangle boardRect = ((IChessBoardView)this).BoardRect;
+            ChessPiece foundPiece = null;
+           
+            if (boardRect.Contains(x, y))
+            {
+                // Convert X, Y to [file:rank] (col, row)
+                int col;
+                int row;
+                int squaresize = boardRect.Width / 8;
+                if (data.Orientation == BoardOrientation.WhiteOnBottom)
+                {
+                    col = ((x - boardRect.X) / (squaresize)) + 1;
+                    row = 8 - ((y - boardRect.Y) / (squaresize));
+                }
+                else
+                {
+                    col = 8 - ((x - boardRect.X) / (squaresize));
+                    row = ((y - boardRect.Y) / (squaresize)) + 1;
+                }
+
+                // Now see if the board has a piece there
+                foundPiece = data.FindPieceAt(new PieceFile(col), row);
+
+                if (foundPiece != null)
+                {
+                    // Debug output to see what we found if anything
+                    Debug.WriteLine(String.Format("ClickedOn: {0} [{1},{2}] ({3})", 
+                        foundPiece.Job.ToString(), foundPiece.File.ToString(), 
+                        foundPiece.Rank.ToString(), foundPiece.Color.ToString()));
+                }
+            }
+            return foundPiece;
         }
         #endregion
 
@@ -400,8 +456,9 @@ namespace AllPawnsMustDie
             }
             else
             {
-                X = (8- file.ToInt()) * squareSizeInPixels;
-                Y = (rank) * squareSizeInPixels;
+                // Broken at the moment (same as above)
+                X = (file.ToInt()) * squareSizeInPixels;
+                Y = (8 - rank) * squareSizeInPixels;
             }
             
             // Return the calculated rect offset from the overall topLeft location
@@ -515,6 +572,18 @@ namespace AllPawnsMustDie
             get { return data; }
             set { data = value; }
         }
+
+        /// <summary>
+        /// Returns the bounding rect of the board including any offset
+        /// </summary>
+        Rectangle IChessBoardView.BoardRect
+        {
+            get
+            {
+                return new Rectangle(topLeft.X, topLeft.Y, dimensions.Width, dimensions.Height);
+            }
+        }
+
         #endregion
 
         #region Public Fields

@@ -215,6 +215,30 @@ namespace AllPawnsMustDie
             }
             piece.PromoteOnNextMove(promotionClass);
         }
+
+        /// <summary>
+        /// Returns a ChessPiece at a given file:rank.  It's very possible there
+        /// is no piece and if so returns null
+        /// </summary>
+        /// <param name="file">ChessFile to check against</param>
+        /// <param name="rank">Rank to check against</param>
+        /// <returns>ChessPiece object at the given file:rank or null if not found</returns>
+        public ChessPiece FindPieceAt(PieceFile file, int rank)
+        {
+            ChessPiece result = null;
+            // Check each piece in the list (32 max)
+            List<ChessPiece> pieces = AllPieces;
+            foreach (ChessPiece piece in pieces)
+            {
+                // Should only ever be 1 in the list at any given location visible
+                if (IsPieceAtLocation(piece, file, rank))
+                {
+                    result = piece; // Again we can stop on the 1st hit
+                    break;
+                }
+            }
+            return result;
+        }
         #endregion
 
         #region Private Methods
@@ -330,30 +354,6 @@ namespace AllPawnsMustDie
                 if (IsPieceAtLocation(piece, file, rank))
                 {
                     result = true;
-                    break;
-                }
-            }
-            return result;
-        }
-
-        /// <summary>
-        /// Returns a ChessPiece at a given file:rank.  It's very possible there
-        /// is no piece and if so returns null
-        /// </summary>
-        /// <param name="file">ChessFile to check against</param>
-        /// <param name="rank">Rank to check against</param>
-        /// <returns>ChessPiece object at the given file:rank or null if not found</returns>
-        private ChessPiece FindPieceAt(PieceFile file, int rank)
-        {
-            ChessPiece result = null;
-            // Check each piece in the list (32 max)
-            List<ChessPiece> pieces = AllPieces;
-            foreach (ChessPiece piece in pieces)
-            {
-                // Should only ever be 1 in the list at any given location visible
-                if (IsPieceAtLocation(piece, file, rank))
-                {
-                    result = piece; // Again we can stop on the 1st hit
                     break;
                 }
             }
