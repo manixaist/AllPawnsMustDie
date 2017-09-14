@@ -14,6 +14,16 @@ namespace AllPawnsMustDie
     {
         #region Public Methods
         /// <summary>
+        /// Checks if the piece is on the back rank (color matters)
+        /// </summary>
+        /// <param name="piece">ChessPiece to check</param>
+        /// <returns>true if the piece is on the back rank (8 for white, 1 for black)</returns>
+        public static bool IsOnBackRank(ChessPiece piece)
+        {
+            return (piece.Color == PieceColor.White) ? (piece.Rank == 8) : (piece.Rank == 1);
+        }
+
+        /// <summary>
         /// Create a new ChessPiece
         /// </summary>
         /// <param name="pieceColor">Color</param>
@@ -35,6 +45,31 @@ namespace AllPawnsMustDie
             deployed = false;
             visible = true;
             isReadyForPromotion = false;
+            highlight = false;
+        }
+
+        /// <summary>
+        /// Moves the piece, but this is intended to be short lived.  Reset with
+        /// ResetTempMove method
+        /// </summary>
+        /// <param name="newFile">new File</param>
+        /// <param name="newRank">new Rank</param>
+        public void TempMove(PieceFile newFile, int newRank)
+        {
+            tempFile = file;
+            tempRank = rank;
+            file = newFile;
+            rank = newRank;
+        }
+
+        /// <summary>
+        /// Reset the piece to its 'real' position.  Should be called after TempMove
+        /// only and always paired with it.
+        /// </summary>
+        public void ResetTempMove()
+        {
+            file = tempFile;
+            rank = tempRank;
         }
 
         /// <summary>
@@ -102,6 +137,16 @@ namespace AllPawnsMustDie
             get { return visible; }
             set { visible = value; }
         }
+
+        /// <summary>
+        /// Gets or sets the Highlight attribute which can be used to indicate
+        /// selection for example
+        /// </summary>
+        public bool Highlight
+        {
+            get { return highlight; }
+            set { highlight = value; }
+        }
         #endregion
 
         #region Private Fields
@@ -111,8 +156,11 @@ namespace AllPawnsMustDie
         private PieceClass job;
         private int rank;
         private PieceFile file;
+        private int tempRank;
+        private PieceFile tempFile;
         private bool deployed;
         private bool visible;
+        private bool highlight;
         #endregion
     }
 }

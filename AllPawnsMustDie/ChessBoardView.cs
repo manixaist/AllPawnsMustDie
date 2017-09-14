@@ -63,6 +63,32 @@ namespace AllPawnsMustDie
         ChessPiece GetPiece(int x, int y);
 
         /// <summary>
+        /// Returns the BoardSquare at the given x, y
+        /// </summary>
+        /// <param name="x"></param>
+        /// <param name="y"></param>
+        /// <returns></returns>
+        ChessBoard.BoardSquare GetSquare(int x, int y);
+
+        /// <summary>
+        /// Highlight a single square
+        /// </summary>
+        /// <param name="file">[a-h] file</param>
+        /// <param name="rank">[1-8] rank</param>
+        void HighlightSquare(PieceFile file, int rank);
+
+        /// <summary>
+        /// Highlight a set of squares
+        /// </summary>
+        /// <param name="squares">List of BoardSquares to highlight</param>
+        void HighlightSquares(ref List<ChessBoard.BoardSquare> squares);
+
+        /// <summary>
+        /// Removes all squares marked for highlighting
+        /// </summary>
+        void ClearHiglightedSquares();
+
+        /// <summary>
         /// Property for the data that drives the view
         /// </summary>
         ChessBoard ViewData { get; set; }
@@ -108,6 +134,8 @@ namespace AllPawnsMustDie
             stringFormat.LineAlignment = StringAlignment.Center;
             stringFormat.Alignment = StringAlignment.Center;
             stringFont = new Font(ChessFont, ChessFontSize);
+
+            highlightedSquares = new List<ChessBoard.BoardSquare>();
         }
 
         /// <summary>
@@ -224,6 +252,9 @@ namespace AllPawnsMustDie
                 DrawLastMoveEnd(g, e);
             }
 
+            // Draw these over last moves if they exist
+            DrawHighlightedSquares(g);
+
             // Draw the pieces (orientation does matter)
             foreach (ChessPiece piece in data.WhitePieces)
             {
@@ -259,18 +290,8 @@ namespace AllPawnsMustDie
                 // Convert X, Y to [file:rank] (col, row)
                 int col;
                 int row;
-                int squaresize = boardRect.Width / 8;
-                if (data.Orientation == BoardOrientation.WhiteOnBottom)
-                {
-                    col = ((x - boardRect.X) / (squaresize)) + 1;
-                    row = 8 - ((y - boardRect.Y) / (squaresize));
-                }
-                else
-                {
-                    col = 8 - ((x - boardRect.X) / (squaresize));
-                    row = ((y - boardRect.Y) / (squaresize)) + 1;
-                }
-
+                ConvertXYToRowCol(x, y, out row, out col);
+                
                 // Now see if the board has a piece there
                 foundPiece = data.FindPieceAt(new PieceFile(col), row);
 
@@ -284,9 +305,82 @@ namespace AllPawnsMustDie
             }
             return foundPiece;
         }
+
+        /// <summary>
+        /// Returns the square at a given x, y
+        /// </summary>
+        /// <param name="x"></param>
+        /// <param name="y"></param>
+        /// <returns></returns>
+        ChessBoard.BoardSquare IChessBoardView.GetSquare(int x, int y)
+        {
+            Rectangle boardRect = ((IChessBoardView)this).BoardRect;
+            if (!boardRect.Contains(x, y))
+            {
+                // should be constrained by this point
+                throw new ArgumentOutOfRangeException();
+            }
+
+            // Convert X, Y to [file:rank] (col, row)
+            int col;
+            int row;
+            ConvertXYToRowCol(x, y, out row, out col);
+            return new ChessBoard.BoardSquare(new PieceFile(col), row);
+        }
+
+        /// <summary>
+        /// Highlight a single square
+        /// </summary>
+        /// <param name="file">[a-h] file</param>
+        /// <param name="rank">[1-8] rank</param>
+        void IChessBoardView.HighlightSquare(PieceFile file, int rank)
+        {
+            highlightedSquares.Add(new ChessBoard.BoardSquare(file, rank));
+        }
+
+        /// <summary>
+        /// Highlight a set of squares
+        /// </summary>
+        /// <param name="squares">List of BoardSquares to highlight</param>
+        void IChessBoardView.HighlightSquares(ref List<ChessBoard.BoardSquare> squares)
+        {
+            highlightedSquares.AddRange(squares);
+        }
+
+        /// <summary>
+        /// Removes all squares marked for highlighting
+        /// </summary>
+        void IChessBoardView.ClearHiglightedSquares()
+        {
+            highlightedSquares.Clear();
+        }
         #endregion
 
         #region Private Methods
+        /// <summary>
+        /// Helper to convert an (x, y) coordinate into a col:row for the board
+        /// Since this may lie out of bounds, the ints are calculated here
+        /// </summary>
+        /// <param name="x">Form x coordinate</param>
+        /// <param name="y">Form y coordinate</param>
+        /// <param name="row">Row (int version of rank)</param>
+        /// <param name="col">Col (int version of PieceFile)</param>
+        private void ConvertXYToRowCol(int x, int y, out int row, out int col)
+        {
+            Rectangle boardRect = ((IChessBoardView)this).BoardRect;
+            int squaresize = boardRect.Width / 8;
+            if (data.Orientation == BoardOrientation.WhiteOnBottom)
+            {
+                col = ((x - boardRect.X) / (squaresize)) + 1;
+                row = 8 - ((y - boardRect.Y) / (squaresize));
+            }
+            else
+            {
+                col = 8 - ((x - boardRect.X) / (squaresize));
+                row = ((y - boardRect.Y) / (squaresize)) + 1;
+            }
+        }
+
         /// <summary>
         /// Draw an arrow for the last move, indicating direction and placement.  
         /// The line connects the center of the given rect and has an arrow to 
@@ -391,6 +485,20 @@ namespace AllPawnsMustDie
         }
 
         /// <summary>
+        /// If there are squares that have been marked for highlight, draw a 
+        /// yellow square there.
+        /// </summary>
+        /// <param name="g">Graphics object for the form</param>
+        private void DrawHighlightedSquares(Graphics g)
+        {
+            foreach(ChessBoard.BoardSquare square in highlightedSquares)
+            {
+                Rectangle squareRect = GetRect(square.File, square.Rank);
+                g.FillRectangle(Brushes.Yellow, squareRect);
+            }
+        }
+
+        /// <summary>
         /// Draw a single piece.  This is a simple draw, but the board shows through
         /// the transparent portions of the piece since it's text.
         /// </summary>
@@ -401,6 +509,11 @@ namespace AllPawnsMustDie
             if (piece.Visible)
             {
                 Rectangle pieceRect = GetRect(piece.File, piece.Rank);
+                if (piece.Highlight)
+                {
+                    g.FillRectangle(Brushes.Yellow, pieceRect);
+                }
+
                 if (chessPieceImageMap == null)
                 {
                     // Find the screen rect for the piece and 'draw' it
@@ -449,15 +562,16 @@ namespace AllPawnsMustDie
             int X;
             int Y;
 
+            // PieceFile is 1-based, same as the physical board
             if (data.Orientation == BoardOrientation.WhiteOnBottom)
             {
-                X = (file.ToInt()) * squareSizeInPixels;
+                X = (file.ToInt() - 1) * squareSizeInPixels;
                 Y = (8 - rank) * squareSizeInPixels;
             }
             else
             {
                 // Broken at the moment (same as above)
-                X = (file.ToInt()) * squareSizeInPixels;
+                X = (file.ToInt() - 1) * squareSizeInPixels;
                 Y = (8 - rank) * squareSizeInPixels;
             }
             
@@ -621,6 +735,8 @@ namespace AllPawnsMustDie
         // Holds images for the pieces if specified
         private Dictionary<string, Bitmap> chessPieceImageMap;
 
+        // Holds list of squares to highlight
+        private List<ChessBoard.BoardSquare> highlightedSquares;
         #endregion
     }
 }

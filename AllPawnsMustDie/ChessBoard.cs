@@ -11,12 +11,98 @@ namespace AllPawnsMustDie
     /// </summary>
     public class ChessBoard
     {
+        #region Public Structs
+        /// <summary>
+        /// Wraps a board location
+        /// </summary>
+        public struct BoardSquare
+        {
+            /// <summary>
+            /// Checks if a square is valid.  You cannot instantiate an invalid
+            /// PieceFile object, so passing that form is meaningless, though
+            /// the rank could be bad
+            /// </summary>
+            /// <param name="file">PieceFile.ToInt() most likely [1-8]</param>
+            /// <param name="rank">[1-8]</param>
+            /// <returns>true if the square is valid (located on the board)</returns>
+            public static bool IsValid(int file, int rank)
+            {
+                return (((file <= 8) && (file > 0)) && 
+                        ((rank <= 8) && (rank > 0)));
+            }
+
+            /// <summary>
+            /// Save the file, rank for the location
+            /// </summary>
+            /// <param name="file">[a-h]</param>
+            /// <param name="rank">[1-8]</param>
+            public BoardSquare(PieceFile file, int rank)
+            {
+                pieceFile = file;
+                pieceRank = rank;
+            }
+
+            /// <summary>
+            /// Override for equality tests
+            /// </summary>
+            /// <param name="obj">object testing</param>
+            /// <returns>true if obj is the same as this instance</returns>
+            public override bool Equals(System.Object obj)
+            {
+                return (obj is BoardSquare);
+            }
+
+            /// <summary>
+            /// Override for equality tests
+            /// </summary>
+            /// <returns>hashcode for the object</returns>
+            public override int GetHashCode()
+            {
+                return pieceFile.GetHashCode() | pieceRank;
+            }
+            
+            /// <summary>
+            /// Override for equality tests
+            /// </summary>
+            /// <param name="p1">object1</param>
+            /// <param name="p2">object2</param>
+            /// <returns>true if the value of object1 and object2 are the same</returns>
+            public static bool operator ==(BoardSquare p1, BoardSquare p2)
+            {
+                // If both are null, or both are same instance, return true.
+                if (System.Object.ReferenceEquals(p1, p2))
+                {
+                    return true;
+                }
+                return ((p1.File == p2.File) && (p1.Rank == p2.Rank));
+            }
+
+            /// <summary>
+            /// Override for equality tests
+            /// </summary>
+            /// <param name="p1">Object1</param>
+            /// <param name="p2">Onject2</param>
+            /// <returns>True if the values of Object1 and Object2 are NOT the same</returns>
+            public static bool operator !=(BoardSquare p1, BoardSquare p2)
+            {
+                return !(p1 == p2);
+            }
+
+            public PieceFile File { get { return pieceFile; } }
+            public int Rank { get { return pieceRank; } }
+
+            private PieceFile pieceFile;
+            private int pieceRank;
+        }
+        #endregion
+
         #region Public Methods
         /// <summary>
         /// Create a new chess board
         /// </summary>
         public ChessBoard()
         {
+            enPassantValid = false;
             NewGame();
         }
 
@@ -97,7 +183,7 @@ namespace AllPawnsMustDie
         public bool MovePiece(PieceFile startFile, int startRank, PieceFile targetFile, int targetRank)
         {
             bool anyCapture = false;
-
+            
             // Get the player piece at the starting location
             // Piece should never be null if chess logic is sound
             ChessPiece playerPiece = FindPieceAt(startFile, startRank);
@@ -135,6 +221,26 @@ namespace AllPawnsMustDie
 
             // ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
             // POST-MOVE CHECKS/UPDATES
+
+            // Update castling rights - moving the king ruins all castling forever
+            if ((playerPiece.Job == PieceClass.King) && (playerPiece.Deployed == false))
+            {
+                BoardSide castlingRights = ActivePlayerCastlingRights;
+                castlingRights = BoardSide.None;
+            }
+            // moving the rook removes the possibility on that side
+            else if ((playerPiece.Job == PieceClass.Rook) && (playerPiece.Deployed == false))
+            {
+                BoardSide castlingRights = ActivePlayerCastlingRights;
+                if (playerPiece.File.ToInt() == 1)
+                {
+                    castlingRights &= ~BoardSide.King;
+                }
+                else if (playerPiece.File.ToInt() == 8)
+                {
+                    castlingRights &= ~BoardSide.Queen;
+                }
+            }
 
             // For normal captures, just do a quick iteration of the opponent pieces
             // there are only 16 of these total in normal chess
@@ -177,6 +283,18 @@ namespace AllPawnsMustDie
         }
 
         /// <summary>
+        /// Returns the current en-passant target square (if any)
+        /// </summary>
+        /// <param name="target">BoardSquare that is the en-passant target</param>
+        /// <returns>true if target exists, in which case 'target' contains the square.
+        /// false if there is no target, and the contents of 'target' are invalid</returns>
+        public bool GetEnPassantTarget(out BoardSquare target)
+        {
+            target = enPassantTarget;
+            return enPassantValid;
+        }
+
+        /// <summary>
         /// Checks if a given player is allowed to castle
         /// </summary>
         /// <param name="playerColor">Player to check</param>
@@ -187,7 +305,6 @@ namespace AllPawnsMustDie
             BoardSide playerSide = (playerColor == PieceColor.White) ? whiteCastlingRights : blackCastlingRights;
             return playerSide.HasFlag(side);
         }
-
 
         /// <summary>
         /// When a pawn has made it to the back rank, it can be promoted.  This method
@@ -238,6 +355,25 @@ namespace AllPawnsMustDie
                 }
             }
             return result;
+        }
+
+        /// <summary>
+        /// Returns the King of the specified color
+        /// should be in an active game
+        /// </summary>
+        /// <param name="kingColor"></param>
+        /// <returns></returns>
+        public ChessPiece GetKing(PieceColor kingColor)
+        {
+            List<ChessPiece> pieces = (kingColor == PieceColor.White) ? WhitePieces : BlackPieces;
+            foreach (ChessPiece piece in pieces)
+            {
+                if (piece.Job == PieceClass.King)
+                {
+                    return piece;
+                }
+            }
+            return null;
         }
         #endregion
 
@@ -304,7 +440,7 @@ namespace AllPawnsMustDie
                 else if (Char.IsDigit(fenChar))
                 {
                     // advance File the amount of the spaces
-                    currentFile += Convert.ToUInt16(fenChar);
+                    currentFile += (Convert.ToUInt16(fenChar) - Convert.ToUInt16('0'));
                 }
                 else if (fenChar == '/')
                 {
@@ -372,6 +508,7 @@ namespace AllPawnsMustDie
         /// <returns>True if the move was en-passant and a piece was captured</returns>
         private bool HandleEnPassant(PieceFile startFile, int startRank, PieceFile targetFile, int targetRank)
         {
+            enPassantValid = false;
             bool isCapture = false;
             if ((startFile != targetFile) &&                      // Diagonal move
                 (!IsAnyPieceAtLocation(targetFile, targetRank)))  // There is some piece behind us
@@ -387,8 +524,20 @@ namespace AllPawnsMustDie
                 enPassantVictim.Visible = false;
                 isCapture = true;
             }
+            else
+            {
+                // Check if we need to set the target en-passant square
+                if (Math.Abs(startRank - targetRank) == 2)
+                {
+                    // Target is one space behind the pawn that just jumped 2 spaces
+                    targetRank += (ActivePlayer == PieceColor.White) ? -1 : 1;
+                    enPassantTarget = new BoardSquare(targetFile, targetRank);
+                    enPassantValid = true;
+                }
+            }
             return isCapture;
         }
+
         /// <summary>
         /// Returns true if the current piece is trying to castle.  It must be 
         /// a king that moved in the correct manner (2 squares horizontally)
@@ -496,6 +645,34 @@ namespace AllPawnsMustDie
         /// Total full moves applied to the board
         /// </summary>
         public int FullMoveCount { get { return fullMoveCount; } }
+
+        /// <summary>
+        /// Returns white's current castling rights
+        /// </summary>
+        public BoardSide WhiteCastlingRights {  get { return whiteCastlingRights; } }
+
+        /// <summary>
+        /// Returns black's current castling rights
+        /// </summary>
+        public BoardSide BlackCastlingRights { get { return blackCastlingRights; } }
+
+        /// <summary>
+        /// Returns castling rights for active player
+        /// </summary>
+        public BoardSide ActivePlayerCastlingRights
+        {
+            get
+            {
+                if (activePlayer == PieceColor.White)
+                {
+                    return whiteCastlingRights;
+                }
+                else
+                {
+                    return blackCastlingRights;
+                }
+            }
+        }
         #endregion
 
         #region Private Properties
@@ -553,8 +730,14 @@ namespace AllPawnsMustDie
         #region Public Fields
         // FEN for the starting position
         public static String InitialFENPosition = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1";
+
+        // Some interesting test positions for legal moves, etc
+        //public static String InitialFENPosition = "r3kb1r/pp1npppp/3p4/2P5/4q3/8/P4P1P/3QK2R w KQkq - 0 1";
+        //public static String InitialFENPosition = "3k1r2/8/4N3/2N5/8/8/3PP3/r2RK3 w KQkq - 0 1";
+        //public static String InitialFENPosition = "r1b1kb1r/pppp1p1p/1q3np1/2n1p3/1BQ3N1/3N1B2/PPP3PP/R3K2R w KQkq - 0 1";
+        //public static String InitialFENPosition = "2b1k2r/pppp1p1p/3r1np1/b1n1p3/2Q1q1N1/2B1NB2/PPP3PP/R3K2R w KQkq - 0 1";
         #endregion
-        
+
         #region Private Fields
         private bool lastMoveWasCapture = false;
         private int halfMoveCount;
@@ -566,6 +749,8 @@ namespace AllPawnsMustDie
         private List<string> moveHistory;
         private List<ChessPiece> whitePieces;
         private List<ChessPiece> blackPieces;
+        private bool enPassantValid;
+        private BoardSquare enPassantTarget;
         #endregion
     }
 }
