@@ -428,14 +428,17 @@ namespace AllPawnsMustDie
                     int destRank = Convert.ToInt16(playerMove[3]) - Convert.ToInt16('0');
 
                     // Need to detect promotion and launch dialog for it...
-                    // TODO...
+                    bool isPawnMovingToBackRank = (selectedPiece.Color == PieceColor.White) ? (destRank == 8) : (destRank == 1);
+                    if ((selectedPiece.Job == PieceClass.Pawn) && isPawnMovingToBackRank)
+                    {
+                        PromotionDialog pd = new PromotionDialog();
+                        pd.ShowDialog();
+                        board.PromotePiece(startFile, startRank, destFile, destRank, pd.PromotionJob);
 
-                    //if (promotionNeeded)
-                    //{
-                    //    // Applied on the next move
-                    //    board.PromotePiece(startFile, startRank, destFile, destRank, ChessBoard.PieceClassFromFen(playerMove[4]));
-                    //}
-
+                        // Append the promotion info for the engine on the move
+                        playerMove = String.Concat(playerMove, PieceClassToPromotionChar(pd.PromotionJob));
+                    }
+                    
                     // Always returns true now
                     board.MovePiece(startFile, startRank, destFile, destRank);
                     board.Moves.Add(playerMove);
@@ -455,6 +458,28 @@ namespace AllPawnsMustDie
             ((IChessBoardView)view).ClearHiglightedSquares();
             selectedPiece.Highlight = false;
             selectedPiece = null;
+        }
+
+        /// <summary>
+        /// Converts a class to its character.  This does not need to differentiate
+        /// case for color like FEN does, it's just needed to update the engine.  
+        /// The starting position or FEN for the engine determines the active player
+        /// </summary>
+        /// <param name="job">Job to convert</param>
+        /// <returns></returns>
+        private char PieceClassToPromotionChar(PieceClass job)
+        {
+            if (job == PieceClass.Queen)
+                return 'q';
+            if (job == PieceClass.Rook)
+                return 'r';
+            if (job == PieceClass.Knight)
+                return 'n';
+            if (job == PieceClass.Bishop)
+                return 'b';
+            // King and Pawn are missing from the normal list, as this is only
+            // used in promotion, and you cannot promote to yourself or to the king
+            throw new ArgumentOutOfRangeException();
         }
 
         /// <summary>

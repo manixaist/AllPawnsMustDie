@@ -127,7 +127,7 @@ namespace AllPawnsMustDie
         /// Has the piece ever moved?  Used for pawns and
         /// castling rights
         /// </summary>
-        public bool Deployed { get { return deployed; } }
+        public bool Deployed { get { return deployed; } set { deployed = value; } }
 
         /// <summary>
         /// Is the piece visible?  False after being captured

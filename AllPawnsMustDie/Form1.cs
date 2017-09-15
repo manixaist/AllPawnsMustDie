@@ -58,7 +58,7 @@ namespace AllPawnsMustDie
         /// <param name="e">Ignored</param>
         private void newGameToolStripNewGame_Click(object sender, EventArgs e)
         {
-            NewGame();
+            NewGame(String.Empty);
         }
 
         /// <summary>
@@ -76,6 +76,9 @@ namespace AllPawnsMustDie
             if (result == DialogResult.OK)
             {
                 string fenInput = fenDialog.FEN;
+                // For now just pass it and assume it's valid
+                NewGame(fenInput);
+
                 // TODO - validate the FEN input - sounds like a job for another class...
                 // Calculate the active player
                 // Extract other relevant info (castling rights, move counts, etc)
@@ -131,7 +134,7 @@ namespace AllPawnsMustDie
         /// <param name="e">Ignored</param>
         private void selfPlayToolStripSelfPlay_Click(object sender, EventArgs e)
         {
-            NewGame();
+            NewGame(String.Empty);
             chessGame?.StartEngineSelfPlay();
         }
 
@@ -158,7 +161,7 @@ namespace AllPawnsMustDie
         /// <summary>
         /// Starts a new game if an engine is loaded
         /// </summary>
-        private void NewGame()
+        private void NewGame(string fen)
         {
             if (fullPathToChessExe != null)
             {
@@ -172,7 +175,15 @@ namespace AllPawnsMustDie
                 // Now we have the engine path, so create an instance of the game class
                 chessGame = new ChessGame(this, fullPathToChessExe);
                 chessGame.OnChessGameSelfPlayGameOver += ChessGameSelfPlayGameOverEventHandler;
-                chessGame.NewGame(PieceColor.White);
+
+                if (fen == String.Empty)
+                {
+                    chessGame.NewGame(PieceColor.White);
+                }
+                else
+                {
+                    chessGame.NewPosition(PieceColor.White, fen);
+                }
 
                 // Trigger Paint event (draws the initial board)
                 Invalidate();

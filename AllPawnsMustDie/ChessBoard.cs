@@ -390,7 +390,7 @@ namespace AllPawnsMustDie
             whiteCastlingRights = BoardSide.King | BoardSide.Queen;
             blackCastlingRights = BoardSide.King | BoardSide.Queen;
         }
-
+        
         /// <summary>
         /// Sets up the board using the given FEN string.  It's possible not all
         /// pieces are present.
@@ -405,54 +405,27 @@ namespace AllPawnsMustDie
             // Top->Bottom
             string fenString = fen.Trim();
 
-            int currentRank = 8; // 8 - back rank for Black
-            int currentFile = 1; // A
+            FenParser parser = new FenParser(fenString);
 
-            int index = 0;
-            while (index < fenString.Length)
+            whiteCastlingRights =  parser.WhiteCastlingRights;
+            blackCastlingRights = parser.BlackCastlingRights;
+            enPassantValid = parser.IsEnPassantTargetValid;
+            if (parser.IsEnPassantTargetValid)
             {
-                char fenChar = fenString[index++];
-
-                if (Char.IsLetter(fenChar))
+                enPassantTarget = parser.EnPassantTarget;
+            }
+            fullMoveCount = parser.FullMoves;
+            halfMoveCount = parser.HalfMoves;
+            
+            foreach (ChessPiece fenPiece in parser.Pieces)
+            {
+                if (fenPiece.Color == PieceColor.White)
                 {
-                    PieceColor color = PieceColor.White;
-                    // New piece
-                    if (Char.IsLower(fenChar))
-                    {
-                        // Black
-                        color = PieceColor.Black;
-                    }
-
-                    ChessPiece newPiece = new ChessPiece(color, PieceClassFromFen(fenChar), new PieceFile(currentFile), currentRank);
-                    
-                    // Add piece
-                    if (color == PieceColor.White)
-                    {
-                        WhitePieces.Add(newPiece);
-                    }
-                    else
-                    {
-                        BlackPieces.Add(newPiece);
-                    }
-
-                    currentFile++;
+                    whitePieces.Add(fenPiece);
                 }
-                else if (Char.IsDigit(fenChar))
+                else
                 {
-                    // advance File the amount of the spaces
-                    currentFile += (Convert.ToUInt16(fenChar) - Convert.ToUInt16('0'));
-                }
-                else if (fenChar == '/')
-                {
-                    // decrement Rank
-                    currentRank--;
-                    // reset File
-                    currentFile = 1;
-                }
-                else if (char.IsWhiteSpace(fenChar))
-                {
-                    // Stop here for now
-                    break;
+                    blackPieces.Add(fenPiece);
                 }
             }
         }
