@@ -11,6 +11,9 @@ using System.Windows.Forms;
 namespace AllPawnsMustDie
 {
     #region Extension Methods
+    /// <summary>
+    /// Extension methods class for Rectangle
+    /// </summary>
     public static class RectangleExtensionMethods
     {
         /// <summary>

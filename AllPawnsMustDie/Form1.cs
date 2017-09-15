@@ -19,6 +19,9 @@ namespace AllPawnsMustDie
     public partial class APMD_Form : Form
     {
         #region Public Methods
+        /// <summary>
+        /// Initialize the main form
+        /// </summary>
         public APMD_Form()
         {
             InitializeComponent();
@@ -212,6 +215,10 @@ namespace AllPawnsMustDie
         #endregion
 
         #region Public Fields
+        /// <summary>
+        /// Verbose text label control name - used to write verbose output from the
+        /// engine, though currently, it only shows a progress string
+        /// </summary>
         public static string VerboseOutputControlName = "labelVerbose";
         #endregion
 

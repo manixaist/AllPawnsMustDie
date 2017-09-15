@@ -311,12 +311,25 @@ namespace AllPawnsMustDie
         #endregion
 
         #region Public Fields
+        /// <summary>UCI "bestmove" command</summary>
         public static string BestMoveResponse = "bestmove";
+        
+        /// <summary>UCI "isready" response</summary>
         public static string IsReady = "isready";
+        
+        /// <summary>UCI "readyok" command</summary>
         public static string ReadyOk = "readyok";
+        
+        /// <summary>UCI "uci" command</summary>
         public static string Uci = "uci";
+        
+        /// <summary>UCI "uciok" response</summary>
         public static string UciOk = "uciok";
+        
+        /// <summary>UCI "position" base command string</summary>
         public static string UciNewGame = "position startpos moves";
+        
+        /// <summary>UCI "quit" command</summary>
         public static string UciQuit = "quit";
         #endregion
 

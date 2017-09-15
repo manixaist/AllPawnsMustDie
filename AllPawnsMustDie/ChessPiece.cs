@@ -93,7 +93,7 @@ namespace AllPawnsMustDie
         /// <summary>
         /// Promote the piece to a new class
         /// </summary>
-        /// <param name="promotionClass">PieceClass after promotion e.g. Queen 
+        /// <param name="newLotInLife">PieceClass after promotion e.g. Queen 
         /// 99.99999% of the time</param>
         public void PromoteOnNextMove(PieceClass newLotInLife)
         {

@@ -88,7 +88,14 @@ namespace AllPawnsMustDie
                 return !(p1 == p2);
             }
 
+            /// <summary>
+            /// Returns the File for the square
+            /// </summary>
             public PieceFile File { get { return pieceFile; } }
+
+            /// <summary>
+            /// Returns the Rank for the square
+            /// </summary>
             public int Rank { get { return pieceRank; } }
 
             private PieceFile pieceFile;
@@ -701,7 +708,9 @@ namespace AllPawnsMustDie
         #endregion
 
         #region Public Fields
-        // FEN for the starting position
+        /// <summary>
+        /// FEN for the standard starting position
+        /// </summary>
         public static String InitialFENPosition = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1";
 
         // Some interesting test positions for legal moves, etc

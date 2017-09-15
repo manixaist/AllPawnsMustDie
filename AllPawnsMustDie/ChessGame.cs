@@ -14,23 +14,59 @@ namespace AllPawnsMustDie
     /// <summary>
     /// Chess piece color, only two options, pretty well known....
     /// </summary>
-    public enum PieceColor { White, Black };
+    public enum PieceColor
+    {
+        /// <summary>White pieces</summary>
+        White,
+        /// <summary>Black pieces</summary>
+        Black
+    };
 
     /// <summary>
     /// Filthy peasant or member of the nobility?
     /// </summary>
-    public enum PieceClass { King, Queen, Rook, Bishop, Knight, Pawn, EnPassantTarget };
+    public enum PieceClass
+    {
+        /// <summary>King - it's good to be him, but movement is limited</summary>
+        King,
+        /// <summary>Queen - Combines the powers of the Rook and Bishops </summary>
+        Queen,
+        /// <summary>Rook - Long operator along vert and horz lines</summary>
+        Rook,
+        /// <summary>Bishop - Long operator along diagonal lines.</summary>
+        Bishop,
+        /// <summary>Knight - Only piece that can jump in normal play.  Moves like an 'L'</summary>
+        Knight,
+        /// <summary>Pawn - Peasant class, moves forward only, captures on the diagonal, can be promoted</summary>
+        Pawn,
+        /// <summary>Not a true piece, but rather a temporary target for Pawns exposed to en-passant capture</summary>
+        EnPassantTarget
+    };
 
     /// <summary>
     /// Which way should the board be drawn?
     /// </summary>
-    public enum BoardOrientation { WhiteOnBottom, BlackOnBottom };
+    public enum BoardOrientation
+    {
+        /// <summary>Board is drawn with the White pieces on the bottom</summary>
+        WhiteOnBottom,
+        /// <summary>Board is drawn with the Black pieces on the bottom</summary>
+        BlackOnBottom
+    };
 
     /// <summary>
     /// The Chess Board is split into two sides, King and Queen (left or right)
     /// depending on which color you are.
     /// </summary>
-    [Flags] public enum BoardSide { None = 0, King = 1, Queen = 2 };
+    [Flags] public enum BoardSide
+    {
+        /// <summary>No side specified</summary>
+        None = 0,
+        /// <summary>Kingside of the board; Files [e-h]</summary>
+        King = 1,
+        /// <summary>Kingside of the board; Files [a-d]</summary>
+        Queen = 2
+    };
     #endregion
 
     #region Public Structs
@@ -683,6 +719,7 @@ namespace AllPawnsMustDie
         /// <summary>
         /// Helper to check if a king of a given color is in check on a given square
         /// </summary>
+        /// <param name="board">ChessBoard to check against</param>
         /// <param name="file">ChessFile to check against</param>
         /// <param name="rank">Rank to check against</param>
         /// <param name="kingColor">Color of king to check against</param>
@@ -706,6 +743,7 @@ namespace AllPawnsMustDie
         /// Checks if a given piece can target a specified square.  It is not required
         /// that the square be occupied by an enemy piece, just potentially reachable
         /// </summary>
+        /// <param name="board">ChessBoard to check against</param>
         /// <param name="piece">ChessPiece to check</param>
         /// <param name="targetFile">file to target</param>
         /// <param name="targetRank">rank to target</param>

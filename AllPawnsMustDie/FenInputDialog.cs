@@ -10,6 +10,9 @@ using System.Windows.Forms;
 
 namespace AllPawnsMustDie
 {
+    /// <summary>
+    /// Dialog class to accept a FEN string
+    /// </summary>
     public partial class FenInputDialog : Form
     {
         /// <summary>
