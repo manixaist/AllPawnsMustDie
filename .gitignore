@@ -3,6 +3,9 @@
 ##
 ## Get latest from https://github.com/github/gitignore/blob/master/VisualStudio.gitignore
 
+# Doxygen output (gh-pages clone)
+html/
+
 # User-specific files
 *.suo
 *.user
