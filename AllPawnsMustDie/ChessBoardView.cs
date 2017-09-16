@@ -245,6 +245,9 @@ namespace AllPawnsMustDie
             // Draw the board (orientation does not matter)
             DrawBoard(g);
 
+            // Draw the coordinates
+            DrawBoardCoordinates(g);
+
             Rectangle s;
             Rectangle e;
             bool drawLast = LastMoveRects(out s, out e);
@@ -482,6 +485,60 @@ namespace AllPawnsMustDie
             using (Pen p = new Pen(Color.Black, 1))
             {
                 g.DrawRectangle(p, new Rectangle(topLeft.X, topLeft.Y, BoardSizeInPixels, BoardSizeInPixels));
+            }
+        }
+
+        /// <summary>
+        /// Draw the File [a-h] and Rank [1-8] next to the board
+        /// </summary>
+        /// <param name="g">Graphics object</param>
+        private void DrawBoardCoordinates(Graphics g)
+        {
+            // The outline of the board
+            Rectangle boardRect = new Rectangle(topLeft.X, topLeft.Y, BoardSizeInPixels, BoardSizeInPixels);
+            // Shifting rect to draw the FILE
+            Rectangle fileRect = new Rectangle(topLeft.X, topLeft.Y, squareSizeInPixels, squareSizeInPixels / 4);
+            // Shifting rect to draw the RANK
+            Rectangle rankRect = new Rectangle(topLeft.X, topLeft.Y, squareSizeInPixels/4, squareSizeInPixels);
+
+            // Assume white on bottom for init
+            int dx = squareSizeInPixels;
+            int dy = squareSizeInPixels;
+            int rank = 8;
+            int dr = -1;
+            fileRect.Y = boardRect.Bottom;
+            fileRect.X = boardRect.Left;
+            rankRect.Y = boardRect.Top;
+            rankRect.X = boardRect.Left - rankRect.Width;
+
+            // If orientation is flipped, adjust
+            if (data.Orientation == BoardOrientation.BlackOnBottom)
+            {
+                rank = 1;
+                dr = 1;
+                fileRect.Y = boardRect.Top - fileRect.Height;
+                fileRect.X = boardRect.Right - fileRect.Width;
+                dx = -squareSizeInPixels;
+                dy = squareSizeInPixels;
+            }
+
+            // File names
+            string file = "abcdefgh";
+            using (Font font = new Font("Segoe UI", 12))
+            {
+                // The board is square, so same number of ranks as files
+                for (int index=0; index < file.Length; index++)
+                {
+                    // draw the file
+                    g.DrawString(file[index].ToString(), font, Brushes.Black, fileRect, stringFormat);
+                    // draw the rank
+                    g.DrawString(String.Format("{0}", rank), font, Brushes.Black, rankRect, stringFormat);
+
+                    // Adjust the text rects and the next rank (drawn in reverse order when black on bottom)
+                    fileRect.X += dx;
+                    rankRect.Y += dy;
+                    rank += dr;
+                }
             }
         }
 

@@ -398,7 +398,7 @@ namespace AllPawnsMustDie
             ((IChessBoardView)view).ViewData = board;
 
             // Set the Offset for the view
-            ((IChessBoardView)view).Offset = new Point(25, 50);
+            ((IChessBoardView)view).Offset = new Point(25, 75);
 
             // Create and initialize the board and view
             ((IChessBoardView)view).ViewData = board;
