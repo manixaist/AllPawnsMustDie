@@ -441,7 +441,7 @@ namespace AllPawnsMustDie
             // Yellow square for a normal move
             else
             {
-                g.FillRectangle(Brushes.Yellow, rect);
+                g.FillRectangle(Brushes.Aqua, rect);
             }
         }
 

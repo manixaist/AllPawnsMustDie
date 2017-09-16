@@ -284,6 +284,12 @@ namespace AllPawnsMustDie
             // Flip players
             activePlayer = (activePlayer == PieceColor.White) ? PieceColor.Black : PieceColor.White;
 
+            // Reset this target flag for all pieces except the pawn, which handles it in HandleEnPassant
+            if (playerPiece.Job != PieceClass.Pawn)
+            {
+                enPassantValid = false;
+            }
+
             // save the last capture state for external callers
             lastMoveWasCapture = anyCapture;
             return anyCapture;

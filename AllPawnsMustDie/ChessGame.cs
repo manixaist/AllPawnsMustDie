@@ -752,6 +752,11 @@ namespace AllPawnsMustDie
         {
             bool result = false;
 
+            if (piece.Visible == false)
+            {
+                return false;
+            }
+
             ChessBoard.BoardSquare targetSquare = new ChessBoard.BoardSquare(targetFile, targetRank);
             List<ChessBoard.BoardSquare> moves = new List<ChessBoard.BoardSquare>();
             switch (piece.Job)
