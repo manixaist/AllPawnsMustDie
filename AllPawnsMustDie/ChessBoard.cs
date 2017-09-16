@@ -717,13 +717,13 @@ namespace AllPawnsMustDie
         /// <summary>
         /// FEN for the standard starting position
         /// </summary>
-        public static String InitialFENPosition = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1";
+        public static String InitialFENPosition = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 0";
 
         // Some interesting test positions for legal moves, etc
-        //public static String InitialFENPosition = "r3kb1r/pp1npppp/3p4/2P5/4q3/8/P4P1P/3QK2R w KQkq - 0 1";
-        //public static String InitialFENPosition = "3k1r2/8/4N3/2N5/8/8/3PP3/r2RK3 w KQkq - 0 1";
-        //public static String InitialFENPosition = "r1b1kb1r/pppp1p1p/1q3np1/2n1p3/1BQ3N1/3N1B2/PPP3PP/R3K2R w KQkq - 0 1";
-        //public static String InitialFENPosition = "2b1k2r/pppp1p1p/3r1np1/b1n1p3/2Q1q1N1/2B1NB2/PPP3PP/R3K2R w KQkq - 0 1";
+        //public static String InitialFENPosition = "r3kb1r/pp1npppp/3p4/2P5/4q3/8/P4P1P/3QK2R w KQkq - 0 0";
+        //public static String InitialFENPosition = "3k1r2/8/4N3/2N5/8/8/3PP3/r2RK3 w KQkq - 0 0";
+        //public static String InitialFENPosition = "r1b1kb1r/pppp1p1p/1q3np1/2n1p3/1BQ3N1/3N1B2/PPP3PP/R3K2R w KQkq - 0 0";
+        //public static String InitialFENPosition = "2b1k2r/pppp1p1p/3r1np1/b1n1p3/2Q1q1N1/2B1NB2/PPP3PP/R3K2R w KQkq - 0 0";
         #endregion
 
         #region Private Fields

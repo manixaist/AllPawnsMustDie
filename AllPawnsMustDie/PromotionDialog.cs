@@ -27,24 +27,6 @@ namespace AllPawnsMustDie
         }
 
         /// <summary>
-        /// Helper to find the checked radio button
-        /// </summary>
-        /// <param name="container"></param>
-        /// <returns></returns>
-        private RadioButton GetCheckedRadio(Control container)
-        {
-            foreach (var control in container.Controls)
-            {
-                RadioButton radio = control as RadioButton;
-                if ((radio != null) && (radio.Checked == true))
-                {
-                    return radio;
-                }
-            }
-            return null;
-        }
-
-        /// <summary>
         /// Ok button click handler
         /// </summary>
         /// <param name="sender">Ignored</param>
@@ -52,7 +34,7 @@ namespace AllPawnsMustDie
         private void buttonOk_Click(object sender, EventArgs e)
         {
             // Get the checked button in the group box (only 1)
-            RadioButton checkedButton = GetCheckedRadio(groupBoxPromotion);
+            RadioButton checkedButton = RadioButtonHelper.GetCheckedRadio(groupBoxPromotion);
 
             if (checkedButton == radioButtonQueen)
             {

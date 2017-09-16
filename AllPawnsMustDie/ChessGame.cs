@@ -279,6 +279,12 @@ namespace AllPawnsMustDie
 
             // Initialize the engine
             chessEngine.NewGame();
+
+            // Start the game if the computer goes first
+            if (playerColor != PieceColor.White)
+            {
+                GetBestMoveAsync();
+            }
         }
 
         /// <summary>
@@ -396,6 +402,12 @@ namespace AllPawnsMustDie
 
             // Create and initialize the board and view
             ((IChessBoardView)view).ViewData = board;
+
+            // Set orientation for black players
+            if (playerColor == PieceColor.Black)
+            {
+                board.Orientation = BoardOrientation.BlackOnBottom;
+            }
 
             // Override the unicode drawing with bmp images
             ((IChessBoardView)view).SetBitmapImages(new Bitmap(Properties.Resources.chesspieces), new Size(64, 64));

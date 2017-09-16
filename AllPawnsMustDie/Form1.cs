@@ -61,7 +61,9 @@ namespace AllPawnsMustDie
         /// <param name="e">Ignored</param>
         private void newGameToolStripNewGame_Click(object sender, EventArgs e)
         {
-            NewGame(String.Empty);
+            ColorSelectDialog playerColorSelectionDialog = new ColorSelectDialog();
+            playerColorSelectionDialog.ShowDialog(this);
+            NewGame(String.Empty, playerColorSelectionDialog.PlayerColor);
         }
 
         /// <summary>
@@ -80,7 +82,7 @@ namespace AllPawnsMustDie
             {
                 string fenInput = fenDialog.FEN;
                 // For now just pass it and assume it's valid
-                NewGame(fenInput);
+                NewGame(fenInput, PieceColor.White);
 
                 // TODO - validate the FEN input - sounds like a job for another class...
                 // Calculate the active player
@@ -137,7 +139,7 @@ namespace AllPawnsMustDie
         /// <param name="e">Ignored</param>
         private void selfPlayToolStripSelfPlay_Click(object sender, EventArgs e)
         {
-            NewGame(String.Empty);
+            NewGame(String.Empty, PieceColor.White);
             chessGame?.StartEngineSelfPlay();
         }
 
@@ -164,7 +166,7 @@ namespace AllPawnsMustDie
         /// <summary>
         /// Starts a new game if an engine is loaded
         /// </summary>
-        private void NewGame(string fen)
+        private void NewGame(string fen, PieceColor playerColor)
         {
             if (fullPathToChessExe != null)
             {
@@ -181,11 +183,11 @@ namespace AllPawnsMustDie
 
                 if (fen == String.Empty)
                 {
-                    chessGame.NewGame(PieceColor.White);
+                    chessGame.NewGame(playerColor);
                 }
                 else
                 {
-                    chessGame.NewPosition(PieceColor.White, fen);
+                    chessGame.NewPosition(playerColor, fen);
                 }
 
                 // Trigger Paint event (draws the initial board)

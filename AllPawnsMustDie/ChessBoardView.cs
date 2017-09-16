@@ -273,8 +273,6 @@ namespace AllPawnsMustDie
             {
                 DrawLastMoveLine(g, s, e);
             }
-
-            // TODO.. highlight checks as well?  Data will need to support this
         }
 
         /// <summary>
@@ -573,9 +571,8 @@ namespace AllPawnsMustDie
             }
             else
             {
-                // Broken at the moment (same as above)
-                X = (file.ToInt() - 1) * squareSizeInPixels;
-                Y = (8 - rank) * squareSizeInPixels;
+                X = (8- file.ToInt()) * squareSizeInPixels;
+                Y = (rank - 1) * squareSizeInPixels;
             }
             
             // Return the calculated rect offset from the overall topLeft location
