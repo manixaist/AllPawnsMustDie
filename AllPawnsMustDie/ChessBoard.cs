@@ -101,6 +101,74 @@ namespace AllPawnsMustDie
             private PieceFile pieceFile;
             private int pieceRank;
         }
+
+        /// <summary>
+        /// Holds more detailed information on a single move for the GUI.
+        /// </summary>
+        public struct MoveInformation
+        {
+            /// <summary>
+            /// Create a new MoveInformation struct and fill in the minumum
+            /// required information
+            /// </summary>
+            /// <param name="start">starting square</param>
+            /// <param name="end">ending square</param>
+            public MoveInformation(BoardSquare start, BoardSquare end)
+            {
+                capturedPiece = null;
+                promotionClass = PieceClass.King; // Invalid promotion job
+                startSquare = start;
+                endSquare = end;
+            }
+
+            /// <summary>
+            /// Return the move in a SAN friendly format
+            /// </summary>
+            /// <returns></returns>
+            public override string ToString()
+            {
+                string result = String.Concat(startSquare.File.ToString(), startSquare.Rank.ToString(), 
+                    endSquare.File.ToString(), endSquare.Rank.ToString());
+
+                if (IsPromotion())
+                {
+                    result = String.Concat(result, ChessGame.PieceClassToPromotionChar(promotionClass));
+                }
+                return result;
+            }
+
+            /// <summary>
+            /// If not null, the piece that was captured on this move.
+            /// </summary>
+            public ChessPiece CapturedPiece
+            {
+                get { return capturedPiece; }
+                set { capturedPiece = value; }
+            }
+
+            /// <summary>
+            /// Property for the promotion job
+            /// </summary>
+            public PieceClass PromotionJob
+            {
+                get { return promotionClass; }
+                set { promotionClass = value; }
+            }
+
+            /// <summary>Returns the start square for the move</summary>
+            public BoardSquare Start { get { return startSquare; } }
+
+            /// <summary>Returns the ending square for the move</summary>
+            public BoardSquare End { get { return endSquare; } }
+
+            /// <summary>True if the move is a promotion move</summary>
+            public bool IsPromotion() { return (promotionClass != PieceClass.King); }
+
+            BoardSquare startSquare;
+            BoardSquare endSquare;
+            ChessPiece capturedPiece;
+            PieceClass promotionClass;
+        }
         #endregion
 
         #region Public Methods
@@ -187,9 +255,10 @@ namespace AllPawnsMustDie
         /// <param name="startRank">starting Rank [1-8]</param>
         /// <param name="targetFile">target File [a-h]</param>
         /// <param name="targetRank">target Rank [1-8]</param>
-        public bool MovePiece(PieceFile startFile, int startRank, PieceFile targetFile, int targetRank)
+        /// <returns>Piece captured or null</returns>
+        public ChessPiece MovePiece(PieceFile startFile, int startRank, PieceFile targetFile, int targetRank)
         {
-            bool anyCapture = false;
+            ChessPiece capturedPiece = null;
             
             // Get the player piece at the starting location
             // Piece should never be null if chess logic is sound
@@ -215,7 +284,7 @@ namespace AllPawnsMustDie
             // We also need to check for an en-passant capture if the pieces is a pawn
             if (playerPiece.Job == PieceClass.Pawn)
             {
-                anyCapture |= HandleEnPassant(startFile, startRank, targetFile, targetRank);
+                capturedPiece = HandleEnPassant(startFile, startRank, targetFile, targetRank);
             }
 
             // ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
@@ -229,26 +298,6 @@ namespace AllPawnsMustDie
             // ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
             // POST-MOVE CHECKS/UPDATES
 
-            // Update castling rights - moving the king ruins all castling forever
-            if ((playerPiece.Job == PieceClass.King) && (playerPiece.Deployed == false))
-            {
-                BoardSide castlingRights = ActivePlayerCastlingRights;
-                castlingRights = BoardSide.None;
-            }
-            // moving the rook removes the possibility on that side
-            else if ((playerPiece.Job == PieceClass.Rook) && (playerPiece.Deployed == false))
-            {
-                BoardSide castlingRights = ActivePlayerCastlingRights;
-                if (playerPiece.File.ToInt() == 1)
-                {
-                    castlingRights &= ~BoardSide.King;
-                }
-                else if (playerPiece.File.ToInt() == 8)
-                {
-                    castlingRights &= ~BoardSide.Queen;
-                }
-            }
-
             // For normal captures, just do a quick iteration of the opponent pieces
             // there are only 16 of these total in normal chess
             foreach (ChessPiece enemyPiece in opponentPieces)
@@ -258,8 +307,38 @@ namespace AllPawnsMustDie
                     enemyPiece.Visible)                 // and it's not already captured
                 {
                     enemyPiece.Visible = false;         // Stop drawing it (capture)
-                    anyCapture |= true;                 // record the capture
+                    capturedPiece = enemyPiece;         // Record the capture
                     break;                              // exit the search loop
+                }
+            }
+
+            // Update castling rights - moving the king ruins all castling forever
+            if ((playerPiece.Job == PieceClass.King) && (playerPiece.Deployed == false))
+            {
+                ActivePlayerCastlingRights = BoardSide.None;
+            }
+            // moving the rook removes the possibility on that side
+            else if ((playerPiece.Job == PieceClass.Rook) && (playerPiece.Deployed == false))
+            {
+                if (playerPiece.File.ToInt() == 8)
+                {
+                    ActivePlayerCastlingRights &= ~BoardSide.King;
+                }
+                else if (playerPiece.File.ToInt() == 1)
+                {
+                    ActivePlayerCastlingRights &= ~BoardSide.Queen;
+                }
+            }
+            // Capturing the opponent's rook removes castling rights for them on that side
+            else if ((capturedPiece != null) && (capturedPiece.Job == PieceClass.Rook))
+            {
+                if (playerPiece.File.ToInt() == 8)
+                {
+                    OpponentPlayerCastlingRights &= ~BoardSide.King;
+                }
+                else if (playerPiece.File.ToInt() == 1)
+                {
+                    OpponentPlayerCastlingRights &= ~BoardSide.Queen;
                 }
             }
 
@@ -276,7 +355,7 @@ namespace AllPawnsMustDie
             // then no progress is being made and the game is drawn and the players
             // are too stubborn to admit it.
             halfMoveCount++;
-            if (anyCapture || (playerPiece.Job == PieceClass.Pawn))
+            if ((capturedPiece != null) || (playerPiece.Job == PieceClass.Pawn))
             {
                 halfMoveCount = 0;
             }
@@ -291,8 +370,8 @@ namespace AllPawnsMustDie
             }
 
             // save the last capture state for external callers
-            lastMoveWasCapture = anyCapture;
-            return anyCapture;
+            lastMoveWasCapture = (capturedPiece != null);
+            return capturedPiece;
         }
 
         /// <summary>
@@ -396,7 +475,7 @@ namespace AllPawnsMustDie
         /// </summary>
         private void Reset()
         {
-            moveHistory = new List<string>();
+            moveHistory = new List<MoveInformation>();
             whitePieces = new List<ChessPiece>();
             blackPieces = new List<ChessPiece>();
             activePlayer = PieceColor.White;
@@ -491,11 +570,12 @@ namespace AllPawnsMustDie
         /// <param name="startRank">Rank the piece originated from </param>
         /// <param name="targetFile">ChessFile the piece is moving to</param>
         /// <param name="targetRank">Rank the piece is moving to</param>
-        /// <returns>True if the move was en-passant and a piece was captured</returns>
-        private bool HandleEnPassant(PieceFile startFile, int startRank, PieceFile targetFile, int targetRank)
+        /// <returns>captured piece or null</returns>
+        private ChessPiece HandleEnPassant(PieceFile startFile, int startRank, PieceFile targetFile, int targetRank)
         {
             enPassantValid = false;
             bool isCapture = false;
+            ChessPiece enPassantVictim = null;
             if ((startFile != targetFile) &&                      // Diagonal move
                 (!IsAnyPieceAtLocation(targetFile, targetRank)))  // There is some piece behind us
             {
@@ -504,7 +584,7 @@ namespace AllPawnsMustDie
                 // This should never return a null object if the chess logic around it is sound
                 // as a diagonal move (already detected) is not possible otherwise for a pawn
                 // that did not make a capture (already detected)
-                ChessPiece enPassantVictim = FindPieceAt(targetFile, enPassantTargetRank);
+                enPassantVictim = FindPieceAt(targetFile, enPassantTargetRank);
 
                 // Capture the piece
                 enPassantVictim.Visible = false;
@@ -521,7 +601,7 @@ namespace AllPawnsMustDie
                     enPassantValid = true;
                 }
             }
-            return isCapture;
+            return enPassantVictim;
         }
 
         /// <summary>
@@ -582,8 +662,14 @@ namespace AllPawnsMustDie
             castleRook.Move(rookTargetFile, rookRank);
 
             // Remove all castling rights for the active player
-            BoardSide playerCastleRights = (activePlayer == PieceColor.White) ? whiteCastlingRights : blackCastlingRights;
-            playerCastleRights = BoardSide.None;
+            if (activePlayer == PieceColor.White)
+            {
+                whiteCastlingRights = BoardSide.None;
+            }
+            else
+            {
+                blackCastlingRights = BoardSide.None;
+            }
         }
         #endregion
 
@@ -605,7 +691,7 @@ namespace AllPawnsMustDie
         /// <summary>
         /// List of moves in SAN (standard algebraic notation)
         /// </summary>
-        public List<string> Moves { get { return moveHistory; } }
+        public List<MoveInformation> Moves { get { return moveHistory; } }
 
         /// <summary>
         /// Set of active white pieces
@@ -656,6 +742,48 @@ namespace AllPawnsMustDie
                 else
                 {
                     return blackCastlingRights;
+                }
+            }
+
+            set
+            {
+                if (activePlayer == PieceColor.White)
+                {
+                    whiteCastlingRights = value; 
+                }
+                else
+                {
+                    blackCastlingRights = value;
+                }
+            }
+        }
+        
+        /// <summary>
+        /// Returns castling rights for opponent player
+        /// </summary>
+        public BoardSide OpponentPlayerCastlingRights
+        {
+            get
+            {
+                if (activePlayer == PieceColor.White)
+                {
+                    return blackCastlingRights;
+                }
+                else
+                {
+                    return whiteCastlingRights;
+                }
+            }
+
+            set
+            {
+                if (activePlayer == PieceColor.White)
+                {
+                    blackCastlingRights = value;
+                }
+                else
+                {
+                    whiteCastlingRights = value;
                 }
             }
         }
@@ -734,7 +862,8 @@ namespace AllPawnsMustDie
         private PieceColor activePlayer;
         private BoardSide whiteCastlingRights;
         private BoardSide blackCastlingRights;
-        private List<string> moveHistory;
+        //private List<string> moveHistory;
+        private List<MoveInformation> moveHistory;
         private List<ChessPiece> whitePieces;
         private List<ChessPiece> blackPieces;
         private bool enPassantValid;

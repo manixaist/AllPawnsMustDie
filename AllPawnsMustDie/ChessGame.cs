@@ -383,6 +383,28 @@ namespace AllPawnsMustDie
             // Close the engine (external process)
             chessEngine.Quit();
         }
+
+        /// <summary>
+        /// Converts a class to its character.  This does not need to differentiate
+        /// case for color like FEN does, it's just needed to update the engine.  
+        /// The starting position or FEN for the engine determines the active player
+        /// </summary>
+        /// <param name="job">Job to convert</param>
+        /// <returns></returns>
+        public static char PieceClassToPromotionChar(PieceClass job)
+        {
+            if (job == PieceClass.Queen)
+                return 'q';
+            if (job == PieceClass.Rook)
+                return 'r';
+            if (job == PieceClass.Knight)
+                return 'n';
+            if (job == PieceClass.Bishop)
+                return 'b';
+            // King and Pawn are missing from the normal list, as this is only
+            // used in promotion, and you cannot promote to yourself or to the king
+            throw new ArgumentOutOfRangeException();
+        }
         #endregion
 
         #region Private Methods
@@ -464,16 +486,16 @@ namespace AllPawnsMustDie
                 if (move == square)
                 {
                     // Done - this is the move
-                    string playerMove = String.Concat(selectedPiece.File.ToString(), 
-                        selectedPiece.Rank.ToString(), move.File.ToString(), move.Rank.ToString());
+                    ChessBoard.MoveInformation moveInfo = new ChessBoard.MoveInformation(
+                        new ChessBoard.BoardSquare(selectedPiece.File, selectedPiece.Rank), move);
 
                     Debug.WriteLine("Valid Move Detected: [{0},{1}]=>[{2},{3}]",
                         selectedPiece.File, selectedPiece.Rank, move.File, move.Rank);
 
-                    PieceFile startFile = new PieceFile(playerMove[0]);
-                    int startRank = Convert.ToInt16(playerMove[1]) - Convert.ToInt16('0');
-                    PieceFile destFile = new PieceFile(playerMove[2]);
-                    int destRank = Convert.ToInt16(playerMove[3]) - Convert.ToInt16('0');
+                    PieceFile startFile = moveInfo.Start.File;
+                    int startRank = moveInfo.Start.Rank;
+                    PieceFile destFile = moveInfo.End.File;
+                    int destRank = moveInfo.End.Rank;
 
                     // Need to detect promotion and launch dialog for it...
                     bool isPawnMovingToBackRank = (selectedPiece.Color == PieceColor.White) ? (destRank == 8) : (destRank == 1);
@@ -484,16 +506,19 @@ namespace AllPawnsMustDie
                         board.PromotePiece(startFile, startRank, destFile, destRank, pd.PromotionJob);
 
                         // Append the promotion info for the engine on the move
-                        playerMove = String.Concat(playerMove, PieceClassToPromotionChar(pd.PromotionJob));
+                        moveInfo.PromotionJob = pd.PromotionJob;
                     }
                     
                     // Always returns true now
-                    board.MovePiece(startFile, startRank, destFile, destRank);
-                    board.Moves.Add(playerMove);
+                    moveInfo.CapturedPiece = board.MovePiece(startFile, startRank, destFile, destRank);
+                    board.Moves.Add(moveInfo);
                     form.Invalidate();
 
                     Debug.WriteLine(String.Format("Fullmoves: {0}", board.FullMoveCount));
                     Debug.WriteLine(String.Format("Halfmoves: {0}", board.HalfMoveCount));
+                    Debug.WriteLine(String.Format("WhCastle: {0}", board.WhiteCastlingRights.ToString()));
+                    Debug.WriteLine(String.Format("BlCastle: {0}", board.BlackCastlingRights.ToString()));
+
 
                     // Update the position with the engine
                     UpdateEnginePosition();
@@ -506,28 +531,6 @@ namespace AllPawnsMustDie
             ((IChessBoardView)view).ClearHiglightedSquares();
             selectedPiece.Highlight = false;
             selectedPiece = null;
-        }
-
-        /// <summary>
-        /// Converts a class to its character.  This does not need to differentiate
-        /// case for color like FEN does, it's just needed to update the engine.  
-        /// The starting position or FEN for the engine determines the active player
-        /// </summary>
-        /// <param name="job">Job to convert</param>
-        /// <returns></returns>
-        private char PieceClassToPromotionChar(PieceClass job)
-        {
-            if (job == PieceClass.Queen)
-                return 'q';
-            if (job == PieceClass.Rook)
-                return 'r';
-            if (job == PieceClass.Knight)
-                return 'n';
-            if (job == PieceClass.Bishop)
-                return 'b';
-            // King and Pawn are missing from the normal list, as this is only
-            // used in promotion, and you cannot promote to yourself or to the king
-            throw new ArgumentOutOfRangeException();
         }
 
         /// <summary>
@@ -559,22 +562,25 @@ namespace AllPawnsMustDie
                 PieceFile destFile = new PieceFile(bestMove[2]);
                 int destRank = Convert.ToInt16(bestMove[3]) - Convert.ToInt16('0');
 
+                ChessBoard.MoveInformation moveInfo = new ChessBoard.MoveInformation(
+                        new ChessBoard.BoardSquare(startFile, startRank),
+                        new ChessBoard.BoardSquare(destFile, destRank));
+
                 // When coming from the engine, we get the promotion detection for free
                 if (bestMove.Length == 5)
                 {
                     // Applied on the next move
-                    board.PromotePiece(startFile, startRank, destFile, destRank, ChessBoard.PieceClassFromFen(bestMove[4]));
+                    PieceClass promotionJob = ChessBoard.PieceClassFromFen(bestMove[4]);
+                    board.PromotePiece(startFile, startRank, destFile, destRank, promotionJob);
+                    moveInfo.PromotionJob = promotionJob;
                 }
 
                 // Move the piece on the board, and add it to the official moves list
-                board.MovePiece(startFile, startRank, destFile, destRank);
-                board.Moves.Add(bestMove);
+                moveInfo.CapturedPiece = board.MovePiece(startFile, startRank, destFile, destRank);
+                board.Moves.Add(moveInfo);
 
                 // trigger a redraw
                 form.Invalidate();
-
-                Debug.WriteLine(String.Format("Fullmoves: {0}", board.FullMoveCount));
-                Debug.WriteLine(String.Format("Halfmoves: {0}", board.HalfMoveCount));
 
                 // Apply the move the engine just gave us with the engine (update it's own move)
                 UpdateEnginePosition();
@@ -636,6 +642,10 @@ namespace AllPawnsMustDie
             else if (response.StartsWith("bestmove") && (GetInputState() == InputState.WaitingOnOpponentMove))
             {
                 OnEngineBestMoveResponse();
+                Debug.WriteLine(String.Format("Fullmoves: {0}", board.FullMoveCount));
+                Debug.WriteLine(String.Format("Halfmoves: {0}", board.HalfMoveCount));
+                Debug.WriteLine(String.Format("WhCastle: {0}", board.WhiteCastlingRights.ToString()));
+                Debug.WriteLine(String.Format("BlCastle: {0}", board.BlackCastlingRights.ToString()));
             }
         }
 
@@ -722,8 +732,12 @@ namespace AllPawnsMustDie
             // send the command.  This block of code will be reused in
             // ChessEngineResponseReceivedEventHandler as well
             //chessEngine.Engine.SendCommand()
-            string movesList = String.Join(" ", board.Moves.ToArray());
-
+            string movesList = String.Empty;
+            foreach (ChessBoard.MoveInformation move in board.Moves)
+            {
+                movesList = String.Concat(movesList, " ");
+                movesList = String.Concat(movesList, move.ToString());
+            }
             updatingPosition = true;
             chessEngine.Engine.SendCommandAsync(String.Concat("position startpos moves ", movesList), "");
         }
@@ -807,13 +821,16 @@ namespace AllPawnsMustDie
                     {
                         int fileOffset = offsets[index * 2];
                         int rankOffset = offsets[(index * 2) + 1];
-                        ChessBoard.BoardSquare testSquare =
-                            new ChessBoard.BoardSquare(new PieceFile(piece.File.ToInt() + fileOffset), piece.Rank + rankOffset);
-
-                        if (testSquare == targetSquare)
+                        // Test the validity of the square offset
+                        if (ChessBoard.BoardSquare.IsValid(piece.File.ToInt() + fileOffset, piece.Rank + rankOffset))
                         {
-                            result = true;
-                            break;
+                            ChessBoard.BoardSquare testSquare =
+                                new ChessBoard.BoardSquare(new PieceFile(piece.File.ToInt() + fileOffset), piece.Rank + rankOffset);
+                            if (testSquare == targetSquare)
+                            {
+                                result = true;
+                                break;
+                            }
                         }
                     }
                     break;

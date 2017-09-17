@@ -676,7 +676,7 @@ namespace AllPawnsMustDie
             {
                 result = true;
                 // Get the move e.g. "e2e4"
-                string lastMove = data.Moves.Last();
+                string lastMove = data.Moves.Last().ToString();
 
                 // Divide the move into start and end e.g. "e2" and "e4"
                 string lastMoveStart = lastMove.Substring(0, 2);
