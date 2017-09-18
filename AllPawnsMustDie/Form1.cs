@@ -225,6 +225,17 @@ namespace AllPawnsMustDie
             chessGame?.UndoLastMove();
             Invalidate();
         }
+
+        /// <summary>
+        /// Show the about dialog...
+        /// </summary>
+        /// <param name="sender">Ignored</param>
+        /// <param name="e">Ignored</param>
+        private void aboutToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            AboutDialog dialog = new AboutDialog();
+            dialog.ShowDialog(this);
+        }
         #endregion
 
         #region Public Fields

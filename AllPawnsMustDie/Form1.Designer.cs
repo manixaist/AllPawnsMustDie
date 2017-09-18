@@ -49,8 +49,10 @@
             this.exitToolStripExit = new System.Windows.Forms.ToolStripMenuItem();
             this.editToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.showFENToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.labelVerbose = new System.Windows.Forms.Label();
             this.UndoLastMoveToolStripMenuItemUndoLastMove = new System.Windows.Forms.ToolStripMenuItem();
+            this.labelVerbose = new System.Windows.Forms.Label();
+            this.helpToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.aboutToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.menuStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -83,7 +85,8 @@
             // 
             this.menuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.fileToolStripMenuItem1,
-            this.editToolStripMenuItem});
+            this.editToolStripMenuItem,
+            this.helpToolStripMenuItem});
             this.menuStrip1.Location = new System.Drawing.Point(0, 0);
             this.menuStrip1.Name = "menuStrip1";
             this.menuStrip1.Size = new System.Drawing.Size(484, 24);
@@ -156,8 +159,16 @@
             // 
             this.showFENToolStripMenuItem.Enabled = false;
             this.showFENToolStripMenuItem.Name = "showFENToolStripMenuItem";
-            this.showFENToolStripMenuItem.Size = new System.Drawing.Size(157, 22);
+            this.showFENToolStripMenuItem.Size = new System.Drawing.Size(198, 22);
             this.showFENToolStripMenuItem.Text = "Show &FEN";
+            // 
+            // UndoLastMoveToolStripMenuItemUndoLastMove
+            // 
+            this.UndoLastMoveToolStripMenuItemUndoLastMove.Name = "UndoLastMoveToolStripMenuItemUndoLastMove";
+            this.UndoLastMoveToolStripMenuItemUndoLastMove.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.Z)));
+            this.UndoLastMoveToolStripMenuItemUndoLastMove.Size = new System.Drawing.Size(198, 22);
+            this.UndoLastMoveToolStripMenuItemUndoLastMove.Text = "&Undo last move";
+            this.UndoLastMoveToolStripMenuItemUndoLastMove.Click += new System.EventHandler(this.UndoLastMoveToolStripMenuItemUndoLastMove_Click);
             // 
             // labelVerbose
             // 
@@ -168,13 +179,20 @@
             this.labelVerbose.Size = new System.Drawing.Size(0, 21);
             this.labelVerbose.TabIndex = 1;
             // 
-            // UndoLastMoveToolStripMenuItemUndoLastMove
+            // helpToolStripMenuItem
             // 
-            this.UndoLastMoveToolStripMenuItemUndoLastMove.Name = "UndoLastMoveToolStripMenuItemUndoLastMove";
-            this.UndoLastMoveToolStripMenuItemUndoLastMove.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.Z)));
-            this.UndoLastMoveToolStripMenuItemUndoLastMove.Size = new System.Drawing.Size(198, 22);
-            this.UndoLastMoveToolStripMenuItemUndoLastMove.Text = "&Undo last move";
-            this.UndoLastMoveToolStripMenuItemUndoLastMove.Click += new System.EventHandler(this.UndoLastMoveToolStripMenuItemUndoLastMove_Click);
+            this.helpToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.aboutToolStripMenuItem});
+            this.helpToolStripMenuItem.Name = "helpToolStripMenuItem";
+            this.helpToolStripMenuItem.Size = new System.Drawing.Size(44, 20);
+            this.helpToolStripMenuItem.Text = "&Help";
+            // 
+            // aboutToolStripMenuItem
+            // 
+            this.aboutToolStripMenuItem.Name = "aboutToolStripMenuItem";
+            this.aboutToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.aboutToolStripMenuItem.Text = "&About";
+            this.aboutToolStripMenuItem.Click += new System.EventHandler(this.aboutToolStripMenuItem_Click);
             // 
             // APMD_Form
             // 
@@ -215,6 +233,8 @@
         private System.Windows.Forms.Label labelVerbose;
         private System.Windows.Forms.ToolStripMenuItem selfPlayToolStripSelfPlay;
         private System.Windows.Forms.ToolStripMenuItem UndoLastMoveToolStripMenuItemUndoLastMove;
+        private System.Windows.Forms.ToolStripMenuItem helpToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem aboutToolStripMenuItem;
     }
 }
 
