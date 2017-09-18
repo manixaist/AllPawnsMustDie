@@ -100,6 +100,14 @@ namespace AllPawnsMustDie
             isReadyForPromotion = true;
             promotionClass = newLotInLife;
         }
+
+        /// <summary>
+        /// Revert to a pawn....used to takeback moves
+        /// </summary>
+        public void Demote()
+        {
+            job = PieceClass.Pawn;
+        }
         #endregion
 
         #region Public Properties

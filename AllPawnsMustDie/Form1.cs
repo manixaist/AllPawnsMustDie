@@ -214,6 +214,17 @@ namespace AllPawnsMustDie
             }
             chessGame?.Quit(); // Quit any current game
         }
+
+        /// <summary>
+        /// Attempt to undo the last move made
+        /// </summary>
+        /// <param name="sender">Ignored</param>
+        /// <param name="e">Ignored</param>
+        private void UndoLastMoveToolStripMenuItemUndoLastMove_Click(object sender, EventArgs e)
+        {
+            chessGame?.UndoLastMove();
+            Invalidate();
+        }
         #endregion
 
         #region Public Fields
@@ -230,6 +241,5 @@ namespace AllPawnsMustDie
         private string fullPathToChessExe;
         private ChessGame chessGame;
         #endregion
-
     }
 }

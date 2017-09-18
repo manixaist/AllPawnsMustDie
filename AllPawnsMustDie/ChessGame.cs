@@ -385,6 +385,22 @@ namespace AllPawnsMustDie
         }
 
         /// <summary>
+        /// Undo the last move made if applicable
+        /// </summary>
+        public void UndoLastMove()
+        {
+            // Do nothing if waiting on the engine...
+            if ((GetInputState() != InputState.WaitingOnOpponentMove) &&
+                (board.Moves.Count() > 1))
+            {
+                // Actually need the last 2 moves (first undo the last opponent move, then
+                // undo the last player move...
+                board.RevertLastMove();
+                board.RevertLastMove();
+            }
+        }
+
+        /// <summary>
         /// Converts a class to its character.  This does not need to differentiate
         /// case for color like FEN does, it's just needed to update the engine.  
         /// The starting position or FEN for the engine determines the active player
@@ -487,7 +503,10 @@ namespace AllPawnsMustDie
                 {
                     // Done - this is the move
                     ChessBoard.MoveInformation moveInfo = new ChessBoard.MoveInformation(
-                        new ChessBoard.BoardSquare(selectedPiece.File, selectedPiece.Rank), move);
+                        new ChessBoard.BoardSquare(selectedPiece.File, selectedPiece.Rank), move, selectedPiece.Deployed);
+
+                    moveInfo.Color = selectedPiece.Color;
+                    moveInfo.CastlingRights = board.ActivePlayerCastlingRights;
 
                     Debug.WriteLine("Valid Move Detected: [{0},{1}]=>[{2},{3}]",
                         selectedPiece.File, selectedPiece.Rank, move.File, move.Rank);
@@ -510,7 +529,7 @@ namespace AllPawnsMustDie
                     }
                     
                     // Always returns true now
-                    moveInfo.CapturedPiece = board.MovePiece(startFile, startRank, destFile, destRank);
+                    board.MovePiece(startFile, startRank, destFile, destRank, ref moveInfo);
                     board.Moves.Add(moveInfo);
                     form.Invalidate();
 
@@ -562,9 +581,14 @@ namespace AllPawnsMustDie
                 PieceFile destFile = new PieceFile(bestMove[2]);
                 int destRank = Convert.ToInt16(bestMove[3]) - Convert.ToInt16('0');
 
+                ChessPiece foundPiece = board.FindPieceAt(startFile, startRank);
                 ChessBoard.MoveInformation moveInfo = new ChessBoard.MoveInformation(
                         new ChessBoard.BoardSquare(startFile, startRank),
-                        new ChessBoard.BoardSquare(destFile, destRank));
+                        new ChessBoard.BoardSquare(destFile, destRank),
+                        foundPiece.Deployed);
+
+                moveInfo.Color = foundPiece.Color;
+                moveInfo.CastlingRights = board.ActivePlayerCastlingRights;
 
                 // When coming from the engine, we get the promotion detection for free
                 if (bestMove.Length == 5)
@@ -576,7 +600,7 @@ namespace AllPawnsMustDie
                 }
 
                 // Move the piece on the board, and add it to the official moves list
-                moveInfo.CapturedPiece = board.MovePiece(startFile, startRank, destFile, destRank);
+                board.MovePiece(startFile, startRank, destFile, destRank, ref moveInfo);
                 board.Moves.Add(moveInfo);
 
                 // trigger a redraw

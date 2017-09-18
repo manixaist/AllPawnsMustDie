@@ -42,6 +42,7 @@
             this.menuStrip1 = new System.Windows.Forms.MenuStrip();
             this.fileToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
             this.newGameToolStripNewGame = new System.Windows.Forms.ToolStripMenuItem();
+            this.selfPlayToolStripSelfPlay = new System.Windows.Forms.ToolStripMenuItem();
             this.newPositionToolStripNewPosition = new System.Windows.Forms.ToolStripMenuItem();
             this.loadEngineToolStripLoadEngine = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
@@ -49,7 +50,7 @@
             this.editToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.showFENToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.labelVerbose = new System.Windows.Forms.Label();
-            this.selfPlayToolStripSelfPlay = new System.Windows.Forms.ToolStripMenuItem();
+            this.UndoLastMoveToolStripMenuItemUndoLastMove = new System.Windows.Forms.ToolStripMenuItem();
             this.menuStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -109,6 +110,13 @@
             this.newGameToolStripNewGame.Text = "&New Game";
             this.newGameToolStripNewGame.Click += new System.EventHandler(this.newGameToolStripNewGame_Click);
             // 
+            // selfPlayToolStripSelfPlay
+            // 
+            this.selfPlayToolStripSelfPlay.Name = "selfPlayToolStripSelfPlay";
+            this.selfPlayToolStripSelfPlay.Size = new System.Drawing.Size(153, 22);
+            this.selfPlayToolStripSelfPlay.Text = "Sel&f Play";
+            this.selfPlayToolStripSelfPlay.Click += new System.EventHandler(this.selfPlayToolStripSelfPlay_Click);
+            // 
             // newPositionToolStripNewPosition
             // 
             this.newPositionToolStripNewPosition.Name = "newPositionToolStripNewPosition";
@@ -138,7 +146,8 @@
             // editToolStripMenuItem
             // 
             this.editToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.showFENToolStripMenuItem});
+            this.showFENToolStripMenuItem,
+            this.UndoLastMoveToolStripMenuItemUndoLastMove});
             this.editToolStripMenuItem.Name = "editToolStripMenuItem";
             this.editToolStripMenuItem.Size = new System.Drawing.Size(39, 20);
             this.editToolStripMenuItem.Text = "&Edit";
@@ -147,7 +156,7 @@
             // 
             this.showFENToolStripMenuItem.Enabled = false;
             this.showFENToolStripMenuItem.Name = "showFENToolStripMenuItem";
-            this.showFENToolStripMenuItem.Size = new System.Drawing.Size(127, 22);
+            this.showFENToolStripMenuItem.Size = new System.Drawing.Size(157, 22);
             this.showFENToolStripMenuItem.Text = "Show &FEN";
             // 
             // labelVerbose
@@ -159,12 +168,13 @@
             this.labelVerbose.Size = new System.Drawing.Size(0, 21);
             this.labelVerbose.TabIndex = 1;
             // 
-            // selfPlayToolStripSelfPlay
+            // UndoLastMoveToolStripMenuItemUndoLastMove
             // 
-            this.selfPlayToolStripSelfPlay.Name = "selfPlayToolStripSelfPlay";
-            this.selfPlayToolStripSelfPlay.Size = new System.Drawing.Size(153, 22);
-            this.selfPlayToolStripSelfPlay.Text = "Sel&f Play";
-            this.selfPlayToolStripSelfPlay.Click += new System.EventHandler(this.selfPlayToolStripSelfPlay_Click);
+            this.UndoLastMoveToolStripMenuItemUndoLastMove.Name = "UndoLastMoveToolStripMenuItemUndoLastMove";
+            this.UndoLastMoveToolStripMenuItemUndoLastMove.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.Z)));
+            this.UndoLastMoveToolStripMenuItemUndoLastMove.Size = new System.Drawing.Size(198, 22);
+            this.UndoLastMoveToolStripMenuItemUndoLastMove.Text = "&Undo last move";
+            this.UndoLastMoveToolStripMenuItemUndoLastMove.Click += new System.EventHandler(this.UndoLastMoveToolStripMenuItemUndoLastMove_Click);
             // 
             // APMD_Form
             // 
@@ -204,6 +214,7 @@
         private System.Windows.Forms.ToolStripMenuItem loadEngineToolStripLoadEngine;
         private System.Windows.Forms.Label labelVerbose;
         private System.Windows.Forms.ToolStripMenuItem selfPlayToolStripSelfPlay;
+        private System.Windows.Forms.ToolStripMenuItem UndoLastMoveToolStripMenuItemUndoLastMove;
     }
 }
 

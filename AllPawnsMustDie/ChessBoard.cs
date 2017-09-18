@@ -113,24 +113,29 @@ namespace AllPawnsMustDie
             /// </summary>
             /// <param name="start">starting square</param>
             /// <param name="end">ending square</param>
-            public MoveInformation(BoardSquare start, BoardSquare end)
+            /// <param name="deployed">true if piece has ever moved, prior to this move</param>
+            public MoveInformation(BoardSquare start, BoardSquare end, bool deployed)
             {
-                capturedPiece = null;
+                ancillaryPiece = null;
                 promotionClass = PieceClass.King; // Invalid promotion job
                 startSquare = start;
                 endSquare = end;
+                firstMove = !deployed;
+                color = PieceColor.White; // assume white
+                castlingRights = BoardSide.None;
+                isCapture = false;
+                isCastle = false;
             }
 
             /// <summary>
             /// Return the move in a SAN friendly format
             /// </summary>
-            /// <returns></returns>
+            /// <returns>SAN engine-friendly format e.g. e2e4 or d7d8q, etc</returns>
             public override string ToString()
             {
                 string result = String.Concat(startSquare.File.ToString(), startSquare.Rank.ToString(), 
                     endSquare.File.ToString(), endSquare.Rank.ToString());
-
-                if (IsPromotion())
+                if (IsPromotion)
                 {
                     result = String.Concat(result, ChessGame.PieceClassToPromotionChar(promotionClass));
                 }
@@ -142,8 +147,41 @@ namespace AllPawnsMustDie
             /// </summary>
             public ChessPiece CapturedPiece
             {
-                get { return capturedPiece; }
-                set { capturedPiece = value; }
+                get
+                {
+                    if (!isCapture) { throw new InvalidOperationException(); }
+                    return ancillaryPiece;
+                }
+                set
+                {
+                    if (value != null) // ignore nulls
+                    {
+                        if (isCastle) { throw new InvalidOperationException(); }
+                        isCapture = true;
+                        ancillaryPiece = value;
+                    }
+                }
+            }
+
+            /// <summary>
+            /// If not null, the Rook associated with the castle
+            /// </summary>
+            public ChessPiece CastlingRook
+            {
+                get
+                {
+                    if (!isCastle) { throw new InvalidOperationException(); }
+                    return ancillaryPiece;
+                }
+                set
+                {
+                    if (value != null) // ignore nulls
+                    {
+                        if (isCapture) { throw new InvalidOperationException(); }
+                        isCastle = true;
+                        ancillaryPiece = value;
+                    }
+                }
             }
 
             /// <summary>
@@ -155,19 +193,51 @@ namespace AllPawnsMustDie
                 set { promotionClass = value; }
             }
 
+            /// <summary>
+            /// Color of the move
+            /// </summary>
+            public PieceColor Color
+            {
+                get { return color; }
+                set { color = value; }
+            }
+
+            /// <summary>
+            /// Castling rights prior to this move
+            /// </summary>
+            public BoardSide CastlingRights
+            {
+                get { return castlingRights; }
+                set { castlingRights = value; }
+            }
+
             /// <summary>Returns the start square for the move</summary>
             public BoardSquare Start { get { return startSquare; } }
 
             /// <summary>Returns the ending square for the move</summary>
             public BoardSquare End { get { return endSquare; } }
 
+            /// <summary>True if this is the piece's first move</summary>
+            public bool FirstMove { get { return firstMove; } }
+            
             /// <summary>True if the move is a promotion move</summary>
-            public bool IsPromotion() { return (promotionClass != PieceClass.King); }
+            public bool IsPromotion { get { return (promotionClass != PieceClass.King); } }
+
+            /// <summary>true if move was a capture</summary>
+            public bool IsCapture { get { return isCapture; } }
+
+            /// <summary>true if move was a castle</summary>
+            public bool IsCastle { get { return isCastle; } }
 
             BoardSquare startSquare;
             BoardSquare endSquare;
-            ChessPiece capturedPiece;
+            ChessPiece ancillaryPiece;
             PieceClass promotionClass;
+            PieceColor color;
+            BoardSide castlingRights;
+            bool firstMove;
+            bool isCapture;
+            bool isCastle;
         }
         #endregion
 
@@ -255,11 +325,8 @@ namespace AllPawnsMustDie
         /// <param name="startRank">starting Rank [1-8]</param>
         /// <param name="targetFile">target File [a-h]</param>
         /// <param name="targetRank">target Rank [1-8]</param>
-        /// <returns>Piece captured or null</returns>
-        public ChessPiece MovePiece(PieceFile startFile, int startRank, PieceFile targetFile, int targetRank)
+        public void MovePiece(PieceFile startFile, int startRank, PieceFile targetFile, int targetRank, ref MoveInformation moveInfo)
         {
-            ChessPiece capturedPiece = null;
-            
             // Get the player piece at the starting location
             // Piece should never be null if chess logic is sound
             ChessPiece playerPiece = FindPieceAt(startFile, startRank);
@@ -284,7 +351,7 @@ namespace AllPawnsMustDie
             // We also need to check for an en-passant capture if the pieces is a pawn
             if (playerPiece.Job == PieceClass.Pawn)
             {
-                capturedPiece = HandleEnPassant(startFile, startRank, targetFile, targetRank);
+                moveInfo.CapturedPiece = HandleEnPassant(startFile, startRank, targetFile, targetRank);
             }
 
             // ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
@@ -292,7 +359,7 @@ namespace AllPawnsMustDie
             playerPiece.Move(targetFile, targetRank);
             if (isCastling)
             {
-                PerformCastle(targetFile); // Also move the rook if needed
+                PerformCastle(targetFile, ref moveInfo); // Also move the rook if needed
             }
 
             // ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
@@ -306,9 +373,9 @@ namespace AllPawnsMustDie
                     (enemyPiece.File == targetFile) &&  // the square we just moved to
                     enemyPiece.Visible)                 // and it's not already captured
                 {
-                    enemyPiece.Visible = false;         // Stop drawing it (capture)
-                    capturedPiece = enemyPiece;         // Record the capture
-                    break;                              // exit the search loop
+                    enemyPiece.Visible      = false;        // Stop drawing it (capture)
+                    moveInfo.CapturedPiece  = enemyPiece;   // Record the capture
+                    break;                                  // exit the search loop
                 }
             }
 
@@ -330,7 +397,7 @@ namespace AllPawnsMustDie
                 }
             }
             // Capturing the opponent's rook removes castling rights for them on that side
-            else if ((capturedPiece != null) && (capturedPiece.Job == PieceClass.Rook))
+            else if ((moveInfo.IsCapture) && (moveInfo.CapturedPiece.Job == PieceClass.Rook))
             {
                 if (playerPiece.File.ToInt() == 8)
                 {
@@ -355,7 +422,7 @@ namespace AllPawnsMustDie
             // then no progress is being made and the game is drawn and the players
             // are too stubborn to admit it.
             halfMoveCount++;
-            if ((capturedPiece != null) || (playerPiece.Job == PieceClass.Pawn))
+            if ((moveInfo.IsCapture) || (playerPiece.Job == PieceClass.Pawn))
             {
                 halfMoveCount = 0;
             }
@@ -370,8 +437,7 @@ namespace AllPawnsMustDie
             }
 
             // save the last capture state for external callers
-            lastMoveWasCapture = (capturedPiece != null);
-            return capturedPiece;
+            lastMoveWasCapture = moveInfo.IsCapture;
         }
 
         /// <summary>
@@ -466,6 +532,64 @@ namespace AllPawnsMustDie
                 }
             }
             return null;
+        }
+
+        /// <summary>
+        /// Reverts last move applied to the board
+        /// </summary>
+        public void RevertLastMove()
+        {
+            MoveInformation lastMove = Moves.Last();
+            Moves.RemoveAt(Moves.Count()-1);
+
+            ChessPiece lastPieceMoved = FindPieceAt(lastMove.End.File, lastMove.End.Rank);
+            lastPieceMoved.Move(lastMove.Start.File, lastMove.Start.Rank);
+            if (lastMove.FirstMove)
+            {
+                lastPieceMoved.Deployed = false; // Reset first move
+            }
+
+            // Undo captures
+            lastMoveWasCapture = false;
+            if (lastMove.IsCapture)
+            {
+                lastMove.CapturedPiece.Visible = true;
+                lastMoveWasCapture = true;
+            }
+
+            if (lastMove.IsPromotion)
+            {
+                lastPieceMoved.Demote();
+            }
+
+            // Undo a castling move
+            if (lastMove.IsCastle)
+            {
+                // Move the rook back as well
+                ChessPiece rook = lastMove.CastlingRook;
+                PieceFile castleTargetFile = lastMove.End.File;
+                int rookRank = (rook.Color == PieceColor.White) ? 1 : 8;
+                if (castleTargetFile.ToInt() == 7) // g->h
+                {
+                    rook.Move(new PieceFile('h'), rookRank);
+                }
+                else if (castleTargetFile.ToInt() == 3) // c->a
+                {
+                    rook.Move(new PieceFile('a'), rookRank);
+                }
+                else
+                {
+                    // It has to be one of the above if logic is correct
+                    throw new IndexOutOfRangeException(); 
+                }
+                rook.Deployed = false;
+            }
+
+            // Reset castling rights
+            ActivePlayerCastlingRights = lastMove.CastlingRights;
+            
+            // Flip players
+            activePlayer = (activePlayer == PieceColor.White) ? PieceColor.Black : PieceColor.White;
         }
         #endregion
 
@@ -628,7 +752,8 @@ namespace AllPawnsMustDie
         /// along for the ride when the king is moved. See IsCastling for detection
         /// </summary>
         /// <param name="targetFile">ChessFile the King is moving to</param>
-        private void PerformCastle(PieceFile targetFile)
+        /// <param name="moveInfo">Extended move information</param>
+        private void PerformCastle(PieceFile targetFile, ref MoveInformation moveInfo)
         {
             // Find the corresponding Rook and move it too
             int rookRank = (activePlayer == PieceColor.White) ? 1 : 8;
@@ -660,6 +785,9 @@ namespace AllPawnsMustDie
 
             // Move it
             castleRook.Move(rookTargetFile, rookRank);
+
+            // Save the castling info
+            moveInfo.CastlingRook = castleRook;
 
             // Remove all castling rights for the active player
             if (activePlayer == PieceColor.White)
