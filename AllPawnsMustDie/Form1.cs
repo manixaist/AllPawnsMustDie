@@ -128,10 +128,6 @@ namespace AllPawnsMustDie
         /// <param name="e">Ignored</param>
         private void exitToolStripExit_Click(object sender, EventArgs e)
         {
-            if (chessGame != null)
-            {
-                chessGame.OnChessGameSelfPlayGameOver -= ChessGameSelfPlayGameOverEventHandler;
-            }
             chessGame?.Quit();  // Quit the game
             Close();            // Close the form
         }
@@ -209,6 +205,23 @@ namespace AllPawnsMustDie
         }
 
         /// <summary>
+        /// Event handler fired when a normal play game has finished
+        /// </summary>
+        /// <param name="sender">Ignored/passed through</param>
+        /// <param name="e">Ignored/passed through</param>
+        private void ChessGameNormalPlayGameOverEventHandler(object sender, EventArgs e)
+        {
+            if (InvokeRequired)
+            {
+                Invoke((MethodInvoker)delegate
+                {
+                    PieceColor winner = chessGame.GetWinner();
+                    MessageBox.Show(this, String.Format("Winner: {0}", winner.ToString()), "Game Over", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                });
+            }
+        }
+
+        /// <summary>
         /// Starts a new game if an engine is loaded
         /// </summary>
         private void NewGame(string fen, PieceColor playerColor, int engineThinkTimeInMs)
@@ -219,12 +232,14 @@ namespace AllPawnsMustDie
                 if (chessGame != null)
                 {
                     chessGame.OnChessGameSelfPlayGameOver -= ChessGameSelfPlayGameOverEventHandler;
+                    chessGame.OnChessGameNormalPlayGameOver -= ChessGameNormalPlayGameOverEventHandler;
                 }
                 chessGame?.Dispose();
 
                 // Now we have the engine path, so create an instance of the game class
                 chessGame = new ChessGame(this, fullPathToChessExe);
                 chessGame.OnChessGameSelfPlayGameOver += ChessGameSelfPlayGameOverEventHandler;
+                chessGame.OnChessGameNormalPlayGameOver += ChessGameNormalPlayGameOverEventHandler;
 
                 if (fen == String.Empty)
                 {
@@ -256,6 +271,7 @@ namespace AllPawnsMustDie
             if (chessGame != null)
             {
                 chessGame.OnChessGameSelfPlayGameOver -= ChessGameSelfPlayGameOverEventHandler;
+                chessGame.OnChessGameNormalPlayGameOver -= ChessGameNormalPlayGameOverEventHandler;
             }
             chessGame?.Quit(); // Quit any current game
         }

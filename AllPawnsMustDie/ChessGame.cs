@@ -209,10 +209,14 @@ namespace AllPawnsMustDie
 
         #region Public Events
         /// <summary>
-        /// EventHandler (delegate(s)) that will get the response event
-        /// this is only used internally to the class
+        /// Fired when a self play game ends
         /// </summary>
         public event EventHandler<EventArgs> OnChessGameSelfPlayGameOver;
+
+        /// <summary>
+        /// Fired when a normal game ends
+        /// </summary>
+        public event EventHandler<EventArgs> OnChessGameNormalPlayGameOver;
         #endregion
 
         #region Public Methods
@@ -411,6 +415,26 @@ namespace AllPawnsMustDie
         }
 
         /// <summary>
+        /// Should only be called after a game over event, no draws right now in normal
+        /// play so find the mated player
+        /// </summary>
+        /// <returns></returns>
+        public PieceColor GetWinner()
+        {
+            if (PlayerMated(PieceColor.White))
+            {
+                return PieceColor.Black;
+            }
+
+            if (PlayerMated(PieceColor.Black))
+            {
+                return PieceColor.White;
+            }
+
+            throw new InvalidOperationException();
+        }
+
+        /// <summary>
         /// Converts a class to its character.  This does not need to differentiate
         /// case for color like FEN does, it's just needed to update the engine.  
         /// The starting position or FEN for the engine determines the active player
@@ -584,7 +608,7 @@ namespace AllPawnsMustDie
                 // Debug at the end to compare the board states
                 chessEngine.Engine.SendCommandAsync("d", "Checkers:");
             }
-            else
+            else if (GetInputState() == InputState.WaitingOnOpponentMove)
             {
                 // Extract the board location from the move string
                 PieceFile startFile = new PieceFile(bestMove[0]);
@@ -674,7 +698,15 @@ namespace AllPawnsMustDie
                 // update and if our logic is correct won't be illegal
                 GetBestMoveAsync();
             }
-            else if (response.StartsWith("bestmove") && (GetInputState() == InputState.WaitingOnOpponentMove))
+            else if (response.StartsWith("Checkers:"))
+            {
+                // Fire event if there is a listener
+                if (OnChessGameNormalPlayGameOver != null)
+                {
+                    OnChessGameNormalPlayGameOver(this, null);
+                }
+            }
+            else if (response.StartsWith("bestmove"))
             {
                 OnEngineBestMoveResponse();
                 Debug.WriteLine(String.Format("Fullmoves: {0}", board.FullMoveCount));
@@ -1427,6 +1459,26 @@ namespace AllPawnsMustDie
         
             // Check violations are handled by the common caller for regulatr moves
             return moves;
+        }
+
+        /// <summary>
+        /// Checks if a player is mated (no legal moves)
+        /// </summary>
+        /// <param name="color">Color of player to check</param>
+        /// <returns>True if there are no legal moves (mated)</returns>
+        private bool PlayerMated(PieceColor color)
+        {
+            bool result = true;
+            List<ChessPiece> pieces = (color == PieceColor.White) ? board.WhitePieces : board.BlackPieces;
+            foreach (ChessPiece piece in pieces)
+            {
+                if ( GetLegalMoves(piece, board).Count() > 0)
+                {
+                    result = false;
+                    break;
+                }
+            }
+            return result;
         }
         #endregion
 
