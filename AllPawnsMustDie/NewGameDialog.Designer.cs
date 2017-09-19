@@ -50,7 +50,7 @@
             this.groupBoxPlayerColor.Size = new System.Drawing.Size(181, 72);
             this.groupBoxPlayerColor.TabIndex = 0;
             this.groupBoxPlayerColor.TabStop = false;
-            this.groupBoxPlayerColor.Text = "Player color";
+            this.groupBoxPlayerColor.Text = Properties.Resources.PlayerColorGroupBox;
             // 
             // radioButtonBlack
             // 
@@ -60,7 +60,7 @@
             this.radioButtonBlack.Size = new System.Drawing.Size(52, 17);
             this.radioButtonBlack.TabIndex = 1;
             this.radioButtonBlack.TabStop = true;
-            this.radioButtonBlack.Text = "&Black";
+            this.radioButtonBlack.Text = Properties.Resources.PlayerColorSelectBlack;
             this.radioButtonBlack.UseVisualStyleBackColor = true;
             // 
             // radioButtonWhite
@@ -71,7 +71,7 @@
             this.radioButtonWhite.Size = new System.Drawing.Size(53, 17);
             this.radioButtonWhite.TabIndex = 0;
             this.radioButtonWhite.TabStop = true;
-            this.radioButtonWhite.Text = "&White";
+            this.radioButtonWhite.Text = Properties.Resources.PlayerColorSelectWhite;
             this.radioButtonWhite.UseVisualStyleBackColor = true;
             // 
             // labelThinkTime
@@ -81,7 +81,7 @@
             this.labelThinkTime.Name = "labelThinkTime";
             this.labelThinkTime.Size = new System.Drawing.Size(121, 13);
             this.labelThinkTime.TabIndex = 1;
-            this.labelThinkTime.Text = "Engine Think Time (ms):";
+            this.labelThinkTime.Text = Properties.Resources.EngineThinkTimeLabel;
             // 
             // numericUpDownThinkTime
             // 
@@ -117,7 +117,7 @@
             this.buttonOk.Name = "buttonOk";
             this.buttonOk.Size = new System.Drawing.Size(75, 23);
             this.buttonOk.TabIndex = 3;
-            this.buttonOk.Text = "&Ok";
+            this.buttonOk.Text = Properties.Resources.Ok;
             this.buttonOk.UseVisualStyleBackColor = true;
             this.buttonOk.Click += new System.EventHandler(this.buttonOk_Click);
             // 
@@ -128,7 +128,7 @@
             this.buttonCancel.Name = "buttonCancel";
             this.buttonCancel.Size = new System.Drawing.Size(75, 23);
             this.buttonCancel.TabIndex = 4;
-            this.buttonCancel.Text = "&Cancel";
+            this.buttonCancel.Text = Properties.Resources.Cancel;
             this.buttonCancel.UseVisualStyleBackColor = true;
             // 
             // labelFEN
@@ -138,7 +138,7 @@
             this.labelFEN.Name = "labelFEN";
             this.labelFEN.Size = new System.Drawing.Size(116, 13);
             this.labelFEN.TabIndex = 5;
-            this.labelFEN.Text = "Starting Position (FEN):";
+            this.labelFEN.Text = Properties.Resources.FENInputLabel;
             // 
             // textBoxFEN
             // 
@@ -167,7 +167,7 @@
             this.MinimizeBox = false;
             this.Name = "NewGameDialog";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
-            this.Text = "New Game";
+            this.Text = Properties.Resources.NewGameTitle;
             this.groupBoxPlayerColor.ResumeLayout(false);
             this.groupBoxPlayerColor.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDownThinkTime)).EndInit();

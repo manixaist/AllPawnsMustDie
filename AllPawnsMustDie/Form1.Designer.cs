@@ -104,34 +104,34 @@
             this.exitToolStripExit});
             this.fileToolStripMenuItem1.Name = "fileToolStripMenuItem1";
             this.fileToolStripMenuItem1.Size = new System.Drawing.Size(37, 20);
-            this.fileToolStripMenuItem1.Text = "&File";
+            this.fileToolStripMenuItem1.Text = Properties.Resources.MenuFile;
             // 
             // newGameToolStripNewGame
             // 
             this.newGameToolStripNewGame.Name = "newGameToolStripNewGame";
             this.newGameToolStripNewGame.Size = new System.Drawing.Size(153, 22);
-            this.newGameToolStripNewGame.Text = "&New Game";
+            this.newGameToolStripNewGame.Text = Properties.Resources.MenuFileNewGame;
             this.newGameToolStripNewGame.Click += new System.EventHandler(this.newGameToolStripNewGame_Click);
             // 
             // selfPlayToolStripSelfPlay
             // 
             this.selfPlayToolStripSelfPlay.Name = "selfPlayToolStripSelfPlay";
             this.selfPlayToolStripSelfPlay.Size = new System.Drawing.Size(153, 22);
-            this.selfPlayToolStripSelfPlay.Text = "Sel&f Play";
+            this.selfPlayToolStripSelfPlay.Text = Properties.Resources.MenuFileSelfPlay;
             this.selfPlayToolStripSelfPlay.Click += new System.EventHandler(this.selfPlayToolStripSelfPlay_Click);
             // 
             // newPositionToolStripNewPosition
             // 
             this.newPositionToolStripNewPosition.Name = "newPositionToolStripNewPosition";
             this.newPositionToolStripNewPosition.Size = new System.Drawing.Size(153, 22);
-            this.newPositionToolStripNewPosition.Text = "New &Position...";
+            this.newPositionToolStripNewPosition.Text = Properties.Resources.MenuFileNewPosition;
             this.newPositionToolStripNewPosition.Click += new System.EventHandler(this.newPositionToolStripNewPosition_Click);
             // 
             // loadEngineToolStripLoadEngine
             // 
             this.loadEngineToolStripLoadEngine.Name = "loadEngineToolStripLoadEngine";
             this.loadEngineToolStripLoadEngine.Size = new System.Drawing.Size(153, 22);
-            this.loadEngineToolStripLoadEngine.Text = "&Load Engine...";
+            this.loadEngineToolStripLoadEngine.Text = Properties.Resources.MenuFileLoadEngine;
             this.loadEngineToolStripLoadEngine.Click += new System.EventHandler(this.loadEngineToolStripLoadEngine_Click);
             // 
             // toolStripSeparator2
@@ -143,7 +143,7 @@
             // 
             this.exitToolStripExit.Name = "exitToolStripExit";
             this.exitToolStripExit.Size = new System.Drawing.Size(153, 22);
-            this.exitToolStripExit.Text = "E&xit";
+            this.exitToolStripExit.Text = Properties.Resources.MenuFileExit;
             this.exitToolStripExit.Click += new System.EventHandler(this.exitToolStripExit_Click);
             // 
             // editToolStripMenuItem
@@ -153,21 +153,21 @@
             this.UndoLastMoveToolStripMenuItemUndoLastMove});
             this.editToolStripMenuItem.Name = "editToolStripMenuItem";
             this.editToolStripMenuItem.Size = new System.Drawing.Size(39, 20);
-            this.editToolStripMenuItem.Text = "&Edit";
+            this.editToolStripMenuItem.Text = Properties.Resources.MenuEdit;
             // 
             // showFENToolStripMenuItem
             // 
             this.showFENToolStripMenuItem.Enabled = false;
             this.showFENToolStripMenuItem.Name = "showFENToolStripMenuItem";
             this.showFENToolStripMenuItem.Size = new System.Drawing.Size(198, 22);
-            this.showFENToolStripMenuItem.Text = "Show &FEN";
+            this.showFENToolStripMenuItem.Text = Properties.Resources.MenuEditShowFen;
             // 
             // UndoLastMoveToolStripMenuItemUndoLastMove
             // 
             this.UndoLastMoveToolStripMenuItemUndoLastMove.Name = "UndoLastMoveToolStripMenuItemUndoLastMove";
             this.UndoLastMoveToolStripMenuItemUndoLastMove.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.Z)));
             this.UndoLastMoveToolStripMenuItemUndoLastMove.Size = new System.Drawing.Size(198, 22);
-            this.UndoLastMoveToolStripMenuItemUndoLastMove.Text = "&Undo last move";
+            this.UndoLastMoveToolStripMenuItemUndoLastMove.Text = Properties.Resources.MenuEditUndo;
             this.UndoLastMoveToolStripMenuItemUndoLastMove.Click += new System.EventHandler(this.UndoLastMoveToolStripMenuItemUndoLastMove_Click);
             // 
             // helpToolStripMenuItem
@@ -176,13 +176,13 @@
             this.aboutToolStripMenuItem});
             this.helpToolStripMenuItem.Name = "helpToolStripMenuItem";
             this.helpToolStripMenuItem.Size = new System.Drawing.Size(44, 20);
-            this.helpToolStripMenuItem.Text = "&Help";
+            this.helpToolStripMenuItem.Text = Properties.Resources.MenuHelp;
             // 
             // aboutToolStripMenuItem
             // 
             this.aboutToolStripMenuItem.Name = "aboutToolStripMenuItem";
             this.aboutToolStripMenuItem.Size = new System.Drawing.Size(107, 22);
-            this.aboutToolStripMenuItem.Text = "&About";
+            this.aboutToolStripMenuItem.Text = Properties.Resources.MenuHelpAbout;
             this.aboutToolStripMenuItem.Click += new System.EventHandler(this.aboutToolStripMenuItem_Click);
             // 
             // labelVerbose
@@ -205,7 +205,7 @@
             this.DoubleBuffered = true;
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
             this.Name = "APMD_Form";
-            this.Text = "All Pawns Must Die";
+            this.Text = Properties.Resources.MainFormTitle;
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.APMD_Form_FormClosing);
             this.Paint += new System.Windows.Forms.PaintEventHandler(this.APMD_Form_Paint);
             this.MouseUp += new System.Windows.Forms.MouseEventHandler(this.APMD_Form_MouseUp);
@@ -213,7 +213,6 @@
             this.menuStrip1.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
-
         }
 
         #endregion

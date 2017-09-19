@@ -41,7 +41,7 @@
             this.linkLabelGitHub.Size = new System.Drawing.Size(230, 13);
             this.linkLabelGitHub.TabIndex = 0;
             this.linkLabelGitHub.TabStop = true;
-            this.linkLabelGitHub.Text = "https://github.com/manixaist/AllPawnsMustDie";
+            this.linkLabelGitHub.Text = Properties.Resources.AboutRepositoryLink;
             this.linkLabelGitHub.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.linkLabelGitHub_LinkClicked);
             // 
             // labelAbout
@@ -51,7 +51,7 @@
             this.labelAbout.Name = "labelAbout";
             this.labelAbout.Size = new System.Drawing.Size(245, 26);
             this.labelAbout.TabIndex = 1;
-            this.labelAbout.Text = "All Pawns Must Die is free and open-source under \r\nthe MIT license.";
+            this.labelAbout.Text = Properties.Resources.AboutLabel;
             // 
             // label1
             // 
@@ -61,7 +61,7 @@
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(114, 13);
             this.label1.TabIndex = 2;
-            this.label1.Text = "GitHub Repository:";
+            this.label1.Text = Properties.Resources.AboutGithubLabel;
             // 
             // AboutDialog
             // 
@@ -76,7 +76,7 @@
             this.MinimizeBox = false;
             this.Name = "AboutDialog";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
-            this.Text = "About";
+            this.Text = Properties.Resources.AboutFormTitle;
             this.ResumeLayout(false);
             this.PerformLayout();
 

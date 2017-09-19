@@ -61,12 +61,282 @@ namespace AllPawnsMustDie.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to About.
+        /// </summary>
+        internal static string AboutFormTitle {
+            get {
+                return ResourceManager.GetString("AboutFormTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to GitHub Repository:.
+        /// </summary>
+        internal static string AboutGithubLabel {
+            get {
+                return ResourceManager.GetString("AboutGithubLabel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to All Pawns Must Die is free and open-source under \r\nthe MIT license..
+        /// </summary>
+        internal static string AboutLabel {
+            get {
+                return ResourceManager.GetString("AboutLabel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to https://github.com/manixaist/AllPawnsMustDie.
+        /// </summary>
+        internal static string AboutRepositoryLink {
+            get {
+                return ResourceManager.GetString("AboutRepositoryLink", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to &amp;Cancel.
+        /// </summary>
+        internal static string Cancel {
+            get {
+                return ResourceManager.GetString("Cancel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
         internal static System.Drawing.Bitmap chesspieces {
             get {
                 object obj = ResourceManager.GetObject("chesspieces", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Engine Think Time (ms):.
+        /// </summary>
+        internal static string EngineThinkTimeLabel {
+            get {
+                return ResourceManager.GetString("EngineThinkTimeLabel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Starting Position (FEN):.
+        /// </summary>
+        internal static string FENInputLabel {
+            get {
+                return ResourceManager.GetString("FENInputLabel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to All Pawns Must Die.
+        /// </summary>
+        internal static string MainFormTitle {
+            get {
+                return ResourceManager.GetString("MainFormTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to &amp;Edit.
+        /// </summary>
+        internal static string MenuEdit {
+            get {
+                return ResourceManager.GetString("MenuEdit", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Show &amp;FEN.
+        /// </summary>
+        internal static string MenuEditShowFen {
+            get {
+                return ResourceManager.GetString("MenuEditShowFen", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to &amp;Undo last move.
+        /// </summary>
+        internal static string MenuEditUndo {
+            get {
+                return ResourceManager.GetString("MenuEditUndo", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to &amp;File.
+        /// </summary>
+        internal static string MenuFile {
+            get {
+                return ResourceManager.GetString("MenuFile", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to E&amp;xit.
+        /// </summary>
+        internal static string MenuFileExit {
+            get {
+                return ResourceManager.GetString("MenuFileExit", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to &amp;Load Engine....
+        /// </summary>
+        internal static string MenuFileLoadEngine {
+            get {
+                return ResourceManager.GetString("MenuFileLoadEngine", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to &amp;New Game.
+        /// </summary>
+        internal static string MenuFileNewGame {
+            get {
+                return ResourceManager.GetString("MenuFileNewGame", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to New &amp;Position....
+        /// </summary>
+        internal static string MenuFileNewPosition {
+            get {
+                return ResourceManager.GetString("MenuFileNewPosition", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Sel&amp;f Play.
+        /// </summary>
+        internal static string MenuFileSelfPlay {
+            get {
+                return ResourceManager.GetString("MenuFileSelfPlay", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to &amp;Help.
+        /// </summary>
+        internal static string MenuHelp {
+            get {
+                return ResourceManager.GetString("MenuHelp", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to &amp;About.
+        /// </summary>
+        internal static string MenuHelpAbout {
+            get {
+                return ResourceManager.GetString("MenuHelpAbout", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to New Game.
+        /// </summary>
+        internal static string NewGameTitle {
+            get {
+                return ResourceManager.GetString("NewGameTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to &amp;Ok.
+        /// </summary>
+        internal static string Ok {
+            get {
+                return ResourceManager.GetString("Ok", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Player color.
+        /// </summary>
+        internal static string PlayerColorGroupBox {
+            get {
+                return ResourceManager.GetString("PlayerColorGroupBox", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to &amp;Black.
+        /// </summary>
+        internal static string PlayerColorSelectBlack {
+            get {
+                return ResourceManager.GetString("PlayerColorSelectBlack", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to &amp;White.
+        /// </summary>
+        internal static string PlayerColorSelectWhite {
+            get {
+                return ResourceManager.GetString("PlayerColorSelectWhite", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to &amp;Bishop.
+        /// </summary>
+        internal static string PromotionBishop {
+            get {
+                return ResourceManager.GetString("PromotionBishop", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Promotion.
+        /// </summary>
+        internal static string PromotionFormTitle {
+            get {
+                return ResourceManager.GetString("PromotionFormTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Choose....
+        /// </summary>
+        internal static string PromotionGroupLabel {
+            get {
+                return ResourceManager.GetString("PromotionGroupLabel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to &amp;Knight.
+        /// </summary>
+        internal static string PromotionKnight {
+            get {
+                return ResourceManager.GetString("PromotionKnight", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to &amp;Queen.
+        /// </summary>
+        internal static string PromotionQueen {
+            get {
+                return ResourceManager.GetString("PromotionQueen", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to &amp;Rook.
+        /// </summary>
+        internal static string PromotionRook {
+            get {
+                return ResourceManager.GetString("PromotionRook", resourceCulture);
             }
         }
     }

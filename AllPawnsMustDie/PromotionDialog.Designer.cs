@@ -46,7 +46,7 @@
             this.radioButtonQueen.Size = new System.Drawing.Size(57, 17);
             this.radioButtonQueen.TabIndex = 0;
             this.radioButtonQueen.TabStop = true;
-            this.radioButtonQueen.Text = "&Queen";
+            this.radioButtonQueen.Text = Properties.Resources.PromotionQueen;
             this.radioButtonQueen.UseVisualStyleBackColor = true;
             // 
             // radioButtonBishop
@@ -57,7 +57,7 @@
             this.radioButtonBishop.Size = new System.Drawing.Size(57, 17);
             this.radioButtonBishop.TabIndex = 2;
             this.radioButtonBishop.TabStop = true;
-            this.radioButtonBishop.Text = "&Bishop";
+            this.radioButtonBishop.Text = Properties.Resources.PromotionBishop;
             this.radioButtonBishop.UseVisualStyleBackColor = true;
             // 
             // radioButtonRook
@@ -68,7 +68,7 @@
             this.radioButtonRook.Size = new System.Drawing.Size(51, 17);
             this.radioButtonRook.TabIndex = 1;
             this.radioButtonRook.TabStop = true;
-            this.radioButtonRook.Text = "&Rook";
+            this.radioButtonRook.Text = Properties.Resources.PromotionRook;
             this.radioButtonRook.UseVisualStyleBackColor = true;
             // 
             // radioButtonKnight
@@ -79,7 +79,7 @@
             this.radioButtonKnight.Size = new System.Drawing.Size(55, 17);
             this.radioButtonKnight.TabIndex = 3;
             this.radioButtonKnight.TabStop = true;
-            this.radioButtonKnight.Text = "&Knight";
+            this.radioButtonKnight.Text = Properties.Resources.PromotionKnight;
             this.radioButtonKnight.UseVisualStyleBackColor = true;
             // 
             // groupBoxPromotion
@@ -93,7 +93,7 @@
             this.groupBoxPromotion.Size = new System.Drawing.Size(92, 127);
             this.groupBoxPromotion.TabIndex = 4;
             this.groupBoxPromotion.TabStop = false;
-            this.groupBoxPromotion.Text = "Choose...";
+            this.groupBoxPromotion.Text = Properties.Resources.PromotionGroupLabel;
             // 
             // buttonOk
             // 
@@ -101,7 +101,7 @@
             this.buttonOk.Name = "buttonOk";
             this.buttonOk.Size = new System.Drawing.Size(92, 23);
             this.buttonOk.TabIndex = 5;
-            this.buttonOk.Text = "&Ok";
+            this.buttonOk.Text = Properties.Resources.Ok;
             this.buttonOk.UseVisualStyleBackColor = true;
             this.buttonOk.Click += new System.EventHandler(this.buttonOk_Click);
             // 
@@ -118,7 +118,7 @@
             this.Name = "PromotionDialog";
             this.ShowIcon = false;
             this.ShowInTaskbar = false;
-            this.Text = "Promotion";
+            this.Text = Properties.Resources.PromotionFormTitle;
             this.groupBoxPromotion.ResumeLayout(false);
             this.groupBoxPromotion.PerformLayout();
             this.ResumeLayout(false);
