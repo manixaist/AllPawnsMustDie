@@ -325,6 +325,7 @@ namespace AllPawnsMustDie
         /// <param name="startRank">starting Rank [1-8]</param>
         /// <param name="targetFile">target File [a-h]</param>
         /// <param name="targetRank">target Rank [1-8]</param>
+        /// <param name="moveInfo">detailed move information struct</param>
         public void MovePiece(PieceFile startFile, int startRank, PieceFile targetFile, int targetRank, ref MoveInformation moveInfo)
         {
             // Get the player piece at the starting location
@@ -698,7 +699,6 @@ namespace AllPawnsMustDie
         private ChessPiece HandleEnPassant(PieceFile startFile, int startRank, PieceFile targetFile, int targetRank)
         {
             enPassantValid = false;
-            bool isCapture = false;
             ChessPiece enPassantVictim = null;
             if ((startFile != targetFile) &&                      // Diagonal move
                 (!IsAnyPieceAtLocation(targetFile, targetRank)))  // There is some piece behind us
@@ -712,7 +712,6 @@ namespace AllPawnsMustDie
 
                 // Capture the piece
                 enPassantVictim.Visible = false;
-                isCapture = true;
             }
             else
             {

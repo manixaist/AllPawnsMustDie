@@ -238,7 +238,14 @@ namespace AllPawnsMustDie
             chessEngine.Engine.OnChessEngineVerboseOutputReceived += ChessEngineVerboseOutputReceivedEventHandler;
 
             // Initialize the chess engine with optional parameters
-            chessEngine.Engine.SendCommandAsync("setoption name Skill Level value 0", String.Empty);
+            // Note this is engine dependent and this version only works with stockfish (to my knowledge)
+            // Other UCI engines use different options, several a combination of UCI_LimitStrength and UCI_ELO
+            // Eventually this will need to be handled in some options dialog that will either
+            // be customizable per engine, or provide a standard way to select things like play strength and time
+            if (fullPathToEngine.Contains("stockfish"))
+            {
+                chessEngine.Engine.SendCommandAsync("setoption name Skill Level value 0", String.Empty);
+            }
         }
 
         /// <summary>
@@ -269,10 +276,11 @@ namespace AllPawnsMustDie
         /// Create a new game
         /// </summary>
         /// <param name="playerColor">Color for the human player</param>
-        public void NewGame(PieceColor playerColor)
+        /// <param name="engineThinkTimeInMs">Time engine is allowed for a move</param>
+        public void NewGame(PieceColor playerColor, int engineThinkTimeInMs)
         {
             // Basic setup
-            CommonInit(playerColor);
+            CommonInit(playerColor, engineThinkTimeInMs);
 
             // Initialize the board
             board.NewGame();
@@ -306,7 +314,8 @@ namespace AllPawnsMustDie
         {
             // TODO - Really this layer should not have this knoweledge, but the only
             // supported engine type is UCI right now
-            chessEngine.Engine.SendCommandAsync(MoveCommandWithTime, UCIChessEngine.BestMoveResponse);
+            string moveCommand = String.Format("{0} {1}", MoveCommand, thinkTime);
+            chessEngine.Engine.SendCommandAsync(moveCommand, UCIChessEngine.BestMoveResponse);
         }
 
         /// <summary>
@@ -315,10 +324,11 @@ namespace AllPawnsMustDie
         /// <param name="playerColor">Color for the human player</param>
         /// <param name="fenNotation">FEN string that describes the position 
         /// (https://en.wikipedia.org/wiki/Forsyth%E2%80%93Edwards_Notation)</param>
-        public void NewPosition(PieceColor playerColor, string fenNotation)
+        /// <param name="engineThinkTimeInMs">Time engine is allowed for a move</param>
+        public void NewPosition(PieceColor playerColor, string fenNotation, int engineThinkTimeInMs)
         {
             // Basic setup
-            CommonInit(playerColor);
+            CommonInit(playerColor, engineThinkTimeInMs);
 
             // Initialize board
             board.NewPosition(fenNotation);
@@ -389,8 +399,8 @@ namespace AllPawnsMustDie
         /// </summary>
         public void UndoLastMove()
         {
-            // Do nothing if waiting on the engine...
-            if ((GetInputState() != InputState.WaitingOnOpponentMove) &&
+            // Do nothing if waiting on the engine...or self play
+            if ((selfPlay == false) && (GetInputState() != InputState.WaitingOnOpponentMove) &&
                 (board.Moves.Count() > 1))
             {
                 // Actually need the last 2 moves (first undo the last opponent move, then
@@ -424,9 +434,10 @@ namespace AllPawnsMustDie
         #endregion
 
         #region Private Methods
-        private void CommonInit(PieceColor playerColor)
+        private void CommonInit(PieceColor humanColor, int engineThinkTimeInMs)
         {
-            this.playerColor = playerColor; // save the player color
+            playerColor = humanColor; // save the player color
+            thinkTime = engineThinkTimeInMs;
 
             // Create the board and view
             board = new ChessBoard();
@@ -1463,7 +1474,8 @@ namespace AllPawnsMustDie
         private ChessPiece selectedPiece;
         private List<ChessBoard.BoardSquare> legalMoves;
         private static int HalfMovesUntilDraw = 50;
-        private static string MoveCommandWithTime = "go movetime 250";
+        private int thinkTime = 250;
+        private static string MoveCommand = "go movetime";
         #endregion
     }
 }

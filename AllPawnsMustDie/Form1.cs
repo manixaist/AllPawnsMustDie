@@ -18,6 +18,31 @@ namespace AllPawnsMustDie
     /// </summary>
     public partial class APMD_Form : Form
     {
+        #region Public EventArgs
+        /// <summary>
+        /// slef-play game has ended
+        /// </summary>
+        public class SelfPlayResultEventArgs : EventArgs
+        {
+            /// <summary>
+            /// Creates a new SelfPlayResultEventArgs
+            /// </summary>
+            public SelfPlayResultEventArgs(bool playAgain)
+            {
+                // External code could keep a counter and pass false
+                // when they want the loop to stop.
+                keepGoing = playAgain;
+            }
+
+            /// <summary>
+            /// Should the game keep going?
+            /// </summary>
+            public bool Continue { get { return keepGoing; } }
+
+            private bool keepGoing;
+        }
+        #endregion
+
         #region Public Methods
         /// <summary>
         /// Initialize the main form
@@ -61,9 +86,12 @@ namespace AllPawnsMustDie
         /// <param name="e">Ignored</param>
         private void newGameToolStripNewGame_Click(object sender, EventArgs e)
         {
-            ColorSelectDialog playerColorSelectionDialog = new ColorSelectDialog();
-            playerColorSelectionDialog.ShowDialog(this);
-            NewGame(String.Empty, playerColorSelectionDialog.PlayerColor);
+            NewGameDialog newGameDialog = new NewGameDialog(NewGameDialog.NewGameType.Normal);
+            DialogResult result = newGameDialog.ShowDialog(this);
+            if (result == DialogResult.OK)
+            {
+                NewGame(String.Empty, newGameDialog.Info.PlayerColor, newGameDialog.Info.ThinkTime);
+            }
         }
 
         /// <summary>
@@ -75,14 +103,13 @@ namespace AllPawnsMustDie
         private void newPositionToolStripNewPosition_Click(object sender, EventArgs e)
         {
             // Opens a dialog to read the FEN string and then passes it to engine
-            FenInputDialog fenDialog = new FenInputDialog();
-            DialogResult result = fenDialog.ShowDialog(); // Modal
-
+            NewGameDialog newGameDialog = new NewGameDialog(NewGameDialog.NewGameType.PositionalFEN);
+            DialogResult result = newGameDialog.ShowDialog(this);
             if (result == DialogResult.OK)
             {
-                string fenInput = fenDialog.FEN;
                 // For now just pass it and assume it's valid
-                NewGame(fenInput, PieceColor.White);
+                NewGame(ChessBoard.InitialFENPosition/*newGameDialog.Info.FEN*/, 
+                    PieceColor.White, newGameDialog.Info.ThinkTime); 
 
                 // TODO - validate the FEN input - sounds like a job for another class...
                 // Calculate the active player
@@ -139,8 +166,25 @@ namespace AllPawnsMustDie
         /// <param name="e">Ignored</param>
         private void selfPlayToolStripSelfPlay_Click(object sender, EventArgs e)
         {
-            NewGame(String.Empty, PieceColor.White);
-            chessGame?.StartEngineSelfPlay();
+            SelfPlayResultEventArgs spea = e as SelfPlayResultEventArgs;
+            // Check if this is an event from our handler
+            if (spea != null && (spea.Continue))
+            {
+                NewGame(String.Empty, PieceColor.White, selfPlayThinkTime);
+                chessGame?.StartEngineSelfPlay();
+            }
+            else
+            {
+                // Otherwise, pop a new dialog for the thinktime
+                NewGameDialog newGameDialog = new NewGameDialog(NewGameDialog.NewGameType.SelfPlay);
+                DialogResult result = newGameDialog.ShowDialog(this);
+                if (result == DialogResult.OK)
+                {
+                    selfPlayThinkTime = newGameDialog.Info.ThinkTime;
+                    NewGame(String.Empty, PieceColor.White, selfPlayThinkTime);
+                    chessGame?.StartEngineSelfPlay();
+                }
+            }
         }
 
         /// <summary>
@@ -157,8 +201,9 @@ namespace AllPawnsMustDie
             {
                 Invoke((MethodInvoker)delegate
                 {
+                    SelfPlayResultEventArgs spea = new SelfPlayResultEventArgs(true);
                     // Running on the UI thread now, so this is safe
-                    selfPlayToolStripSelfPlay_Click(sender, e);
+                    selfPlayToolStripSelfPlay_Click(sender, spea);
                 });
             }
         }
@@ -166,7 +211,7 @@ namespace AllPawnsMustDie
         /// <summary>
         /// Starts a new game if an engine is loaded
         /// </summary>
-        private void NewGame(string fen, PieceColor playerColor)
+        private void NewGame(string fen, PieceColor playerColor, int engineThinkTimeInMs)
         {
             if (fullPathToChessExe != null)
             {
@@ -183,11 +228,11 @@ namespace AllPawnsMustDie
 
                 if (fen == String.Empty)
                 {
-                    chessGame.NewGame(playerColor);
+                    chessGame.NewGame(playerColor, engineThinkTimeInMs);
                 }
                 else
                 {
-                    chessGame.NewPosition(playerColor, fen);
+                    chessGame.NewPosition(playerColor, fen, engineThinkTimeInMs);
                 }
 
                 // Trigger Paint event (draws the initial board)
@@ -251,6 +296,8 @@ namespace AllPawnsMustDie
         private static string APMD_ErrorTitle = "Error";
         private string fullPathToChessExe;
         private ChessGame chessGame;
+        private int selfPlayThinkTime;
         #endregion
     }
 }
+

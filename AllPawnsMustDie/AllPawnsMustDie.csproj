@@ -57,16 +57,6 @@
     <Compile Include="ChessEngineWrapper.cs" />
     <Compile Include="ChessGame.cs" />
     <Compile Include="ChessPiece.cs" />
-    <Compile Include="ColorSelectDialog.cs" />
-    <Compile Include="ColorSelectDialog.Designer.cs">
-      <DependentUpon>ColorSelectDialog.cs</DependentUpon>
-    </Compile>
-    <Compile Include="FenInputDialog.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="FenInputDialog.Designer.cs">
-      <DependentUpon>FenInputDialog.cs</DependentUpon>
-    </Compile>
     <Compile Include="FenParser.cs" />
     <Compile Include="FENString.cs" />
     <Compile Include="Form1.cs">
@@ -76,6 +66,12 @@
       <DependentUpon>Form1.cs</DependentUpon>
     </Compile>
     <Compile Include="IChessEngine.cs" />
+    <Compile Include="NewGameDialog.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="NewGameDialog.Designer.cs">
+      <DependentUpon>NewGameDialog.cs</DependentUpon>
+    </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="PromotionDialog.cs">
       <SubType>Form</SubType>
@@ -88,14 +84,11 @@
     <EmbeddedResource Include="AboutDialog.resx">
       <DependentUpon>AboutDialog.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="ColorSelectDialog.resx">
-      <DependentUpon>ColorSelectDialog.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="FenInputDialog.resx">
-      <DependentUpon>FenInputDialog.cs</DependentUpon>
-    </EmbeddedResource>
     <EmbeddedResource Include="Form1.resx">
       <DependentUpon>Form1.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="NewGameDialog.resx">
+      <DependentUpon>NewGameDialog.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="PromotionDialog.resx">
       <DependentUpon>PromotionDialog.cs</DependentUpon>

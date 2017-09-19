@@ -50,9 +50,9 @@
             this.editToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.showFENToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.UndoLastMoveToolStripMenuItemUndoLastMove = new System.Windows.Forms.ToolStripMenuItem();
-            this.labelVerbose = new System.Windows.Forms.Label();
             this.helpToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.aboutToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.labelVerbose = new System.Windows.Forms.Label();
             this.menuStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -170,15 +170,6 @@
             this.UndoLastMoveToolStripMenuItemUndoLastMove.Text = "&Undo last move";
             this.UndoLastMoveToolStripMenuItemUndoLastMove.Click += new System.EventHandler(this.UndoLastMoveToolStripMenuItemUndoLastMove_Click);
             // 
-            // labelVerbose
-            // 
-            this.labelVerbose.AutoSize = true;
-            this.labelVerbose.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.labelVerbose.Location = new System.Drawing.Point(12, 24);
-            this.labelVerbose.Name = "labelVerbose";
-            this.labelVerbose.Size = new System.Drawing.Size(0, 21);
-            this.labelVerbose.TabIndex = 1;
-            // 
             // helpToolStripMenuItem
             // 
             this.helpToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
@@ -190,14 +181,24 @@
             // aboutToolStripMenuItem
             // 
             this.aboutToolStripMenuItem.Name = "aboutToolStripMenuItem";
-            this.aboutToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.aboutToolStripMenuItem.Size = new System.Drawing.Size(107, 22);
             this.aboutToolStripMenuItem.Text = "&About";
             this.aboutToolStripMenuItem.Click += new System.EventHandler(this.aboutToolStripMenuItem_Click);
+            // 
+            // labelVerbose
+            // 
+            this.labelVerbose.AutoSize = true;
+            this.labelVerbose.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.labelVerbose.Location = new System.Drawing.Point(12, 24);
+            this.labelVerbose.Name = "labelVerbose";
+            this.labelVerbose.Size = new System.Drawing.Size(0, 21);
+            this.labelVerbose.TabIndex = 1;
             // 
             // APMD_Form
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
             this.ClientSize = new System.Drawing.Size(484, 461);
             this.Controls.Add(this.labelVerbose);
             this.Controls.Add(this.menuStrip1);
