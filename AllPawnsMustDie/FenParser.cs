@@ -9,7 +9,7 @@ namespace AllPawnsMustDie
     /// <summary>
     /// Helper class to parse and extract information from a FEN string
     /// </summary>
-    sealed class FenParser
+    public sealed class FenParser
     {
         #region Public Methods
         /// <summary>
@@ -36,16 +36,18 @@ namespace AllPawnsMustDie
         {
             pieces = chessBoard.WhitePieces;
             pieces.AddRange(chessBoard.BlackPieces);
+            // remove any non-visible pieces from the board data
+            pieces.RemoveAll(p => { return !p.Visible; });
             activePlayer = chessBoard.ActivePlayer;
             enPassantValid = chessBoard.GetEnPassantTarget(out enPassantTarget);
             whiteCastlingRights = chessBoard.WhiteCastlingRights;
             blackCastlingRights = chessBoard.BlackCastlingRights;
+            fullMoves = chessBoard.FullMoveCount;
+            halfMoves = chessBoard.HalfMoveCount;
             fenInput = null;
 
-            // TODO - convert all this into a string
-            // ...
+            CalculateFEN();
         }
-
         #endregion
 
         #region Public Properties
@@ -141,6 +143,176 @@ namespace AllPawnsMustDie
 
             // Token 5 is the number of full moves
             fullMoves = Convert.ToInt16(tokens[5]);
+        }
+
+        /// <summary>
+        /// Convert state into a FEN string
+        /// </summary>
+        private void CalculateFEN()
+        {
+            string fenPieces = TokenizePieces();
+
+            // Castling rights
+            string castlingRights = "";
+            string whcastlingRights = TokenizeCastlingRights(WhiteCastlingRights, PieceColor.White);
+            string blcastlingRights = TokenizeCastlingRights(BlackCastlingRights, PieceColor.Black);
+
+            bool noWhiteCastlingRights = (String.Compare(whcastlingRights, "-") == 0);
+            bool noBlackCastlingRights = (String.Compare(blcastlingRights, "-") == 0);
+
+            if (noWhiteCastlingRights && noBlackCastlingRights)
+            {
+                castlingRights = "-";
+            }
+            else if (noWhiteCastlingRights)
+            {
+                castlingRights = blcastlingRights;
+            }
+            else if (noBlackCastlingRights)
+            {
+                castlingRights = whcastlingRights;
+            }
+            else
+            {
+                castlingRights = String.Concat(whcastlingRights, blcastlingRights);
+            }
+
+            // En-Passant target
+            string enPassantOut = "-";
+            if (enPassantValid)
+            {
+                enPassantOut = String.Format("{0}{1}", EnPassantTarget.File.ToString(), EnPassantTarget.Rank);
+            }
+
+            // Build final output
+            fenOutput = String.Format("{0} {1} {2} {3} {4} {5}", fenPieces, (ActivePlayer == PieceColor.White) ? "w" : "b", castlingRights, enPassantOut, HalfMoves, FullMoves);
+        }
+
+        /// <summary>
+        /// Builds a FEN string for the pieces data only (the first section of the FEN)
+        /// </summary>
+        /// <returns></returns>
+        private string TokenizePieces()
+        {
+            // Sort the pieces in the order FEN wants
+            // Place them highest rank and lowest file first
+            // the pieces should read top->bottom, left->right
+            // as the white player faces the board
+            List<ChessPiece> chessPieces = Pieces;
+            chessPieces.Sort((pieceA, pieceB) =>
+            {
+                int result = 0;
+                // Prioritize Rank
+                if (pieceA.Rank > pieceB.Rank)
+                {
+                    result = -1;
+                }
+                else if (pieceA.Rank < pieceB.Rank)
+                {
+                    result = 1;
+                }
+                else if (pieceA.Rank == pieceB.Rank)
+                {
+                    // Rank being equal - try the file
+                    if (pieceA.File.ToInt() > pieceB.File.ToInt())
+                    {
+                        result = 1;
+                    }
+                    else if (pieceA.File.ToInt() < pieceB.File.ToInt())
+                    {
+                        result = -1;
+                    }
+                    else
+                    {
+                        // Both must be equal (and it shouldn't happen on a chessboard)
+                        throw new InvalidOperationException();
+                    }
+                }
+                return result;
+            });
+
+            string fenPieces = String.Empty;
+            int pieceIndex = 0;
+            int spaceCounter = 0;
+
+            // Loop through all 64 squares back rank first as white is facing
+            // and insert either blank space data (RLE counter) or the piece char
+            // every spot is either empty, or the next piece in the sorted list
+            // now that it is sorted in the same order
+            for (int rankIndex = 8; rankIndex >= 1; rankIndex--)
+            {
+                for (int fileIndex = 1; fileIndex <= 8; fileIndex++)
+                {
+                    // Pieces remain, and the piece exists at this square
+                    if ((pieceIndex < chessPieces.Count()) &&
+                        (chessPieces[pieceIndex].File.ToInt() == fileIndex) &&
+                        (chessPieces[pieceIndex].Rank == rankIndex))
+                    {
+                        if (spaceCounter > 0)
+                        {
+                            // Write out current empty space count
+                            fenPieces = String.Concat(fenPieces, Convert.ToString(spaceCounter));
+                            spaceCounter = 0;
+                        }
+
+                        // Append the piece character
+                        fenPieces = String.Concat(fenPieces, ChessBoard.FenCharFromPieceClass(chessPieces[pieceIndex].Job, chessPieces[pieceIndex].Color));
+                        pieceIndex++;
+                    }
+                    else
+                    {
+                        //Empty space, count it, no writing until we have the final total
+                        spaceCounter++;
+                    }
+                }
+
+                // Hit the end of a rank - if the counter is >0 it means we have blank spaces to record
+                if (spaceCounter > 0)
+                {
+                    // Write out current empty space count
+                    fenPieces = String.Concat(fenPieces, Convert.ToString(spaceCounter));
+                    spaceCounter = 0;
+                }
+                
+                // End of rank marker
+                fenPieces = String.Concat(fenPieces, "/");
+            }
+            // Trim last '/' and return
+            return fenPieces.Remove(fenPieces.Length - 1, 1);
+        }
+
+        /// <summary>
+        /// Converts Boardside castling rights to a FEN string
+        /// </summary>
+        /// <param name="castlingRights">rights to check</param>
+        /// <param name="color">Affects casing of string, white is uppercase</param>
+        /// <returns>kq, k, q, or - (or uppercase versions)</returns>
+        private string TokenizeCastlingRights(BoardSide castlingRights, PieceColor color)
+        {
+            string result = String.Empty;
+            if (castlingRights.HasFlag(BoardSide.King) & castlingRights.HasFlag(BoardSide.Queen))
+            {
+                result = String.Concat(result, "kq");
+            }
+            else if (WhiteCastlingRights.HasFlag(BoardSide.King))
+            {
+                result = String.Concat(result, "k");
+            }
+            else if (WhiteCastlingRights.HasFlag(BoardSide.Queen))
+            {
+                result = String.Concat(result, "q");
+            }
+            else
+            {
+                result = "-";
+            }
+
+            if (color == PieceColor.White)
+            {
+                result = result.ToUpper();
+            }
+
+            return result;
         }
 
         /// <summary>

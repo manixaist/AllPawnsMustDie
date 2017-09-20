@@ -52,6 +52,7 @@
     <Compile Include="BoardSquareUnitTests.cs" />
     <Compile Include="ChessBoardUnitTests.cs" />
     <Compile Include="ChessPieceTests.cs" />
+    <Compile Include="FenParserUnitTests.cs" />
     <Compile Include="MoveInformationUnitTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

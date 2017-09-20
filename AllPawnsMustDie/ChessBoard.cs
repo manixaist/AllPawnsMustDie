@@ -306,6 +306,46 @@ namespace AllPawnsMustDie
         }
 
         /// <summary>
+        /// Helper to return a FEN char for a job, color matters
+        /// </summary>
+        /// <param name="pieceClass">Class to convert</param>
+        /// <param name="color">PieceColor Black is lowercase</param>
+        /// <returns></returns>
+        public static char FenCharFromPieceClass(PieceClass pieceClass, PieceColor color)
+        {
+            char result; 
+            switch (pieceClass)
+            {
+                case PieceClass.King:
+                    result = 'k';
+                    break;
+                case PieceClass.Queen:
+                    result = 'q';
+                    break;
+                case PieceClass.Rook:
+                    result = 'r';
+                    break;
+                case PieceClass.Bishop:
+                    result = 'b';
+                    break;
+                case PieceClass.Knight:
+                    result = 'n';
+                    break;
+                case PieceClass.Pawn:
+                    result = 'p';
+                    break;
+                default:
+                    throw new ArgumentOutOfRangeException();
+            }
+
+            if (color == PieceColor.White)
+            {
+                result = Char.ToUpper(result);
+            }
+            return result;
+        }
+
+        /// <summary>
         /// Calculates the FEN for the board as is and returns it
         /// </summary>
         /// <returns>FEN for the board</returns>
@@ -644,12 +684,22 @@ namespace AllPawnsMustDie
             
             foreach (ChessPiece fenPiece in parser.Pieces)
             {
+                // For pawns, deployment matters, check if they're on their home
+                // rank and if not, set it to true
                 if (fenPiece.Color == PieceColor.White)
                 {
+                    if (fenPiece.Rank != 2)
+                    {
+                        fenPiece.Deployed = true;
+                    }
                     whitePieces.Add(fenPiece);
                 }
                 else
                 {
+                    if (fenPiece.Rank != 7)
+                    {
+                        fenPiece.Deployed = true;
+                    }
                     blackPieces.Add(fenPiece);
                 }
             }
@@ -981,7 +1031,6 @@ namespace AllPawnsMustDie
         /// FEN for the standard starting position
         /// </summary>
         public static String InitialFENPosition = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 0";
-
         // Some interesting test positions for legal moves, etc
         //public static String InitialFENPosition = "r3kb1r/pp1npppp/3p4/2P5/4q3/8/P4P1P/3QK2R w KQkq - 0 0";
         //public static String InitialFENPosition = "3k1r2/8/4N3/2N5/8/8/3PP3/r2RK3 w KQkq - 0 0";
