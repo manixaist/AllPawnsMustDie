@@ -50,6 +50,11 @@ namespace AllPawnsMustDie
 
         #region Public Properties
         /// <summary>
+        /// Active player specified in the FEN
+        /// </summary>
+        public PieceColor ActivePlayer { get { return activePlayer; } }
+
+        /// <summary>
         /// FEN string from a board construction, or just the echoed input
         /// </summary>
         public string FEN { get { return fenOutput; } }

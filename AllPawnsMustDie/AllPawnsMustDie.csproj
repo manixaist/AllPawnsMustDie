@@ -58,7 +58,6 @@
     <Compile Include="ChessGame.cs" />
     <Compile Include="ChessPiece.cs" />
     <Compile Include="FenParser.cs" />
-    <Compile Include="FENString.cs" />
     <Compile Include="Form1.cs">
       <SubType>Form</SubType>
     </Compile>

@@ -545,27 +545,18 @@ namespace AllPawnsMustDie
 
                     Debug.WriteLine("Valid Move Detected: [{0},{1}]=>[{2},{3}]",
                         selectedPiece.File, selectedPiece.Rank, move.File, move.Rank);
-
-                    PieceFile startFile = moveInfo.Start.File;
-                    int startRank = moveInfo.Start.Rank;
-                    PieceFile destFile = moveInfo.End.File;
-                    int destRank = moveInfo.End.Rank;
-
+                    
                     // Need to detect promotion and launch dialog for it...
-                    bool isPawnMovingToBackRank = (selectedPiece.Color == PieceColor.White) ? (destRank == 8) : (destRank == 1);
+                    bool isPawnMovingToBackRank = (selectedPiece.Color == PieceColor.White) ? (moveInfo.End.Rank == 8) : (moveInfo.End.Rank == 1);
                     if ((selectedPiece.Job == PieceClass.Pawn) && isPawnMovingToBackRank)
                     {
                         PromotionDialog pd = new PromotionDialog();
                         pd.ShowDialog();
-                        board.PromotePiece(startFile, startRank, destFile, destRank, pd.PromotionJob);
-
-                        // Append the promotion info for the engine on the move
-                        moveInfo.PromotionJob = pd.PromotionJob;
+                        board.PromotePiece(moveInfo.Start.File, moveInfo.Start.Rank, moveInfo.End.File, moveInfo.End.Rank, pd.PromotionJob, ref moveInfo);
                     }
                     
                     // Always returns true now
-                    board.MovePiece(startFile, startRank, destFile, destRank, ref moveInfo);
-                    board.Moves.Add(moveInfo);
+                    board.MovePiece(ref moveInfo);
                     form.Invalidate();
 
                     Debug.WriteLine(String.Format("Fullmoves: {0}", board.FullMoveCount));
@@ -630,14 +621,12 @@ namespace AllPawnsMustDie
                 {
                     // Applied on the next move
                     PieceClass promotionJob = ChessBoard.PieceClassFromFen(bestMove[4]);
-                    board.PromotePiece(startFile, startRank, destFile, destRank, promotionJob);
-                    moveInfo.PromotionJob = promotionJob;
+                    board.PromotePiece(startFile, startRank, destFile, destRank, promotionJob, ref moveInfo);
                 }
 
                 // Move the piece on the board, and add it to the official moves list
-                board.MovePiece(startFile, startRank, destFile, destRank, ref moveInfo);
-                board.Moves.Add(moveInfo);
-
+                board.MovePiece(ref moveInfo);
+                
                 // trigger a redraw
                 form.Invalidate();
 

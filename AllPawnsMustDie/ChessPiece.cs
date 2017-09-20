@@ -106,6 +106,12 @@ namespace AllPawnsMustDie
         /// </summary>
         public void Demote()
         {
+            // These should be impossible cases
+            if ((job == PieceClass.Pawn) || (job == PieceClass.King) || 
+                (job == PieceClass.EnPassantTarget))
+            {
+                throw new InvalidOperationException();
+            }
             job = PieceClass.Pawn;
         }
         #endregion

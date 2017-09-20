@@ -49,7 +49,7 @@ namespace AllPawnsMustDie
             /// <returns>true if obj is the same as this instance</returns>
             public override bool Equals(System.Object obj)
             {
-                return (obj is BoardSquare);
+                return (obj is BoardSquare) && (this == (BoardSquare)obj); ;
             }
 
             /// <summary>
@@ -178,6 +178,7 @@ namespace AllPawnsMustDie
                     if (value != null) // ignore nulls
                     {
                         if (isCapture) { throw new InvalidOperationException(); }
+                        if (value.Job != PieceClass.Rook) { throw new ArgumentException(); }
                         isCastle = true;
                         ancillaryPiece = value;
                     }
@@ -321,15 +322,16 @@ namespace AllPawnsMustDie
         /// remain, and validation of the legallity for the player can be handled
         /// above this call
         /// </summary>
-        /// <param name="startFile">starting File [a-h]</param>
-        /// <param name="startRank">starting Rank [1-8]</param>
-        /// <param name="targetFile">target File [a-h]</param>
-        /// <param name="targetRank">target Rank [1-8]</param>
         /// <param name="moveInfo">detailed move information struct</param>
-        public void MovePiece(PieceFile startFile, int startRank, PieceFile targetFile, int targetRank, ref MoveInformation moveInfo)
+        public void MovePiece(ref MoveInformation moveInfo)
         {
             // Get the player piece at the starting location
             // Piece should never be null if chess logic is sound
+            PieceFile startFile = moveInfo.Start.File;
+            int startRank = moveInfo.Start.Rank;
+            PieceFile targetFile = moveInfo.End.File;
+            int targetRank = moveInfo.End.Rank;
+
             ChessPiece playerPiece = FindPieceAt(startFile, startRank);
             if (playerPiece.Color != activePlayer)
             {
@@ -381,18 +383,18 @@ namespace AllPawnsMustDie
             }
 
             // Update castling rights - moving the king ruins all castling forever
-            if ((playerPiece.Job == PieceClass.King) && (playerPiece.Deployed == false))
+            if ((playerPiece.Job == PieceClass.King) && (moveInfo.FirstMove))
             {
                 ActivePlayerCastlingRights = BoardSide.None;
             }
             // moving the rook removes the possibility on that side
-            else if ((playerPiece.Job == PieceClass.Rook) && (playerPiece.Deployed == false))
+            else if ((playerPiece.Job == PieceClass.Rook) && (moveInfo.FirstMove))
             {
-                if (playerPiece.File.ToInt() == 8)
+                if (moveInfo.Start.File.ToInt() == 8)
                 {
                     ActivePlayerCastlingRights &= ~BoardSide.King;
                 }
-                else if (playerPiece.File.ToInt() == 1)
+                else if (moveInfo.Start.File.ToInt() == 1)
                 {
                     ActivePlayerCastlingRights &= ~BoardSide.Queen;
                 }
@@ -400,11 +402,11 @@ namespace AllPawnsMustDie
             // Capturing the opponent's rook removes castling rights for them on that side
             else if ((moveInfo.IsCapture) && (moveInfo.CapturedPiece.Job == PieceClass.Rook))
             {
-                if (playerPiece.File.ToInt() == 8)
+                if (moveInfo.Start.File.ToInt() == 8)
                 {
                     OpponentPlayerCastlingRights &= ~BoardSide.King;
                 }
-                else if (playerPiece.File.ToInt() == 1)
+                else if (moveInfo.Start.File.ToInt() == 1)
                 {
                     OpponentPlayerCastlingRights &= ~BoardSide.Queen;
                 }
@@ -439,6 +441,8 @@ namespace AllPawnsMustDie
 
             // save the last capture state for external callers
             lastMoveWasCapture = moveInfo.IsCapture;
+
+            Moves.Add(moveInfo);
         }
 
         /// <summary>
@@ -475,20 +479,23 @@ namespace AllPawnsMustDie
         /// <param name="targetFile"></param>
         /// <param name="targetRank"></param>
         /// <param name="promotionClass"></param>
-        public void PromotePiece(PieceFile startFile, int startRank, PieceFile targetFile, int targetRank, PieceClass promotionClass)
+        /// <param name="moveInfo">Detailed move info</param>
+        public void PromotePiece(PieceFile startFile, int startRank, PieceFile targetFile, int targetRank, PieceClass promotionClass, ref MoveInformation moveInfo)
         {
-            if (!((targetRank == 1) || (targetRank == 8)))
-            {
+            ChessPiece piece = FindPieceAt(startFile, startRank);
+            int validRank = (piece.Color == PieceColor.White) ? 8 : 1;
+            if (targetRank != validRank)
+            { 
                 throw new ArgumentOutOfRangeException();
             }
             
             // Find the pawn and mark it
-            ChessPiece piece = FindPieceAt(startFile, startRank);
             if (piece.Job != PieceClass.Pawn)
             {
                 // Logic check
                 throw new InvalidOperationException();
             }
+            moveInfo.PromotionJob = promotionClass;
             piece.PromoteOnNextMove(promotionClass);
         }
 
@@ -624,6 +631,7 @@ namespace AllPawnsMustDie
 
             FenParser parser = new FenParser(fenString);
 
+            activePlayer = parser.ActivePlayer;
             whiteCastlingRights =  parser.WhiteCastlingRights;
             blackCastlingRights = parser.BlackCastlingRights;
             enPassantValid = parser.IsEnPassantTargetValid;
@@ -989,7 +997,6 @@ namespace AllPawnsMustDie
         private PieceColor activePlayer;
         private BoardSide whiteCastlingRights;
         private BoardSide blackCastlingRights;
-        //private List<string> moveHistory;
         private List<MoveInformation> moveHistory;
         private List<ChessPiece> whitePieces;
         private List<ChessPiece> blackPieces;
