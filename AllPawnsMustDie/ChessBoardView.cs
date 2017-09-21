@@ -139,6 +139,14 @@ namespace AllPawnsMustDie
             stringFont = new Font(ChessFont, ChessFontSize);
 
             highlightedSquares = new List<ChessBoard.BoardSquare>();
+
+            Control moveHistoryControl = viewForm.Controls[APMD_Form.MoveHistoryControlName];
+            moveHistoryControl.Invoke((MethodInvoker)delegate
+            {
+                // Running on the UI thread now, so this is safe
+                moveHistoryControl.Visible = true;
+            });
+            moveCount = 0;
         }
 
         /// <summary>
@@ -229,8 +237,7 @@ namespace AllPawnsMustDie
         void IChessBoardView.Invalidate()
         {
             // Only need to invalidate the board portion of the form
-            viewForm.Invalidate(new Rectangle(topLeft.X, topLeft.Y,
-                BoardSizeInPixels, BoardSizeInPixels), true);
+            viewForm.Invalidate();
         }
 
         /// <summary>
@@ -276,6 +283,9 @@ namespace AllPawnsMustDie
             {
                 DrawLastMoveLine(g, s, e);
             }
+
+            // Render the move history - updates the text control
+            DrawMoveHistory();
         }
 
         /// <summary>
@@ -587,6 +597,52 @@ namespace AllPawnsMustDie
         }
 
         /// <summary>
+        /// Updates the text in the move history control
+        /// </summary>
+        private void DrawMoveHistory()
+        {
+            // The moves go into a textbox for now...simple
+            Control moveHistoryControl = viewForm.Controls[APMD_Form.MoveHistoryControlName];
+            // Only needs updates when the move count has changed
+            if (data.Moves.Count() != moveCount)
+            {
+                List<ChessBoard.MoveInformation> moves = data.Moves;
+                int newlineIndex = 0;
+                int moveIndex = 1;
+                string text = "Move History:\r\n---------------------\r\n";
+                foreach (ChessBoard.MoveInformation move in moves)
+                {
+                    if (newlineIndex == 0)
+                    {
+                        text = String.Concat(text, String.Format("{0:00}). {1}", moveIndex, move.ToString()));
+                    }
+                    else
+                    {
+                        text = String.Concat(text, String.Format("...{0:00}", move.ToString()));
+                    }
+
+                    if (++newlineIndex == 2)
+                    {
+                        text = String.Concat(text, "\r\n");
+                        newlineIndex = 0;
+                        moveIndex++;
+                    }
+                }
+
+                // Invoke is synchronous - this will block this thread
+                moveHistoryControl.Invoke((MethodInvoker)delegate
+                {
+                    // Running on the UI thread now, so this is safe
+                    TextBox moveTextBox = moveHistoryControl as TextBox;
+                    moveTextBox.Text = text;
+                    moveCount = data.Moves.Count();
+                    moveTextBox.SelectionStart = moveTextBox.Text.Length;
+                    moveTextBox.ScrollToCaret();
+                });
+            }
+        }
+
+        /// <summary>
         /// Find the rect for a given location on the board
         /// </summary>
         /// <param name="file">File for the piece</param>
@@ -741,7 +797,11 @@ namespace AllPawnsMustDie
         ChessBoard IChessBoardView.ViewData
         {
             get { return data; }
-            set { data = value; }
+            set
+            {
+                data = value;
+                moveCount = data.Moves.Count();
+            }
         }
 
         /// <summary>
@@ -762,6 +822,11 @@ namespace AllPawnsMustDie
         /// The size of one edge of the board in pixels.  A square is 1/8 of this
         /// </summary>
         public static int BoardSizeInPixels = 640;
+
+        /// <summary>
+        /// The width of the move history text control
+        /// </summary>
+        public static int MoveHistoryWidthInPixels = 125;
         #endregion
 
         #region Private Fields
@@ -794,6 +859,9 @@ namespace AllPawnsMustDie
 
         // Holds list of squares to highlight
         private List<ChessBoard.BoardSquare> highlightedSquares;
+
+        // Counter to update scroll of textbox
+        private int moveCount;
         #endregion
     }
 }

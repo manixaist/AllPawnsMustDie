@@ -386,7 +386,10 @@ namespace AllPawnsMustDie
         /// <param name="g">Graphics object for the form</param>
         public void Render(Graphics g)
         {
-            ((IChessBoardView)view).Render(g);
+            if (view != null)
+            {
+                ((IChessBoardView)view).Render(g);
+            }
         }
 
         /// <summary>
@@ -1461,7 +1464,7 @@ namespace AllPawnsMustDie
             List<ChessPiece> pieces = (color == PieceColor.White) ? board.WhitePieces : board.BlackPieces;
             foreach (ChessPiece piece in pieces)
             {
-                if ( GetLegalMoves(piece, board).Count() > 0)
+                if (piece.Visible && GetLegalMoves(piece, board).Count() > 0)
                 {
                     result = false;
                     break;
@@ -1479,8 +1482,8 @@ namespace AllPawnsMustDie
         {
             get
             {
-                int delta = ChessBoardView.BoardSizeInPixels + 50;
-                return new Size(delta, delta + 50);
+                return new Size(ChessBoardView.BoardSizeInPixels + 50 + ChessBoardView.MoveHistoryWidthInPixels + 25,
+                    ChessBoardView.BoardSizeInPixels + 100);
             }
         }
 

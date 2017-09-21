@@ -149,6 +149,10 @@ namespace AllPawnsMustDie
 
                 // Resize the form if needed
                 ClientSize = ChessGame.RequestedSize;
+                textBoxMoveHistory.Location = new Point(ClientSize.Width - ChessBoardView.MoveHistoryWidthInPixels - 25, 75);
+                textBoxMoveHistory.Height = ChessBoardView.BoardSizeInPixels / 2;
+                textBoxMoveHistory.Width = ChessBoardView.MoveHistoryWidthInPixels;
+                textBoxMoveHistory.Font = new Font("Segoe UI", 8);
 
                 // Trigger Paint event
                 Invalidate();
@@ -211,14 +215,13 @@ namespace AllPawnsMustDie
         /// <param name="e">Ignored/passed through</param>
         private void ChessGameNormalPlayGameOverEventHandler(object sender, EventArgs e)
         {
-            if (InvokeRequired)
+            // Probably coming from the non-UI thread the engine is using
+            Invoke((MethodInvoker)delegate
             {
-                Invoke((MethodInvoker)delegate
-                {
-                    PieceColor winner = chessGame.GetWinner();
-                    MessageBox.Show(this, String.Format("Winner: {0}", winner.ToString()), "Game Over", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                });
-            }
+                PieceColor winner;
+                winner = chessGame.GetWinner();
+                MessageBox.Show(this, String.Format("Winner: {0}", winner.ToString()), "Game Over", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            });
         }
 
         /// <summary>
@@ -228,6 +231,8 @@ namespace AllPawnsMustDie
         {
             if (fullPathToChessExe != null)
             {
+                textBoxMoveHistory.Text = String.Empty;
+
                 // Old game is dead to us
                 if (chessGame != null)
                 {
@@ -305,6 +310,11 @@ namespace AllPawnsMustDie
         /// engine, though currently, it only shows a progress string
         /// </summary>
         public static string VerboseOutputControlName = "labelVerbose";
+
+        /// <summary>
+        /// Text box on main form for the move history
+        /// </summary>
+        public static string MoveHistoryControlName = "textBoxMoveHistory";
         #endregion
 
         #region Private Fields
