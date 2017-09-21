@@ -201,10 +201,29 @@ namespace AllPawnsMustDie
             {
                 Invoke((MethodInvoker)delegate
                 {
-                    SelfPlayResultEventArgs spea = new SelfPlayResultEventArgs(true);
-                    // Running on the UI thread now, so this is safe
-                    selfPlayToolStripSelfPlay_Click(sender, spea);
+                    // Start a small delay timer so we have a chance to see the
+                    // board
+                    Timer timer = new Timer();
+                    timer.Tick += SelfPlayDelayTick;
+                    timer.Interval = 5000; // 5 seconds for now
+                    timer.Start();
                 });
+            }
+        }
+
+        /// <summary>
+        /// Callback for the selfplay delay timer
+        /// </summary>
+        /// <param name="sender">Timer object</param>
+        /// <param name="e">Ignored</param>
+        private void SelfPlayDelayTick(object sender, EventArgs e)
+        {
+            Timer timer = sender as Timer;
+            if (timer != null)
+            {
+                SelfPlayResultEventArgs spea = new SelfPlayResultEventArgs(true);
+                selfPlayToolStripSelfPlay_Click(sender, spea);
+                timer.Enabled = false;
             }
         }
 
@@ -301,6 +320,22 @@ namespace AllPawnsMustDie
         {
             AboutDialog dialog = new AboutDialog();
             dialog.ShowDialog(this);
+        }
+
+        /// <summary>
+        /// Edit->Show FEN handler
+        /// </summary>
+        /// <param name="sender">Ignored</param>
+        /// <param name="e">Ignored</param>
+        private void showFENToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            // Get the FEN if we have one
+            string fen = chessGame?.GetCurrentFEN();
+            if (fen != null)
+            {
+                DisplayFENDialog fenDialog = new DisplayFENDialog(fen);
+                fenDialog.ShowDialog();
+            }
         }
         #endregion
 

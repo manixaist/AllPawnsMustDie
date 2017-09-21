@@ -126,6 +126,24 @@ namespace AllPawnsMustDie.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Current board FEN:.
+        /// </summary>
+        internal static string FENDisplayLabel {
+            get {
+                return ResourceManager.GetString("FENDisplayLabel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to FEN.
+        /// </summary>
+        internal static string FENDisplayTitle {
+            get {
+                return ResourceManager.GetString("FENDisplayTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Starting Position (FEN):.
         /// </summary>
         internal static string FENInputLabel {

@@ -158,10 +158,10 @@
             // 
             // showFENToolStripMenuItem
             // 
-            this.showFENToolStripMenuItem.Enabled = false;
             this.showFENToolStripMenuItem.Name = "showFENToolStripMenuItem";
             this.showFENToolStripMenuItem.Size = new System.Drawing.Size(198, 22);
             this.showFENToolStripMenuItem.Text = global::AllPawnsMustDie.Properties.Resources.MenuEditShowFen;
+            this.showFENToolStripMenuItem.Click += new System.EventHandler(this.showFENToolStripMenuItem_Click);
             // 
             // UndoLastMoveToolStripMenuItemUndoLastMove
             // 

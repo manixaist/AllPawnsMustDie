@@ -31,11 +31,17 @@ namespace AllPawnsMustDie
         /// <summary>
         /// Construct a FEN string given an input ChessBoard
         /// </summary>
-        /// <param name="chessBoard"></param>
+        /// <param name="chessBoard">ChessBoard to parse</param>
         public FenParser(ChessBoard chessBoard)
         {
-            pieces = chessBoard.WhitePieces;
-            pieces.AddRange(chessBoard.BlackPieces);
+            // When processing a board, it's important to make a copy of the pieces
+            // (They are very simple classes which have a copy constructor) so we
+            // aren't in conflict with the ChessGame class which may be updating.
+            // A full locking scheme here isn't needed yet, but we're pushing it
+            List<ChessPiece> whiteCopy = new List<ChessPiece>(chessBoard.WhitePieces);
+            List<ChessPiece> blackCopy = new List<ChessPiece>(chessBoard.BlackPieces);
+            pieces = whiteCopy;
+            pieces.AddRange(blackCopy);
             // remove any non-visible pieces from the board data
             pieces.RemoveAll(p => { return !p.Visible; });
             activePlayer = chessBoard.ActivePlayer;

@@ -105,6 +105,15 @@ namespace AllPawnsMustDie
         }
 
         /// <summary>
+        /// Copy constructor
+        /// </summary>
+        /// <param name="oldFile"></param>
+        public PieceFile(PieceFile oldFile)
+        {
+            pieceFile = oldFile.pieceFile;
+        }
+
+        /// <summary>
         /// Override for equality tests
         /// </summary>
         /// <param name="obj">object testing</param>
@@ -435,6 +444,16 @@ namespace AllPawnsMustDie
             }
 
             throw new InvalidOperationException();
+        }
+
+        /// <summary>
+        /// Returns current FEN for the board
+        /// </summary>
+        /// <returns>current FEN for the board</returns>
+        public string GetCurrentFEN()
+        {
+            FenParser parser = new FenParser(board);
+            return parser.FEN;
         }
 
         /// <summary>

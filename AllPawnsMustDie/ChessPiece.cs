@@ -49,6 +49,23 @@ namespace AllPawnsMustDie
         }
 
         /// <summary>
+        /// Copy Constructor
+        /// </summary>
+        /// <param name="oldPiece">ChessPiece to copy</param>
+        public ChessPiece(ChessPiece oldPiece)
+        {
+            // Save the parameters as fields
+            color = oldPiece.Color;
+            job = oldPiece.Job;
+            rank = oldPiece.Rank;
+            file = new PieceFile(oldPiece.File);
+            deployed = oldPiece.Deployed;
+            visible = oldPiece.Visible;
+            isReadyForPromotion = oldPiece.isReadyForPromotion;
+            highlight = oldPiece.Highlight;
+        }
+
+        /// <summary>
         /// Moves the piece, but this is intended to be short lived.  Reset with
         /// ResetTempMove method
         /// </summary>
