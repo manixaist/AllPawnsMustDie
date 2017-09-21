@@ -495,7 +495,7 @@ namespace AllPawnsMustDie
         /// <returns></returns>
         private InputState GetInputState()
         {
-            if (playerColor != ActivePlayer)
+            if ((playerColor != ActivePlayer) || selfPlay)
             {
                 return InputState.WaitingOnOpponentMove;
             }

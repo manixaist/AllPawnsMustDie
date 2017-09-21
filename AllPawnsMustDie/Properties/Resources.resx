@@ -124,7 +124,8 @@
     <value>GitHub Repository:</value>
   </data>
   <data name="AboutLabel" xml:space="preserve">
-    <value>All Pawns Must Die is free and open-source under \r\nthe MIT license.</value>
+    <value>All Pawns Must Die is free and open-source under 
+the MIT license.</value>
   </data>
   <data name="AboutRepositoryLink" xml:space="preserve">
     <value>https://github.com/manixaist/AllPawnsMustDie</value>

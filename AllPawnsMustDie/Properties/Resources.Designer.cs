@@ -79,7 +79,8 @@ namespace AllPawnsMustDie.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to All Pawns Must Die is free and open-source under \r\nthe MIT license..
+        ///   Looks up a localized string similar to All Pawns Must Die is free and open-source under 
+        ///the MIT license..
         /// </summary>
         internal static string AboutLabel {
             get {
