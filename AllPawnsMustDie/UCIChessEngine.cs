@@ -36,20 +36,13 @@ namespace AllPawnsMustDie
             /// <summary>
             /// Create a new CommandExecutionParameters object for the worker threaad
             /// </summary>
-            /// <param name="sw">StreamWriter for the engine's stdin</param>
             /// <param name="commandString">command to send</param>
-            /// <param name="expectedString">expected response or String.Empty if none</param>
-            public CommandExecutionParameters(StreamWriter sw, string commandString, string expectedString)
+            /// <param name="expectedString">expected response or String. Empty if none</param>
+            public CommandExecutionParameters(string commandString, string expectedString)
             {
                 command = commandString;
                 expected = expectedString;
-                streamWriter = sw;
             }
-
-            /// <summary>
-            /// Gets the StreamWriter for stdin
-            /// </summary>
-            public StreamWriter StreamWriter { get { return streamWriter; } }
 
             /// <summary>
             /// Returns the command for execution
@@ -63,7 +56,6 @@ namespace AllPawnsMustDie
 
             private string command;
             private string expected;
-            private StreamWriter streamWriter;
         }
         #endregion
 
@@ -73,7 +65,14 @@ namespace AllPawnsMustDie
         /// </summary>
         public UCIChessEngine()
         {
+            needIsReadySync = false;
+            queueThread = null;
             bestMove = String.Empty;
+            queue_lock = new object();
+            uciCommandFinished = new AutoResetEvent(false);
+            newCommandAddedToQueue = new AutoResetEvent(false);
+            shutdownCommandQueue = new AutoResetEvent(false);
+            commandQueue = new Queue<CommandExecutionParameters>();
         }
 
         /// <summary>
@@ -97,6 +96,14 @@ namespace AllPawnsMustDie
                 engineProcess.Dispose();
                 disposed = true;
                 GC.SuppressFinalize(this);
+
+                // Ask thread to close
+                shutdownCommandQueue.Set();
+                if (!queueThread.Join(500))
+                {
+                    // Tell thread to close
+                    queueThread.Abort();
+                }
             }
         }
 
@@ -113,22 +120,34 @@ namespace AllPawnsMustDie
             {
                 return;
             }
-            
+
+            // Set to an empty one since it's a value type...but we only care
+            // if we actually find one.
+            string dummyCommand = "{OnDataReceived}";
+            CommandExecutionParameters cep = new CommandExecutionParameters("", "");
+
+            // Don't need a lock here, just need to know if it's > 0, and only this
+            // method Dequeues
+            if (commandQueue.Count() > 0)
+            {
+                cep = commandQueue.Peek();
+            }
+            bool foundCommand = (String.Compare(dummyCommand, cep.Command) != 0);
+            bool dequeue = false;
             SendVerboseEvent(e.Data); 
 
-            // compare e.Data to the expected string stored in the class
-            // Note this requires serialized execution - which is achieved by
-            // ThreadPool.QueueUserWorkItem and the logic calling it
-            //
-            // Really the expected (and whatever else) might go into a queue
-            // instead and we can pop the front one off here.  This would allow
-            // multiple command/response pairs to be running/queued in order but
-            // it's just not needed here yet, but this is intentional and not 
-            // an oversight
-            if (e.Data.StartsWith(Expected))
+            // First check if we need to wait on a ReadyOK response
+            if (foundCommand && (String.Compare(e.Data, ReadyOk) == 0) && (needIsReadySync))
             {
+                dequeue = true;
                 commandResponse = e.Data;
-
+                needIsReadySync = false; 
+            }
+            else if (foundCommand && e.Data.StartsWith(cep.Expected))
+            {
+                dequeue = true;
+                commandResponse = e.Data;
+                
                 // If we're asking for a move - then save the response we care about
                 // the SAN for the move - it comes right after "bestmove"
                 // If no move (e.g. mate) will return 'bestmove (none)'
@@ -137,8 +156,18 @@ namespace AllPawnsMustDie
                     string[] parts = e.Data.Split(' ');
                     bestMove = parts[1];
                 }
+            }
+
+            // Remove item if processed and notify listeners
+            if (dequeue) 
+            {
+                lock (queue_lock)
+                {
+                    commandQueue.Dequeue();
+                }
 
                 SendReceivedEvent(CommandResponse);
+                uciCommandFinished.Set();
             }
         }
 
@@ -180,32 +209,12 @@ namespace AllPawnsMustDie
 
             fullPathToEngine = fullPathToExe;
 
-            // Set process and startup variables
-            // and launch process
-            engineProcess = new Process();
-            engineProcess.EnableRaisingEvents = true;
-            engineProcess.StartInfo.CreateNoWindow = true;
-            engineProcess.StartInfo.RedirectStandardOutput = true;
-            engineProcess.StartInfo.RedirectStandardInput = true;
-            engineProcess.StartInfo.RedirectStandardError = true;
-            engineProcess.StartInfo.UseShellExecute = false;
-            engineProcess.StartInfo.FileName = fullPathToEngine;
-
-            // Subscribe to data arriving on the output stream
-            engineProcess.OutputDataReceived += OnDataReceived;
-
-            // Start the process up
-            if (!engineProcess.Start())
+            // Create the worker thread the first time
+            if (queueThread == null)
             {
-                // Bad path? Invalid exe file? For now just throw
-                throw new ArgumentException();
+                queueThread = new Thread(() => CommandQueueExecutionMethod());
+                queueThread.Start();
             }
-
-            // Start async read of that output stream.
-            engineProcess.BeginOutputReadLine();
-
-            // Now we're inited
-            processInited = true;
         }
 
         /// <summary>
@@ -213,32 +222,114 @@ namespace AllPawnsMustDie
         /// </summary>
         void IChessEngine.Reset()
         {
-            // Reset internals
-            syncAfterCommand = false;
-            command = String.Empty;
-            expected = String.Empty;
-
             // Set a default position with the engine
             ((IChessEngine)this).SendCommandAsync(String.Concat("position fen ", ChessBoard.InitialFENPosition), String.Empty);
         }
 
         /// <summary>
-        /// Send a command to the chess engine
+        /// Send a command to the chess engine.  Commands are serialized on another thread
         /// </summary>
         /// <param name="commandString">command to send</param>
         /// <param name="expectedResponse">response we expect to get.  If this is
         /// an empty string, then sync up after the command with the engine</param>
         void IChessEngine.SendCommandAsync(string commandString, string expectedResponse)
         {
-            // Queue a work item to run in the background.  This is serialized work,
-            // simple to use, and all we need for the background thread for now
-            // It's in fact overkill since the work is currently serialized by the
-            // calling logic - but that will likely change
-            // It, in even more fact, is actually quite broken if we tried to 
-            // send more than one of these at a time right now, but that is also
-            // commented in the OnDataRecieved callback
-            ThreadPool.QueueUserWorkItem(new WaitCallback(CommandCallback),
-                    new CommandExecutionParameters(engineProcess.StandardInput, commandString, expectedResponse));
+            // Under lock - update the queue of commands to execute and signal
+            // our running worker thread (or create it the first time)
+            lock (queue_lock)
+            {
+                CommandExecutionParameters cep = 
+                    new CommandExecutionParameters(commandString, expectedResponse);
+                Debug.WriteLine(String.Format("Enqueueing command pair (\"{0}\", \"{1}\")", commandString, expectedResponse));
+                commandQueue.Enqueue(cep);
+                // Signal the worker thread
+                newCommandAddedToQueue.Set();
+            }
+        }
+
+        /// <summary>
+        /// Worker Thread Method responsible for processing commands to the chess engine.
+        /// When first launched, the thread will attempt to launch the engine process, 
+        /// then enter a wait state until work is sent (added to the queue).
+        /// 
+        /// When signalled for work, the thread will take the next queueded item (if any)
+        /// and send the command to the engine, and wait for the response triggered in 
+        /// the stdout callback OnDataReceieved.  This will repeat so long as items
+        /// are in the queue.
+        /// 
+        /// If a command has no response (e.g. 'position' uci command) a pair of
+        /// "IsReady"/"ReadyOk" command/response is sent to sync up.
+        /// 
+        /// This thread exists for the lifetime of the owning ChessGame object
+        /// </summary>
+        public void CommandQueueExecutionMethod()
+        {
+            // Load the process
+            LoadEngineProcess();
+
+            AutoResetEvent[] workerEvents = { newCommandAddedToQueue, shutdownCommandQueue };
+            int waitResult = WaitHandle.WaitTimeout;
+            bool exitThread = false;
+            bool moreWork = false;
+
+            while (!exitThread)
+            {
+                lock (queue_lock)
+                {
+                    moreWork = (commandQueue.Count() > 0);
+                }
+
+                if (!moreWork)
+                {
+                    waitResult = WaitHandle.WaitAny(workerEvents);
+                }
+                else
+                {
+                    waitResult = 0; // Process more items
+                }
+
+                if (waitResult == 1) // shutdownCommandQueue
+                {
+                    exitThread = true;
+                }
+                else
+                {
+                    // Set to an empty one since it's a value type...but we only care
+                    // if we actually find one.
+                    string dummyCommand = "{CommandQueueExecutionMethod}";
+                    CommandExecutionParameters cep = new CommandExecutionParameters(dummyCommand, "");
+                    
+                    // There should be new work to do
+                    lock (queue_lock)
+                    {
+                        if (commandQueue.Count() > 0)
+                        {
+                            // Do not remove the item yet - wait until it's processed
+                            cep = commandQueue.Peek();
+                        }
+                    }
+
+                    if ((String.Compare(cep.Command, dummyCommand) != 0) && (engineProcess.StandardInput != null))
+                    {
+                        // Found something - write it to the process, but first check if we're
+                        // going to get a response to wait on
+                        needIsReadySync = (String.Compare(cep.Expected, String.Empty) == 0);
+
+                        Debug.WriteLine(String.Concat("=>Engine: ", cep.Command));
+                        engineProcess.StandardInput.WriteLine(cep.Command);
+
+                        // If this is true, the above command has no response, and we'd wait here forever
+                        if (needIsReadySync)
+                        {
+                            // So instead, send it an "IsReady" and wait on the reply
+                            engineProcess.StandardInput.WriteLine(IsReady);
+                        }
+
+                        // Wait for the response
+                        uciCommandFinished.WaitOne();
+                    }
+                }
+            }
         }
 
         /// <summary>
@@ -256,37 +347,42 @@ namespace AllPawnsMustDie
                 Dispose();
             }
         }
+        #endregion
 
-        /// <summary>
-        /// Thread execution Method
-        /// </summary>
-        /// <param name="state">CommandExecutionParameters object</param>
-        public void CommandCallback(object state)
+        #region Private Methods
+        private void LoadEngineProcess()
         {
-            CommandExecutionParameters cep = (CommandExecutionParameters)state;
-            // Save to class fields
-            expected = cep.Expected;
-            command = cep.Command;
-            syncAfterCommand = (expected.Length == 0);
-            
-            Debug.WriteLine(String.Concat("=>Engine: ", command));
-            cep.StreamWriter.WriteLine(command);
-
-            if (syncAfterCommand)
+            if (!processInited)
             {
-                // Add a sync work item - update the expected - the reason we need
-                // this is for commands that have no response, so we're not overwriting
-                // any expected here that is meaningful
-                // Because of the serialization above, this means we're launching 2 threads
-                // (still one per command) behind each other and our callback is going to 
-                // fire only once (since there is no output and hence no event for the 1st 
-                // command (the whole reason we're sending the 2nd command)expected = ReadyOk;
-                ThreadPool.QueueUserWorkItem(new WaitCallback(CommandCallback), 
-                    new CommandExecutionParameters(cep.StreamWriter, IsReady, ReadyOk));
+                // Set process and startup variables
+                // and launch process
+                engineProcess = new Process();
+                engineProcess.EnableRaisingEvents = true;
+                engineProcess.StartInfo.CreateNoWindow = true;
+                engineProcess.StartInfo.RedirectStandardOutput = true;
+                engineProcess.StartInfo.RedirectStandardInput = true;
+                engineProcess.StartInfo.RedirectStandardError = true;
+                engineProcess.StartInfo.UseShellExecute = false;
+                engineProcess.StartInfo.FileName = fullPathToEngine;
+
+                // Subscribe to data arriving on the output stream
+                engineProcess.OutputDataReceived += OnDataReceived;
+
+                // Start the process up
+                if (!engineProcess.Start())
+                {
+                    // Bad path? Invalid exe file? For now just throw
+                    throw new ArgumentException();
+                }
+
+                // Start async read of that output stream.
+                engineProcess.BeginOutputReadLine();
+
+                // Now we're inited
+                processInited = true;
             }
         }
         #endregion
-
         #region Public Properties
         /// <summary>
         /// Returns true if the object has already been disposed
@@ -302,12 +398,6 @@ namespace AllPawnsMustDie
         /// Last "best move" returned by the enine.  Used to get moves for the CPU
         /// </summary>
         public string BestMove { get { return bestMove; } }
-
-        /// <summary>
-        /// The expected response for the last command sent (only one that is expecting
-        /// a response is sent at a time at the moment.
-        /// </summary>
-        public string Expected { get { return expected; } }
         #endregion
 
         #region Public Fields
@@ -336,13 +426,17 @@ namespace AllPawnsMustDie
         #region Private Fields
         private bool disposed = false;
         private bool processInited = false;
-        private bool syncAfterCommand = false;
-        private string command;
         private string commandResponse;
-        private string expected;
         private string bestMove;
         private string fullPathToEngine;
         private Process engineProcess;
+        private Queue<CommandExecutionParameters> commandQueue;
+        private AutoResetEvent newCommandAddedToQueue;
+        private AutoResetEvent shutdownCommandQueue;
+        private AutoResetEvent uciCommandFinished;
+        private object queue_lock;
+        private Thread queueThread;
+        private bool needIsReadySync;
         #endregion
     }
 }
