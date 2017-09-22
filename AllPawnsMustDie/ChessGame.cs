@@ -67,6 +67,21 @@ namespace AllPawnsMustDie
         /// <summary>Kingside of the board; Files [a-d]</summary>
         Queen = 2
     };
+
+    /// <summary>
+    /// Possible game results
+    /// </summary>
+    public enum GameResult
+    {
+        /// <summary>White wins! (black mated)</summary>
+        WhiteWins,
+        /// <summary>Black wins! (white mated)</summary>
+        BlackWins,
+        /// <summary>No one wins!</summary>
+        Stalemate,
+        /// <summary>No one wins by move count or mutual decision!</summary>
+        Draw,
+    };
     #endregion
 
     #region Public Structs
@@ -319,6 +334,14 @@ namespace AllPawnsMustDie
         }
 
         /// <summary>
+        /// Stop self play
+        /// </summary>
+        public void StopEngineSelfPlay()
+        {
+            selfPlay = false;
+        }
+
+        /// <summary>
         /// Ask the engine to evaluate the current board for the best move.  This
         /// is an asynchronous call.  ChessEngineResponseReceivedEventHandler will
         /// fired when the command is processed
@@ -428,19 +451,20 @@ namespace AllPawnsMustDie
 
         /// <summary>
         /// Should only be called after a game over event, no draws right now in normal
-        /// play so find the mated player
+        /// play so find the mated player, or possibly the stalemate.
         /// </summary>
-        /// <returns></returns>
-        public PieceColor GetWinner()
+        /// <returns>GameResult value</returns>
+        public GameResult GetWinner()
         {
-            if (PlayerMated(PieceColor.White))
+            bool stalemate = false;
+            if (PlayerMated(PieceColor.White, out stalemate))
             {
-                return PieceColor.Black;
+                return stalemate ? GameResult.Stalemate : GameResult.BlackWins;
             }
 
-            if (PlayerMated(PieceColor.Black))
+            if (PlayerMated(PieceColor.Black, out stalemate))
             {
-                return PieceColor.White;
+                return stalemate ? GameResult.Stalemate : GameResult.WhiteWins;
             }
 
             throw new InvalidOperationException();
@@ -817,7 +841,9 @@ namespace AllPawnsMustDie
                 movesList = String.Concat(movesList, move.ToString());
             }
             updatingPosition = true;
-            chessEngine.Engine.SendCommandAsync(String.Concat("position startpos moves ", movesList), "");
+
+            string position = String.Format("fen {0}", board.InitialFEN);
+            chessEngine.Engine.SendCommandAsync(String.Format("position {0} moves {1}", position, movesList), "");
         }
 
         /// <summary>
@@ -1476,9 +1502,11 @@ namespace AllPawnsMustDie
         /// Checks if a player is mated (no legal moves)
         /// </summary>
         /// <param name="color">Color of player to check</param>
-        /// <returns>True if there are no legal moves (mated)</returns>
-        private bool PlayerMated(PieceColor color)
+        /// <param name="positionIsStaleMate">Set to true on stalemate</param>
+        /// <returns>True if there are no legal moves for the player color</returns>
+        private bool PlayerMated(PieceColor color, out bool positionIsStaleMate)
         {
+            positionIsStaleMate = false;
             bool result = true;
             List<ChessPiece> pieces = (color == PieceColor.White) ? board.WhitePieces : board.BlackPieces;
             foreach (ChessPiece piece in pieces)
@@ -1487,6 +1515,16 @@ namespace AllPawnsMustDie
                 {
                     result = false;
                     break;
+                }
+            }
+
+            if (result)
+            {
+                // Verify the King is in check, if not, stalemate
+                ChessPiece king = board.GetKing(color);
+                if (!IsSquareInCheck(board, king.File, king.Rank, color))
+                {
+                    positionIsStaleMate = true;
                 }
             }
             return result;

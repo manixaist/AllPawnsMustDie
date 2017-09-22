@@ -65,6 +65,7 @@ namespace AllPawnsMustDie
         /// </summary>
         public UCIChessEngine()
         {
+            initialFEN = null;
             needIsReadySync = false;
             queueThread = null;
             bestMove = String.Empty;
@@ -222,8 +223,20 @@ namespace AllPawnsMustDie
         /// </summary>
         void IChessEngine.Reset()
         {
+            string fen = (initialFEN != null) ? initialFEN : ChessBoard.InitialFENPosition;
             // Set a default position with the engine
-            ((IChessEngine)this).SendCommandAsync(String.Concat("position fen ", ChessBoard.InitialFENPosition), String.Empty);
+            ((IChessEngine)this).SendCommandAsync(UCIChessEngine.UciNewGame, String.Empty);
+            ((IChessEngine)this).SendCommandAsync(String.Format("position fen {0}", fen), String.Empty);
+        }
+
+        /// <summary>
+        /// Set an initial position with the engine
+        /// </summary>
+        /// <param name="fen">fen to store</param>
+        void IChessEngine.SetInitialPosition(string fen)
+        {
+            initialFEN = fen;
+            ((IChessEngine)this).Reset();
         }
 
         /// <summary>
@@ -416,9 +429,9 @@ namespace AllPawnsMustDie
         /// <summary>UCI "uciok" response</summary>
         public static string UciOk = "uciok";
         
-        /// <summary>UCI "position" base command string</summary>
-        public static string UciNewGame = "position startpos moves";
-        
+        /// <summary>UCI "new game" command</summary>
+        public static string UciNewGame = "ucinewgame";
+
         /// <summary>UCI "quit" command</summary>
         public static string UciQuit = "quit";
         #endregion
@@ -429,6 +442,7 @@ namespace AllPawnsMustDie
         private string commandResponse;
         private string bestMove;
         private string fullPathToEngine;
+        private string initialFEN;
         private Process engineProcess;
         private Queue<CommandExecutionParameters> commandQueue;
         private AutoResetEvent newCommandAddedToQueue;

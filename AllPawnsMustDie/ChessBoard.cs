@@ -120,7 +120,7 @@ namespace AllPawnsMustDie
                 promotionClass = PieceClass.King; // Invalid promotion job
                 startSquare = start;
                 endSquare = end;
-                firstMove = !deployed;
+                firstMove = (deployed == false);
                 color = PieceColor.White; // assume white
                 castlingRights = BoardSide.None;
                 isCapture = false;
@@ -248,6 +248,7 @@ namespace AllPawnsMustDie
         /// </summary>
         public ChessBoard()
         {
+            initialFEN = InitialFENPosition;
             enPassantValid = false;
             NewGame();
         }
@@ -267,7 +268,8 @@ namespace AllPawnsMustDie
         /// (https://en.wikipedia.org/wiki/Forsyth%E2%80%93Edwards_Notation)</param>
         public void NewPosition(string fen)
         {
-            CreateAndPlacePieces(fen);
+            initialFEN = fen;
+            CreateAndPlacePieces(initialFEN);
         }
 
         /// <summary>
@@ -343,15 +345,6 @@ namespace AllPawnsMustDie
                 result = Char.ToUpper(result);
             }
             return result;
-        }
-
-        /// <summary>
-        /// Calculates the FEN for the board as is and returns it
-        /// </summary>
-        /// <returns>FEN for the board</returns>
-        public string CurrentPositionAsFEN()
-        {
-            return "TODO";
         }
 
         /// <summary>
@@ -639,6 +632,26 @@ namespace AllPawnsMustDie
             // Flip players
             activePlayer = (activePlayer == PieceColor.White) ? PieceColor.Black : PieceColor.White;
         }
+
+        /// <summary>
+        /// Returns the home rank of a pawn
+        /// </summary>
+        /// <param name="pawnColor">color matters</param>
+        /// <returns>2 for white 7 for black</returns>
+        public static int PawnHomeRank(PieceColor pawnColor)
+        {
+            return pawnColor == PieceColor.White ? 2 : 7;
+        }
+
+        /// <summary>
+        /// Returns the home rank of a rook
+        /// </summary>
+        /// <param name="rookColor">Color matters</param>
+        /// <returns>1 for white and 8 for black</returns>
+        public static int RookHomeRank(PieceColor rookColor)
+        {
+            return rookColor == PieceColor.White ? 1 : 8;
+        }
         #endregion
 
         #region Private Methods
@@ -684,22 +697,38 @@ namespace AllPawnsMustDie
             
             foreach (ChessPiece fenPiece in parser.Pieces)
             {
-                // For pawns, deployment matters, check if they're on their home
-                // rank and if not, set it to true
-                if (fenPiece.Color == PieceColor.White)
+                // For pawns and rooks and kings, deployment matters, check if they're on their home
+                // rank/square and if not, set it to true
+                if (fenPiece.Job == PieceClass.Pawn)
                 {
-                    if (fenPiece.Rank != 2)
+                    if (PawnHomeRank(fenPiece.Color) != fenPiece.Rank)
                     {
                         fenPiece.Deployed = true;
                     }
+                }
+                else if (fenPiece.Job == PieceClass.Rook)
+                {
+                    if (((fenPiece.File.ToInt() != 1) && (fenPiece.File.ToInt() != 8)) ||
+                        (fenPiece.Rank != RookHomeRank(fenPiece.Color)))
+                    {
+                        fenPiece.Deployed = true;
+                    }
+                }
+                else if (fenPiece.Job == PieceClass.King)
+                {
+                    // Both colors should be on the E file and back rank
+                    if (!ChessPiece.IsOnBackRank(fenPiece) || fenPiece.File != new PieceFile('e'))
+                    {
+                        fenPiece.Deployed = true;
+                    }
+                }
+                
+                if (fenPiece.Color == PieceColor.White)
+                {
                     whitePieces.Add(fenPiece);
                 }
                 else
                 {
-                    if (fenPiece.Rank != 7)
-                    {
-                        fenPiece.Deployed = true;
-                    }
                     blackPieces.Add(fenPiece);
                 }
             }
@@ -972,6 +1001,11 @@ namespace AllPawnsMustDie
                 }
             }
         }
+
+        /// <summary>
+        /// Returns initial position
+        /// </summary>
+        public string InitialFEN { get { return initialFEN; } }
         #endregion
 
         #region Private Properties
@@ -1031,6 +1065,7 @@ namespace AllPawnsMustDie
         /// FEN for the standard starting position
         /// </summary>
         public static String InitialFENPosition = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 0";
+
         // Some interesting test positions for legal moves, etc
         //public static String InitialFENPosition = "r3kb1r/pp1npppp/3p4/2P5/4q3/8/P4P1P/3QK2R w KQkq - 0 0";
         //public static String InitialFENPosition = "3k1r2/8/4N3/2N5/8/8/3PP3/r2RK3 w KQkq - 0 0";
@@ -1051,6 +1086,7 @@ namespace AllPawnsMustDie
         private List<ChessPiece> blackPieces;
         private bool enPassantValid;
         private BoardSquare enPassantTarget;
+        private string initialFEN;
         #endregion
     }
 }

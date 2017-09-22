@@ -50,7 +50,7 @@
             this.groupBoxPlayerColor.Size = new System.Drawing.Size(181, 72);
             this.groupBoxPlayerColor.TabIndex = 0;
             this.groupBoxPlayerColor.TabStop = false;
-            this.groupBoxPlayerColor.Text = Properties.Resources.PlayerColorGroupBox;
+            this.groupBoxPlayerColor.Text = "Player color";
             // 
             // radioButtonBlack
             // 
@@ -60,7 +60,7 @@
             this.radioButtonBlack.Size = new System.Drawing.Size(52, 17);
             this.radioButtonBlack.TabIndex = 1;
             this.radioButtonBlack.TabStop = true;
-            this.radioButtonBlack.Text = Properties.Resources.PlayerColorSelectBlack;
+            this.radioButtonBlack.Text = global::AllPawnsMustDie.Properties.Resources.PlayerColorSelectBlack;
             this.radioButtonBlack.UseVisualStyleBackColor = true;
             // 
             // radioButtonWhite
@@ -71,7 +71,7 @@
             this.radioButtonWhite.Size = new System.Drawing.Size(53, 17);
             this.radioButtonWhite.TabIndex = 0;
             this.radioButtonWhite.TabStop = true;
-            this.radioButtonWhite.Text = Properties.Resources.PlayerColorSelectWhite;
+            this.radioButtonWhite.Text = global::AllPawnsMustDie.Properties.Resources.PlayerColorSelectWhite;
             this.radioButtonWhite.UseVisualStyleBackColor = true;
             // 
             // labelThinkTime
@@ -81,7 +81,7 @@
             this.labelThinkTime.Name = "labelThinkTime";
             this.labelThinkTime.Size = new System.Drawing.Size(121, 13);
             this.labelThinkTime.TabIndex = 1;
-            this.labelThinkTime.Text = Properties.Resources.EngineThinkTimeLabel;
+            this.labelThinkTime.Text = "Engine Think Time (ms):";
             // 
             // numericUpDownThinkTime
             // 
@@ -97,7 +97,7 @@
             0,
             0});
             this.numericUpDownThinkTime.Minimum = new decimal(new int[] {
-            250,
+            50,
             0,
             0,
             0});
@@ -117,7 +117,7 @@
             this.buttonOk.Name = "buttonOk";
             this.buttonOk.Size = new System.Drawing.Size(75, 23);
             this.buttonOk.TabIndex = 3;
-            this.buttonOk.Text = Properties.Resources.Ok;
+            this.buttonOk.Text = global::AllPawnsMustDie.Properties.Resources.Ok;
             this.buttonOk.UseVisualStyleBackColor = true;
             this.buttonOk.Click += new System.EventHandler(this.buttonOk_Click);
             // 
@@ -128,7 +128,7 @@
             this.buttonCancel.Name = "buttonCancel";
             this.buttonCancel.Size = new System.Drawing.Size(75, 23);
             this.buttonCancel.TabIndex = 4;
-            this.buttonCancel.Text = Properties.Resources.Cancel;
+            this.buttonCancel.Text = global::AllPawnsMustDie.Properties.Resources.Cancel;
             this.buttonCancel.UseVisualStyleBackColor = true;
             // 
             // labelFEN
@@ -138,7 +138,7 @@
             this.labelFEN.Name = "labelFEN";
             this.labelFEN.Size = new System.Drawing.Size(116, 13);
             this.labelFEN.TabIndex = 5;
-            this.labelFEN.Text = Properties.Resources.FENInputLabel;
+            this.labelFEN.Text = "Starting Position (FEN):";
             // 
             // textBoxFEN
             // 
@@ -167,7 +167,7 @@
             this.MinimizeBox = false;
             this.Name = "NewGameDialog";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
-            this.Text = Properties.Resources.NewGameTitle;
+            this.Text = "New Game";
             this.groupBoxPlayerColor.ResumeLayout(false);
             this.groupBoxPlayerColor.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDownThinkTime)).EndInit();

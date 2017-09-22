@@ -90,6 +90,7 @@ namespace AllPawnsMustDie
             DialogResult result = newGameDialog.ShowDialog(this);
             if (result == DialogResult.OK)
             {
+                chessGame?.StopEngineSelfPlay();
                 NewGame(String.Empty, newGameDialog.Info.PlayerColor, newGameDialog.Info.ThinkTime);
             }
         }
@@ -107,17 +108,8 @@ namespace AllPawnsMustDie
             DialogResult result = newGameDialog.ShowDialog(this);
             if (result == DialogResult.OK)
             {
-                // For now just pass it and assume it's valid
-                NewGame(ChessBoard.InitialFENPosition/*newGameDialog.Info.FEN*/, 
-                    PieceColor.White, newGameDialog.Info.ThinkTime); 
-
-                // TODO - validate the FEN input - sounds like a job for another class...
-                // Calculate the active player
-                // Extract other relevant info (castling rights, move counts, etc)
-
-                // Really the FEN does not indicate anything for the 'human'
-                // player, but for now we will consider the 'player to move'
-                // in the FEN as the player
+                chessGame?.StopEngineSelfPlay();
+                NewGame(newGameDialog.StartingPosition, PieceColor.White, newGameDialog.Info.ThinkTime);
             }
         }
 
@@ -237,9 +229,16 @@ namespace AllPawnsMustDie
             // Probably coming from the non-UI thread the engine is using
             Invoke((MethodInvoker)delegate
             {
-                PieceColor winner;
+                GameResult winner;
                 winner = chessGame.GetWinner();
-                MessageBox.Show(this, String.Format("Winner: {0}", winner.ToString()), "Game Over", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                if (winner == GameResult.Stalemate)
+                {
+                    MessageBox.Show(this, "Stalemate!", "Game Over", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                }
+                else
+                {
+                    MessageBox.Show(this, String.Format("Winner: {0}", winner.ToString()), "Game Over", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                }
             });
         }
 

@@ -88,6 +88,21 @@ namespace AllPawnsMustDie
         }
 
         /// <summary>
+        /// Reutrns the starting position.
+        /// </summary>
+        public string StartingPosition
+        {
+            get
+            {
+                if (newGameInfo.FEN != null)
+                {
+                    return newGameInfo.FEN;
+                }
+                return ChessBoard.InitialFENPosition;
+            }
+        }
+        
+        /// <summary>
         /// OK button handler
         /// </summary>
         /// <param name="sender">Ignored</param>
