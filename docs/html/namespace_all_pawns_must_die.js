@@ -1,5 +1,6 @@
 var namespace_all_pawns_must_die =
 [
+    [ "AboutDialog", "class_all_pawns_must_die_1_1_about_dialog.html", "class_all_pawns_must_die_1_1_about_dialog" ],
     [ "APMD_Form", "class_all_pawns_must_die_1_1_a_p_m_d___form.html", "class_all_pawns_must_die_1_1_a_p_m_d___form" ],
     [ "ChessBoard", "class_all_pawns_must_die_1_1_chess_board.html", "class_all_pawns_must_die_1_1_chess_board" ],
     [ "ChessBoardView", "class_all_pawns_must_die_1_1_chess_board_view.html", "class_all_pawns_must_die_1_1_chess_board_view" ],
@@ -7,12 +8,11 @@ var namespace_all_pawns_must_die =
     [ "ChessEngineWrapper", "class_all_pawns_must_die_1_1_chess_engine_wrapper.html", "class_all_pawns_must_die_1_1_chess_engine_wrapper" ],
     [ "ChessGame", "class_all_pawns_must_die_1_1_chess_game.html", "class_all_pawns_must_die_1_1_chess_game" ],
     [ "ChessPiece", "class_all_pawns_must_die_1_1_chess_piece.html", "class_all_pawns_must_die_1_1_chess_piece" ],
-    [ "ColorSelectDialog", "class_all_pawns_must_die_1_1_color_select_dialog.html", "class_all_pawns_must_die_1_1_color_select_dialog" ],
-    [ "FenInputDialog", "class_all_pawns_must_die_1_1_fen_input_dialog.html", "class_all_pawns_must_die_1_1_fen_input_dialog" ],
+    [ "DisplayFENDialog", "class_all_pawns_must_die_1_1_display_f_e_n_dialog.html", "class_all_pawns_must_die_1_1_display_f_e_n_dialog" ],
     [ "FenParser", "class_all_pawns_must_die_1_1_fen_parser.html", "class_all_pawns_must_die_1_1_fen_parser" ],
-    [ "FENString", "class_all_pawns_must_die_1_1_f_e_n_string.html", "class_all_pawns_must_die_1_1_f_e_n_string" ],
     [ "IChessBoardView", "interface_all_pawns_must_die_1_1_i_chess_board_view.html", "interface_all_pawns_must_die_1_1_i_chess_board_view" ],
     [ "IChessEngine", "interface_all_pawns_must_die_1_1_i_chess_engine.html", "interface_all_pawns_must_die_1_1_i_chess_engine" ],
+    [ "NewGameDialog", "class_all_pawns_must_die_1_1_new_game_dialog.html", "class_all_pawns_must_die_1_1_new_game_dialog" ],
     [ "PieceFile", "struct_all_pawns_must_die_1_1_piece_file.html", "struct_all_pawns_must_die_1_1_piece_file" ],
     [ "PromotionDialog", "class_all_pawns_must_die_1_1_promotion_dialog.html", "class_all_pawns_must_die_1_1_promotion_dialog" ],
     [ "RadioButtonHelper", "class_all_pawns_must_die_1_1_radio_button_helper.html", null ],

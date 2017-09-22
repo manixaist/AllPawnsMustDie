@@ -1,3 +1,4 @@
 <map id="Graphical Class Hierarchy" name="Graphical Class Hierarchy">
-<area shape="rect" id="node1" href="$class_all_pawns_must_die_1_1_chess_board.html" title="Encapsulates a chess board. The board owns the pieces and the history " alt="" coords="5,5,204,32"/>
+<area shape="rect" id="node2" href="$class_all_pawns_must_die_1_1_a_p_m_d___form_1_1_self_play_result_event_args.html" title="slef&#45;play game has ended " alt="" coords="135,5,341,47"/>
+<area shape="rect" id="node3" href="$class_all_pawns_must_die_1_1_chess_engine_response_received_event_args.html" title="EventArgs for the engine response (external process response) " alt="" coords="135,71,341,112"/>
 </map>

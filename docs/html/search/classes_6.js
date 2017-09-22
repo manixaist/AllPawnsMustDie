@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['radiobuttonhelper',['RadioButtonHelper',['../class_all_pawns_must_die_1_1_radio_button_helper.html',1,'AllPawnsMustDie']]]
+  ['moveinformation',['MoveInformation',['../struct_all_pawns_must_die_1_1_chess_board_1_1_move_information.html',1,'AllPawnsMustDie::ChessBoard']]]
 ];

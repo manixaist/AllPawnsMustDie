@@ -1,5 +1,4 @@
 var searchData=
 [
-  ['white',['White',['../namespace_all_pawns_must_die.html#a85861edb29de64dca36dafa5084cb252a25a81701fbfa4a1efdf660a950c1d006',1,'AllPawnsMustDie']]],
-  ['whiteonbottom',['WhiteOnBottom',['../namespace_all_pawns_must_die.html#a3cad71405d639137c5105fa9317322a5a3373daa117cb69fc028ed212e444eb7e',1,'AllPawnsMustDie']]]
+  ['rook',['Rook',['../namespace_all_pawns_must_die.html#ac442d1a8ebdbf826c03394e256ebbff7a1a415f5ae0f891e49d34821a896b4466',1,'AllPawnsMustDie']]]
 ];

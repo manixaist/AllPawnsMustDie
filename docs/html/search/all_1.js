@@ -7,6 +7,7 @@ var searchData=
   ['blackcastlingrights',['BlackCastlingRights',['../class_all_pawns_must_die_1_1_chess_board.html#aa959814fd86ad30cacacf2615cdec54e',1,'AllPawnsMustDie.ChessBoard.BlackCastlingRights()'],['../class_all_pawns_must_die_1_1_fen_parser.html#a59e0d3810103de8f5a1807f1126de0b6',1,'AllPawnsMustDie.FenParser.BlackCastlingRights()']]],
   ['blackonbottom',['BlackOnBottom',['../namespace_all_pawns_must_die.html#a3cad71405d639137c5105fa9317322a5af036b2ab27497f31456aa8e35f07b862',1,'AllPawnsMustDie']]],
   ['blackpieces',['BlackPieces',['../class_all_pawns_must_die_1_1_chess_board.html#abde346ad92b7348fc005afa466ebe9c1',1,'AllPawnsMustDie::ChessBoard']]],
+  ['blackwins',['BlackWins',['../namespace_all_pawns_must_die.html#aefaee6faa86299aac4d3e9f00ca71315a709826f9a0b38ed23672336c7d8f2b8f',1,'AllPawnsMustDie']]],
   ['boardorientation',['BoardOrientation',['../namespace_all_pawns_must_die.html#a3cad71405d639137c5105fa9317322a5',1,'AllPawnsMustDie']]],
   ['boardrect',['BoardRect',['../interface_all_pawns_must_die_1_1_i_chess_board_view.html#a556562f4007b7ab878aef2bc307ec233',1,'AllPawnsMustDie::IChessBoardView']]],
   ['boardside',['BoardSide',['../namespace_all_pawns_must_die.html#a9060f5c8425e9b5768de0c7de20c77cf',1,'AllPawnsMustDie']]],

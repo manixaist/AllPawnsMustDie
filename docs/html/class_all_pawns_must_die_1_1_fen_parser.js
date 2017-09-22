@@ -2,6 +2,7 @@ var class_all_pawns_must_die_1_1_fen_parser =
 [
     [ "FenParser", "class_all_pawns_must_die_1_1_fen_parser.html#ac21fb51162d9c83465107439263c8270", null ],
     [ "FenParser", "class_all_pawns_must_die_1_1_fen_parser.html#a90fbb610ab0487869cef0ae1df0abcd4", null ],
+    [ "ActivePlayer", "class_all_pawns_must_die_1_1_fen_parser.html#ad806f4d5d1e5c13f430fef413ed647df", null ],
     [ "BlackCastlingRights", "class_all_pawns_must_die_1_1_fen_parser.html#a59e0d3810103de8f5a1807f1126de0b6", null ],
     [ "EnPassantTarget", "class_all_pawns_must_die_1_1_fen_parser.html#ac7057f3044802b9328230ec42839eefa", null ],
     [ "FEN", "class_all_pawns_must_die_1_1_fen_parser.html#a29af0ffedc5c6c4b90796d04032350f6", null ],

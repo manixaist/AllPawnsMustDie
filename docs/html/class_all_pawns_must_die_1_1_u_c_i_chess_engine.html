@@ -128,9 +128,9 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:aa440c4f0bb77141f42cf6d7434107595"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_all_pawns_must_die_1_1_u_c_i_chess_engine.html#aa440c4f0bb77141f42cf6d7434107595">SendReceivedEvent</a> (string s)</td></tr>
 <tr class="memdesc:aa440c4f0bb77141f42cf6d7434107595"><td class="mdescLeft">&#160;</td><td class="mdescRight">Invokes subscribers to OnChessEngineResponseReceived  <a href="#aa440c4f0bb77141f42cf6d7434107595">More...</a><br /></td></tr>
 <tr class="separator:aa440c4f0bb77141f42cf6d7434107595"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ac05ea3a804fc8ab48c58ac3ef039a400"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_all_pawns_must_die_1_1_u_c_i_chess_engine.html#ac05ea3a804fc8ab48c58ac3ef039a400">CommandCallback</a> (object state)</td></tr>
-<tr class="memdesc:ac05ea3a804fc8ab48c58ac3ef039a400"><td class="mdescLeft">&#160;</td><td class="mdescRight">Thread execution Method  <a href="#ac05ea3a804fc8ab48c58ac3ef039a400">More...</a><br /></td></tr>
-<tr class="separator:ac05ea3a804fc8ab48c58ac3ef039a400"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a56c7551073f011c103a93ac99060b928"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_all_pawns_must_die_1_1_u_c_i_chess_engine.html#a56c7551073f011c103a93ac99060b928">CommandQueueExecutionMethod</a> ()</td></tr>
+<tr class="memdesc:a56c7551073f011c103a93ac99060b928"><td class="mdescLeft">&#160;</td><td class="mdescRight">Worker Thread Method responsible for processing commands to the chess engine. When first launched, the thread will attempt to launch the engine process, then enter a wait state until work is sent (added to the queue).  <a href="#a56c7551073f011c103a93ac99060b928">More...</a><br /></td></tr>
+<tr class="separator:a56c7551073f011c103a93ac99060b928"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-static-attribs"></a>
 Static Public Attributes</h2></td></tr>
@@ -149,8 +149,8 @@ Static Public Attributes</h2></td></tr>
 <tr class="memitem:aa7c07aca63fec6c6edde3bb5d5aec955"><td class="memItemLeft" align="right" valign="top">static string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_all_pawns_must_die_1_1_u_c_i_chess_engine.html#aa7c07aca63fec6c6edde3bb5d5aec955">UciOk</a> = &quot;uciok&quot;</td></tr>
 <tr class="memdesc:aa7c07aca63fec6c6edde3bb5d5aec955"><td class="mdescLeft">&#160;</td><td class="mdescRight">UCI "uciok" response <a href="#aa7c07aca63fec6c6edde3bb5d5aec955">More...</a><br /></td></tr>
 <tr class="separator:aa7c07aca63fec6c6edde3bb5d5aec955"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a83d46ec32d52ee529409f3e8d4347b37"><td class="memItemLeft" align="right" valign="top">static string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_all_pawns_must_die_1_1_u_c_i_chess_engine.html#a83d46ec32d52ee529409f3e8d4347b37">UciNewGame</a> = &quot;position startpos moves&quot;</td></tr>
-<tr class="memdesc:a83d46ec32d52ee529409f3e8d4347b37"><td class="mdescLeft">&#160;</td><td class="mdescRight">UCI "position" base command string <a href="#a83d46ec32d52ee529409f3e8d4347b37">More...</a><br /></td></tr>
+<tr class="memitem:a83d46ec32d52ee529409f3e8d4347b37"><td class="memItemLeft" align="right" valign="top">static string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_all_pawns_must_die_1_1_u_c_i_chess_engine.html#a83d46ec32d52ee529409f3e8d4347b37">UciNewGame</a> = &quot;ucinewgame&quot;</td></tr>
+<tr class="memdesc:a83d46ec32d52ee529409f3e8d4347b37"><td class="mdescLeft">&#160;</td><td class="mdescRight">UCI "new game" command <a href="#a83d46ec32d52ee529409f3e8d4347b37">More...</a><br /></td></tr>
 <tr class="separator:a83d46ec32d52ee529409f3e8d4347b37"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:afc023ec86bf0f49d29741301e9efdbbc"><td class="memItemLeft" align="right" valign="top">static string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_all_pawns_must_die_1_1_u_c_i_chess_engine.html#afc023ec86bf0f49d29741301e9efdbbc">UciQuit</a> = &quot;quit&quot;</td></tr>
 <tr class="memdesc:afc023ec86bf0f49d29741301e9efdbbc"><td class="mdescLeft">&#160;</td><td class="mdescRight">UCI "quit" command <a href="#afc023ec86bf0f49d29741301e9efdbbc">More...</a><br /></td></tr>
@@ -167,9 +167,6 @@ Properties</h2></td></tr>
 <tr class="memitem:ac2b7aa9f3b7ee853acd20ac37aef9bb1"><td class="memItemLeft" align="right" valign="top">string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_all_pawns_must_die_1_1_u_c_i_chess_engine.html#ac2b7aa9f3b7ee853acd20ac37aef9bb1">BestMove</a><code> [get]</code></td></tr>
 <tr class="memdesc:ac2b7aa9f3b7ee853acd20ac37aef9bb1"><td class="mdescLeft">&#160;</td><td class="mdescRight">Last "best move" returned by the enine. Used to get moves for the CPU  <a href="#ac2b7aa9f3b7ee853acd20ac37aef9bb1">More...</a><br /></td></tr>
 <tr class="separator:ac2b7aa9f3b7ee853acd20ac37aef9bb1"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a9e2320957b7e9547864c3e625cd1c3a8"><td class="memItemLeft" align="right" valign="top">string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_all_pawns_must_die_1_1_u_c_i_chess_engine.html#a9e2320957b7e9547864c3e625cd1c3a8">Expected</a><code> [get]</code></td></tr>
-<tr class="memdesc:a9e2320957b7e9547864c3e625cd1c3a8"><td class="mdescLeft">&#160;</td><td class="mdescRight">The expected response for the last command sent (only one that is expecting a response is sent at a time at the moment.  <a href="#a9e2320957b7e9547864c3e625cd1c3a8">More...</a><br /></td></tr>
-<tr class="separator:a9e2320957b7e9547864c3e625cd1c3a8"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="events"></a>
 Events</h2></td></tr>
@@ -210,29 +207,25 @@ Events</h2></td></tr>
 </div>
 </div>
 <h2 class="groupheader">Member Function Documentation</h2>
-<a id="ac05ea3a804fc8ab48c58ac3ef039a400"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ac05ea3a804fc8ab48c58ac3ef039a400">&#9670;&nbsp;</a></span>CommandCallback()</h2>
+<a id="a56c7551073f011c103a93ac99060b928"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a56c7551073f011c103a93ac99060b928">&#9670;&nbsp;</a></span>CommandQueueExecutionMethod()</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">void AllPawnsMustDie.UCIChessEngine.CommandCallback </td>
+          <td class="memname">void AllPawnsMustDie.UCIChessEngine.CommandQueueExecutionMethod </td>
           <td>(</td>
-          <td class="paramtype">object&#160;</td>
-          <td class="paramname"><em>state</em></td><td>)</td>
+          <td class="paramname"></td><td>)</td>
           <td></td>
         </tr>
       </table>
 </div><div class="memdoc">
 
-<p>Thread execution Method </p>
-<dl class="params"><dt>Parameters</dt><dd>
-  <table class="params">
-    <tr><td class="paramname">state</td><td>CommandExecutionParameters object</td></tr>
-  </table>
-  </dd>
-</dl>
+<p>Worker Thread Method responsible for processing commands to the chess engine. When first launched, the thread will attempt to launch the engine process, then enter a wait state until work is sent (added to the queue). </p>
+<p>When signalled for work, the thread will take the next queueded item (if any) and send the command to the engine, and wait for the response triggered in the stdout callback OnDataReceieved. This will repeat so long as items are in the queue.</p>
+<p>If a command has no response (e.g. 'position' uci command) a pair of "IsReady"/"ReadyOk" command/response is sent to sync up.</p>
+<p>This thread exists for the lifetime of the owning <a class="el" href="class_all_pawns_must_die_1_1_chess_game.html" title="ChessGame encapsulates a game &quot;session&quot;. It can either start from scratch or from a given starting po...">ChessGame</a> object </p>
 
 </div>
 </div>
@@ -451,7 +444,7 @@ Events</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">string AllPawnsMustDie.UCIChessEngine.UciNewGame = &quot;position startpos moves&quot;</td>
+          <td class="memname">string AllPawnsMustDie.UCIChessEngine.UciNewGame = &quot;ucinewgame&quot;</td>
         </tr>
       </table>
   </td>
@@ -461,7 +454,7 @@ Events</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p>UCI "position" base command string</p>
+<p>UCI "new game" command</p>
 
 </div>
 </div>
@@ -583,30 +576,6 @@ Events</h2></td></tr>
 </div><div class="memdoc">
 
 <p>Returns true if the object has already been disposed </p>
-
-</div>
-</div>
-<a id="a9e2320957b7e9547864c3e625cd1c3a8"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a9e2320957b7e9547864c3e625cd1c3a8">&#9670;&nbsp;</a></span>Expected</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">string AllPawnsMustDie.UCIChessEngine.Expected</td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">get</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-<p>The expected response for the last command sent (only one that is expecting a response is sent at a time at the moment. </p>
 
 </div>
 </div>

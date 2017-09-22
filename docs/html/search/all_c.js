@@ -1,6 +1,9 @@
 var searchData=
 [
   ['move',['Move',['../class_all_pawns_must_die_1_1_chess_piece.html#aa5b4ce158fefa7ec904e85f606a5e8d9',1,'AllPawnsMustDie::ChessPiece']]],
-  ['movepiece',['MovePiece',['../class_all_pawns_must_die_1_1_chess_board.html#aceaa025563a2e40749c6b25800301b41',1,'AllPawnsMustDie::ChessBoard']]],
-  ['moves',['Moves',['../class_all_pawns_must_die_1_1_chess_board.html#aa23b668cba457bc75d5aad4e4305bc67',1,'AllPawnsMustDie::ChessBoard']]]
+  ['movehistorycontrolname',['MoveHistoryControlName',['../class_all_pawns_must_die_1_1_a_p_m_d___form.html#ae1fd65fac7ace9eb3e1620cca43107a2',1,'AllPawnsMustDie::APMD_Form']]],
+  ['movehistorywidthinpixels',['MoveHistoryWidthInPixels',['../class_all_pawns_must_die_1_1_chess_board_view.html#ab5fe1f2c677f6f91ae625974e3644a51',1,'AllPawnsMustDie::ChessBoardView']]],
+  ['moveinformation',['MoveInformation',['../struct_all_pawns_must_die_1_1_chess_board_1_1_move_information.html',1,'AllPawnsMustDie.ChessBoard.MoveInformation'],['../struct_all_pawns_must_die_1_1_chess_board_1_1_move_information.html#a8f957b9c24b3c342e3946fa718693ab3',1,'AllPawnsMustDie.ChessBoard.MoveInformation.MoveInformation()']]],
+  ['movepiece',['MovePiece',['../class_all_pawns_must_die_1_1_chess_board.html#aea5f86892592ddc8ebc6e42821547b0b',1,'AllPawnsMustDie::ChessBoard']]],
+  ['moves',['Moves',['../class_all_pawns_must_die_1_1_chess_board.html#a03e59cba37551879af4574100ba0bfa9',1,'AllPawnsMustDie::ChessBoard']]]
 ];

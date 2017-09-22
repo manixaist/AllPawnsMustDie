@@ -98,6 +98,9 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a3e9dfface12d0f1cf43d3d1bc69db91f"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_all_pawns_must_die_1_1_chess_piece.html#a3e9dfface12d0f1cf43d3d1bc69db91f">ChessPiece</a> (<a class="el" href="namespace_all_pawns_must_die.html#a85861edb29de64dca36dafa5084cb252">PieceColor</a> pieceColor, <a class="el" href="namespace_all_pawns_must_die.html#ac442d1a8ebdbf826c03394e256ebbff7">PieceClass</a> pieceClass, <a class="el" href="struct_all_pawns_must_die_1_1_piece_file.html">PieceFile</a> pieceFile, int pieceRank)</td></tr>
 <tr class="memdesc:a3e9dfface12d0f1cf43d3d1bc69db91f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Create a new <a class="el" href="class_all_pawns_must_die_1_1_chess_piece.html" title="Encapsulates a chess piece ">ChessPiece</a>  <a href="#a3e9dfface12d0f1cf43d3d1bc69db91f">More...</a><br /></td></tr>
 <tr class="separator:a3e9dfface12d0f1cf43d3d1bc69db91f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a95d91416e866a7e5ca0c82abe80e3da6"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_all_pawns_must_die_1_1_chess_piece.html#a95d91416e866a7e5ca0c82abe80e3da6">ChessPiece</a> (<a class="el" href="class_all_pawns_must_die_1_1_chess_piece.html">ChessPiece</a> oldPiece)</td></tr>
+<tr class="memdesc:a95d91416e866a7e5ca0c82abe80e3da6"><td class="mdescLeft">&#160;</td><td class="mdescRight">Copy Constructor  <a href="#a95d91416e866a7e5ca0c82abe80e3da6">More...</a><br /></td></tr>
+<tr class="separator:a95d91416e866a7e5ca0c82abe80e3da6"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a984e1278fd6e4ccde5d5e63bc2ed1963"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_all_pawns_must_die_1_1_chess_piece.html#a984e1278fd6e4ccde5d5e63bc2ed1963">TempMove</a> (<a class="el" href="struct_all_pawns_must_die_1_1_piece_file.html">PieceFile</a> newFile, int newRank)</td></tr>
 <tr class="memdesc:a984e1278fd6e4ccde5d5e63bc2ed1963"><td class="mdescLeft">&#160;</td><td class="mdescRight">Moves the piece, but this is intended to be short lived. Reset with ResetTempMove method  <a href="#a984e1278fd6e4ccde5d5e63bc2ed1963">More...</a><br /></td></tr>
 <tr class="separator:a984e1278fd6e4ccde5d5e63bc2ed1963"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -110,6 +113,9 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a26418c8a176f7a4a1d648eab7e6076f4"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_all_pawns_must_die_1_1_chess_piece.html#a26418c8a176f7a4a1d648eab7e6076f4">PromoteOnNextMove</a> (<a class="el" href="namespace_all_pawns_must_die.html#ac442d1a8ebdbf826c03394e256ebbff7">PieceClass</a> newLotInLife)</td></tr>
 <tr class="memdesc:a26418c8a176f7a4a1d648eab7e6076f4"><td class="mdescLeft">&#160;</td><td class="mdescRight">Promote the piece to a new class  <a href="#a26418c8a176f7a4a1d648eab7e6076f4">More...</a><br /></td></tr>
 <tr class="separator:a26418c8a176f7a4a1d648eab7e6076f4"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad60190563926a46a227ccd3a2852518e"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_all_pawns_must_die_1_1_chess_piece.html#ad60190563926a46a227ccd3a2852518e">Demote</a> ()</td></tr>
+<tr class="memdesc:ad60190563926a46a227ccd3a2852518e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Revert to a pawn....used to takeback moves  <a href="#ad60190563926a46a227ccd3a2852518e">More...</a><br /></td></tr>
+<tr class="separator:ad60190563926a46a227ccd3a2852518e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-static-methods"></a>
 Static Public Member Functions</h2></td></tr>
@@ -145,7 +151,7 @@ Properties</h2></td></tr>
 <div class="textblock"><p>Encapsulates a chess piece </p>
 </div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
 <a id="a3e9dfface12d0f1cf43d3d1bc69db91f"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a3e9dfface12d0f1cf43d3d1bc69db91f">&#9670;&nbsp;</a></span>ChessPiece()</h2>
+<h2 class="memtitle"><span class="permalink"><a href="#a3e9dfface12d0f1cf43d3d1bc69db91f">&#9670;&nbsp;</a></span>ChessPiece() <span class="overload">[1/2]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -195,7 +201,52 @@ Properties</h2></td></tr>
 
 </div>
 </div>
+<a id="a95d91416e866a7e5ca0c82abe80e3da6"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a95d91416e866a7e5ca0c82abe80e3da6">&#9670;&nbsp;</a></span>ChessPiece() <span class="overload">[2/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">AllPawnsMustDie.ChessPiece.ChessPiece </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="class_all_pawns_must_die_1_1_chess_piece.html">ChessPiece</a>&#160;</td>
+          <td class="paramname"><em>oldPiece</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Copy Constructor </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">oldPiece</td><td><a class="el" href="class_all_pawns_must_die_1_1_chess_piece.html" title="Encapsulates a chess piece ">ChessPiece</a> to copy</td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
 <h2 class="groupheader">Member Function Documentation</h2>
+<a id="ad60190563926a46a227ccd3a2852518e"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ad60190563926a46a227ccd3a2852518e">&#9670;&nbsp;</a></span>Demote()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void AllPawnsMustDie.ChessPiece.Demote </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Revert to a pawn....used to takeback moves </p>
+
+</div>
+</div>
 <a id="a75f15ca14a884c55231fb4903fae82fa"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a75f15ca14a884c55231fb4903fae82fa">&#9670;&nbsp;</a></span>IsOnBackRank()</h2>
 

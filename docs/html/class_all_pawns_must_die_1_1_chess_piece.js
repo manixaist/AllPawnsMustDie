@@ -1,6 +1,8 @@
 var class_all_pawns_must_die_1_1_chess_piece =
 [
     [ "ChessPiece", "class_all_pawns_must_die_1_1_chess_piece.html#a3e9dfface12d0f1cf43d3d1bc69db91f", null ],
+    [ "ChessPiece", "class_all_pawns_must_die_1_1_chess_piece.html#a95d91416e866a7e5ca0c82abe80e3da6", null ],
+    [ "Demote", "class_all_pawns_must_die_1_1_chess_piece.html#ad60190563926a46a227ccd3a2852518e", null ],
     [ "Move", "class_all_pawns_must_die_1_1_chess_piece.html#aa5b4ce158fefa7ec904e85f606a5e8d9", null ],
     [ "PromoteOnNextMove", "class_all_pawns_must_die_1_1_chess_piece.html#a26418c8a176f7a4a1d648eab7e6076f4", null ],
     [ "ResetTempMove", "class_all_pawns_must_die_1_1_chess_piece.html#ad69ee5546e20cf6af19fb95101affee2", null ],

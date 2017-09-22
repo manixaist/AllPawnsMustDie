@@ -108,6 +108,9 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:acef09e68c82a163d083ce02d619855f6"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="interface_all_pawns_must_die_1_1_i_chess_engine.html#acef09e68c82a163d083ce02d619855f6">Reset</a> ()</td></tr>
 <tr class="memdesc:acef09e68c82a163d083ce02d619855f6"><td class="mdescLeft">&#160;</td><td class="mdescRight">Resets the engine, only valid after a succesful load  <a href="#acef09e68c82a163d083ce02d619855f6">More...</a><br /></td></tr>
 <tr class="separator:acef09e68c82a163d083ce02d619855f6"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aee35bbd9de1d8673bb7af60ec1f4b6c2"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="interface_all_pawns_must_die_1_1_i_chess_engine.html#aee35bbd9de1d8673bb7af60ec1f4b6c2">SetInitialPosition</a> (string fen)</td></tr>
+<tr class="memdesc:aee35bbd9de1d8673bb7af60ec1f4b6c2"><td class="mdescLeft">&#160;</td><td class="mdescRight">Set an initial position with the engine  <a href="#aee35bbd9de1d8673bb7af60ec1f4b6c2">More...</a><br /></td></tr>
+<tr class="separator:aee35bbd9de1d8673bb7af60ec1f4b6c2"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a4b77bfc7413e12ad0dfb87dde42850ac"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="interface_all_pawns_must_die_1_1_i_chess_engine.html#a4b77bfc7413e12ad0dfb87dde42850ac">SendCommandAsync</a> (string commandString, string expectedResponse)</td></tr>
 <tr class="memdesc:a4b77bfc7413e12ad0dfb87dde42850ac"><td class="mdescLeft">&#160;</td><td class="mdescRight">Send a command to the chess engine, does not block, fires events above  <a href="#a4b77bfc7413e12ad0dfb87dde42850ac">More...</a><br /></td></tr>
 <tr class="separator:a4b77bfc7413e12ad0dfb87dde42850ac"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -222,6 +225,32 @@ Events</h2></td></tr>
   <table class="params">
     <tr><td class="paramname">commandString</td><td>command to send</td></tr>
     <tr><td class="paramname">expectedResponse</td><td>response we expect to get. If this is and empty string, then sync up after the command with the engine</td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="aee35bbd9de1d8673bb7af60ec1f4b6c2"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aee35bbd9de1d8673bb7af60ec1f4b6c2">&#9670;&nbsp;</a></span>SetInitialPosition()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void AllPawnsMustDie.IChessEngine.SetInitialPosition </td>
+          <td>(</td>
+          <td class="paramtype">string&#160;</td>
+          <td class="paramname"><em>fen</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Set an initial position with the engine </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">fen</td><td></td></tr>
   </table>
   </dd>
 </dl>
