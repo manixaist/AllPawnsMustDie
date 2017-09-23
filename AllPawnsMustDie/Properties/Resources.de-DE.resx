@@ -118,116 +118,112 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="AboutFormTitle" xml:space="preserve">
-    <value>About</value>
+    <value>Über</value>
   </data>
   <data name="AboutGithubLabel" xml:space="preserve">
     <value>GitHub Repository:</value>
   </data>
   <data name="AboutLabel" xml:space="preserve">
-    <value>All Pawns Must Die is free and open-source under 
-the MIT license.</value>
+    <value>All Pawns Must Die ist frei und Open-Source unter
+die MIT-Lizenz.</value>
   </data>
   <data name="AboutRepositoryLink" xml:space="preserve">
     <value>https://github.com/manixaist/AllPawnsMustDie</value>
   </data>
   <data name="Cancel" xml:space="preserve">
-    <value>&amp;Cancel</value>
-  </data>
-  <assembly alias="System.Windows.Forms" name="System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
-  <data name="chesspieces" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\images\chesspieces.bmp;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+    <value>&amp;Abbrechen</value>
   </data>
   <data name="EngineThinkTimeLabel" xml:space="preserve">
-    <value>Engine Think Time (ms):</value>
+    <value>CPU Denken Sie Zeit (ms):</value>
+  </data>
+  <data name="ErrorNoEngineLoaded" xml:space="preserve">
+    <value>Noch kein Schachprogramm ist geladen ...</value>
+  </data>
+  <data name="ErrorTitle" xml:space="preserve">
+    <value>Fehler</value>
+  </data>
+  <data name="FENDisplayLabel" xml:space="preserve">
+    <value>Aktuelles Schachbrett FEN:</value>
+  </data>
+  <data name="FENDisplayTitle" xml:space="preserve">
+    <value>FEN</value>
   </data>
   <data name="FENInputLabel" xml:space="preserve">
-    <value>Starting Position (FEN):</value>
+    <value>Ausgangslage (FEN):</value>
+  </data>
+  <data name="LoadEngineFileTitle" xml:space="preserve">
+    <value>Wähle dein Schachprogramm</value>
   </data>
   <data name="MainFormTitle" xml:space="preserve">
     <value>All Pawns Must Die</value>
   </data>
   <data name="MenuEdit" xml:space="preserve">
-    <value>&amp;Edit</value>
+    <value>&amp;Bearbeiten</value>
   </data>
   <data name="MenuEditShowFen" xml:space="preserve">
-    <value>Show &amp;FEN</value>
+    <value>Weisen &amp;FEN</value>
   </data>
   <data name="MenuEditUndo" xml:space="preserve">
-    <value>&amp;Undo last move</value>
+    <value>&amp;Rückgängig machen</value>
   </data>
   <data name="MenuFile" xml:space="preserve">
-    <value>&amp;File</value>
+    <value>&amp;Datei</value>
   </data>
   <data name="MenuFileExit" xml:space="preserve">
-    <value>E&amp;xit</value>
+    <value>&amp;Beenden</value>
   </data>
   <data name="MenuFileLoadEngine" xml:space="preserve">
-    <value>&amp;Load Engine...</value>
+    <value>&amp;Laden Schach Engine...</value>
   </data>
   <data name="MenuFileNewGame" xml:space="preserve">
-    <value>&amp;New Game</value>
+    <value>&amp;Neues Spiel</value>
   </data>
   <data name="MenuFileNewPosition" xml:space="preserve">
-    <value>New &amp;Position...</value>
+    <value>Neues Schachbrett...</value>
   </data>
   <data name="MenuFileSelfPlay" xml:space="preserve">
-    <value>Sel&amp;f Play</value>
+    <value>&amp;Selbst Spielen</value>
   </data>
   <data name="MenuHelp" xml:space="preserve">
-    <value>&amp;Help</value>
+    <value>&amp;Hilfe</value>
   </data>
   <data name="MenuHelpAbout" xml:space="preserve">
-    <value>&amp;About</value>
+    <value>&amp;Über</value>
   </data>
   <data name="NewGameTitle" xml:space="preserve">
-    <value>New Game</value>
+    <value>Neues Spiel</value>
   </data>
   <data name="Ok" xml:space="preserve">
     <value>&amp;Ok</value>
   </data>
   <data name="PlayerColorGroupBox" xml:space="preserve">
-    <value>Player color</value>
+    <value>Spielerfarbe</value>
   </data>
   <data name="PlayerColorSelectBlack" xml:space="preserve">
-    <value>&amp;Black</value>
+    <value>&amp;Schwarz</value>
   </data>
   <data name="PlayerColorSelectWhite" xml:space="preserve">
-    <value>&amp;White</value>
+    <value>&amp;Weiß</value>
   </data>
   <data name="PromotionBishop" xml:space="preserve">
-    <value>&amp;Bishop</value>
+    <value>&amp;Bischof</value>
   </data>
   <data name="PromotionFormTitle" xml:space="preserve">
-    <value>Promotion</value>
+    <value>Aufstieg</value>
   </data>
   <data name="PromotionGroupLabel" xml:space="preserve">
-    <value>Choose...</value>
+    <value>Wählen...</value>
   </data>
   <data name="PromotionKnight" xml:space="preserve">
-    <value>&amp;Knight</value>
+    <value>&amp;Ritter</value>
   </data>
   <data name="PromotionQueen" xml:space="preserve">
-    <value>&amp;Queen</value>
+    <value>&amp;Königin</value>
   </data>
   <data name="PromotionRook" xml:space="preserve">
-    <value>&amp;Rook</value>
-  </data>
-  <data name="FENDisplayLabel" xml:space="preserve">
-    <value>Current board FEN:</value>
-  </data>
-  <data name="FENDisplayTitle" xml:space="preserve">
-    <value>FEN</value>
+    <value>&amp;Turm</value>
   </data>
   <data name="Thinking" xml:space="preserve">
-    <value>Thinking</value>
-  </data>
-  <data name="ErrorNoEngineLoaded" xml:space="preserve">
-    <value>No Engine is loaded yet...</value>
-  </data>
-  <data name="ErrorTitle" xml:space="preserve">
-    <value>Error</value>
-  </data>
-  <data name="LoadEngineFileTitle" xml:space="preserve">
-    <value>Select your chess engine exe</value>
+    <value>Darüber nachdenken</value>
   </data>
 </root>

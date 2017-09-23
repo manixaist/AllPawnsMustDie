@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Threading;
+using System.Globalization;
 using System.Diagnostics;
 using System.Drawing;
 using System.Collections.Generic;
@@ -249,10 +250,18 @@ namespace AllPawnsMustDie
         /// </summary>
         /// <param name="clientForm">Windows Form the game will draw to</param>
         /// <param name="fullPathToEngine">Full path the chess engine exe</param>
-        public ChessGame(Form clientForm, string fullPathToEngine)
+        /// <param name="cultureInfo">CultureInfo for main form</param>
+        public ChessGame(Form clientForm, string fullPathToEngine, CultureInfo cultureInfo)
         {
             // Save the form
             form = clientForm;
+
+            // Save culture for this thread
+            currentCultureInfo = cultureInfo;
+            Thread.CurrentThread.CurrentCulture = currentCultureInfo;
+            Thread.CurrentThread.CurrentUICulture = currentCultureInfo;
+
+            ThinkingLocalized = Properties.Resources.Thinking;
 
             // Create legal move list
             legalMoves = new List<ChessBoard.BoardSquare>();
@@ -788,7 +797,8 @@ namespace AllPawnsMustDie
             Control verboseControl = form.Controls[APMD_Form.VerboseOutputControlName];
 
             // Build the progress text bar
-            StringBuilder sb = new StringBuilder("Thinking: [");
+            StringBuilder sb = new StringBuilder(": [");
+            sb.Insert(0, ThinkingLocalized);
             sb.Append('\u25AB', 75);
             sb.Append(']');
             // Replace the current spinning index to the marker character
@@ -1577,6 +1587,8 @@ namespace AllPawnsMustDie
         private static int HalfMovesUntilDraw = 50;
         private int thinkTime = 250;
         private static string MoveCommand = "go movetime";
+        private CultureInfo currentCultureInfo;
+        private readonly string ThinkingLocalized;
         #endregion
     }
 }

@@ -609,12 +609,12 @@ namespace AllPawnsMustDie
                 List<ChessBoard.MoveInformation> moves = data.Moves;
                 int newlineIndex = 0;
                 int moveIndex = 1;
-                string text = "Move History:\r\n---------------------\r\n";
+                string text = "---------------------\r\n";
                 foreach (ChessBoard.MoveInformation move in moves)
                 {
                     if (newlineIndex == 0)
                     {
-                        text = String.Concat(text, String.Format("{0:00}). {1}", moveIndex, move.ToString()));
+                        text = String.Concat(text, String.Format("{0:00}. | {1}", moveIndex, move.ToString()));
                     }
                     else
                     {

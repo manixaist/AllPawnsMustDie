@@ -126,6 +126,24 @@ namespace AllPawnsMustDie.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to No Engine is loaded yet....
+        /// </summary>
+        internal static string ErrorNoEngineLoaded {
+            get {
+                return ResourceManager.GetString("ErrorNoEngineLoaded", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Error.
+        /// </summary>
+        internal static string ErrorTitle {
+            get {
+                return ResourceManager.GetString("ErrorTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Current board FEN:.
         /// </summary>
         internal static string FENDisplayLabel {
@@ -149,6 +167,15 @@ namespace AllPawnsMustDie.Properties {
         internal static string FENInputLabel {
             get {
                 return ResourceManager.GetString("FENInputLabel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Select your chess engine exe.
+        /// </summary>
+        internal static string LoadEngineFileTitle {
+            get {
+                return ResourceManager.GetString("LoadEngineFileTitle", resourceCulture);
             }
         }
         
@@ -356,6 +383,15 @@ namespace AllPawnsMustDie.Properties {
         internal static string PromotionRook {
             get {
                 return ResourceManager.GetString("PromotionRook", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Thinking.
+        /// </summary>
+        internal static string Thinking {
+            get {
+                return ResourceManager.GetString("Thinking", resourceCulture);
             }
         }
     }

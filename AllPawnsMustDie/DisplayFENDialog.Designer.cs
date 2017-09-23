@@ -39,7 +39,7 @@
             this.labelDisplayFEN.Name = "labelDisplayFEN";
             this.labelDisplayFEN.Size = new System.Drawing.Size(98, 13);
             this.labelDisplayFEN.TabIndex = 0;
-            this.labelDisplayFEN.Text = "Current board FEN:";
+            this.labelDisplayFEN.Text = Properties.Resources.FENDisplayLabel;
             // 
             // textBoxDisplayFEN
             // 
@@ -48,7 +48,7 @@
             this.textBoxDisplayFEN.ReadOnly = true;
             this.textBoxDisplayFEN.Size = new System.Drawing.Size(463, 20);
             this.textBoxDisplayFEN.TabIndex = 1;
-            this.textBoxDisplayFEN.Text = displayFen;
+            this.textBoxDisplayFEN.Text = string.Empty;
             // 
             // DisplayFENDialog
             // 
@@ -62,7 +62,7 @@
             this.MinimizeBox = false;
             this.Name = "DisplayFENDialog";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
-            this.Text = "FEN";
+            this.Text = Properties.Resources.FENDisplayTitle;
             this.ResumeLayout(false);
             this.PerformLayout();
 

@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Threading;
+using System.Globalization;
 using System.IO;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -132,7 +134,7 @@ namespace AllPawnsMustDie
         private void loadEngineToolStripLoadEngine_Click(object sender, EventArgs e)
         {
             OpenFileDialog openFileDialog = new OpenFileDialog();
-            openFileDialog.Title = "Select your chess engine exe";
+            openFileDialog.Title = Properties.Resources.LoadEngineFileTitle;
             openFileDialog.Filter = "Exe Files (*.exe) | *.exe";
             DialogResult result = openFileDialog.ShowDialog();
             if (result == DialogResult.OK)
@@ -195,7 +197,7 @@ namespace AllPawnsMustDie
                 {
                     // Start a small delay timer so we have a chance to see the
                     // board
-                    Timer timer = new Timer();
+                    System.Windows.Forms.Timer timer = new System.Windows.Forms.Timer();
                     timer.Tick += SelfPlayDelayTick;
                     timer.Interval = 5000; // 5 seconds for now
                     timer.Start();
@@ -210,7 +212,7 @@ namespace AllPawnsMustDie
         /// <param name="e">Ignored</param>
         private void SelfPlayDelayTick(object sender, EventArgs e)
         {
-            Timer timer = sender as Timer;
+            System.Windows.Forms.Timer timer = sender as System.Windows.Forms.Timer;
             if (timer != null)
             {
                 SelfPlayResultEventArgs spea = new SelfPlayResultEventArgs(true);
@@ -260,7 +262,7 @@ namespace AllPawnsMustDie
                 chessGame?.Dispose();
 
                 // Now we have the engine path, so create an instance of the game class
-                chessGame = new ChessGame(this, fullPathToChessExe);
+                chessGame = new ChessGame(this, fullPathToChessExe, Thread.CurrentThread.CurrentCulture);
                 chessGame.OnChessGameSelfPlayGameOver += ChessGameSelfPlayGameOverEventHandler;
                 chessGame.OnChessGameNormalPlayGameOver += ChessGameNormalPlayGameOverEventHandler;
 
@@ -279,7 +281,7 @@ namespace AllPawnsMustDie
             else
             {
                 // No engine loaded, so no new game can be created.  Inform the user
-                MessageBox.Show(this, APMD_ErrorNoEngineLoaded, APMD_ErrorTitle,
+                MessageBox.Show(this, Properties.Resources.ErrorNoEngineLoaded, Properties.Resources.ErrorTitle,
                     MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
@@ -352,8 +354,6 @@ namespace AllPawnsMustDie
         #endregion
 
         #region Private Fields
-        private static string APMD_ErrorNoEngineLoaded = "No Engine is loaded yet...";
-        private static string APMD_ErrorTitle = "Error";
         private string fullPathToChessExe;
         private ChessGame chessGame;
         private int selfPlayThinkTime;

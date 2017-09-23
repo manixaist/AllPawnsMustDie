@@ -24,6 +24,8 @@ namespace AllPawnsMustDie
         {
             displayFen = fen;
             InitializeComponent();
+
+            textBoxDisplayFEN.Text = displayFen;
         }
 
         // Copy of the string to display
