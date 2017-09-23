@@ -716,8 +716,9 @@ namespace AllPawnsMustDie
                 }
                 else if (fenPiece.Job == PieceClass.King)
                 {
-                    // Both colors should be on the E file and back rank
-                    if (!ChessPiece.IsOnBackRank(fenPiece) || fenPiece.File != new PieceFile('e'))
+                    // Both colors should be on the E file and their home rank
+                    int homeRank = (fenPiece.Color == PieceColor.White) ? 1 : 8;
+                    if ((fenPiece.Rank != homeRank) || (fenPiece.File != new PieceFile('e')))
                     {
                         fenPiece.Deployed = true;
                     }

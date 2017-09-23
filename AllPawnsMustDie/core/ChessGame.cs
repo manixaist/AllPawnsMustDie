@@ -643,12 +643,17 @@ namespace AllPawnsMustDie
 
             // Get the best move from the engine
             string bestMove = chessEngine.BestMove;
-            if ((String.Compare(bestMove, "(none)") == 0) || // Probably mate
+            if ((String.Compare(bestMove, "(none)") == 0) || // Stockfish
+                (String.Compare(bestMove, "a1a1") == 0)   || // Rybka
                 (board.HalfMoveCount >= HalfMovesUntilDraw)) // Propably spinning on self play or just a draw
             {
                 if (board.HalfMoveCount >= HalfMovesUntilDraw)
                 {
                     Debug.WriteLine("Draw by 50 moves rule...");
+                    if (OnChessGameSelfPlayGameOver != null)
+                    {
+                        OnChessGameSelfPlayGameOver(this, null);
+                    }
                 }
 
                 // Debug at the end to compare the board states
@@ -853,7 +858,7 @@ namespace AllPawnsMustDie
             updatingPosition = true;
 
             string position = String.Format("fen {0}", board.InitialFEN);
-            chessEngine.Engine.SendCommandAsync(String.Format("position {0} moves {1}", position, movesList), "");
+            chessEngine.Engine.SendCommandAsync(String.Format("position {0} moves{1}", position, movesList), "");
         }
 
         /// <summary>
