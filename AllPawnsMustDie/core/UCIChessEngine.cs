@@ -122,6 +122,15 @@ namespace AllPawnsMustDie
                 return;
             }
 
+            string data = e.Data;
+
+            // Spike 1.1
+            if (String.Compare(data, "Error: Fatal no best move") == 0)
+            {
+                // Convert to something approaching a real protocol response
+                data = "bestmove (none)";
+            }
+
             // Set to an empty one since it's a value type...but we only care
             // if we actually find one.
             string dummyCommand = "{OnDataReceived}";
@@ -135,26 +144,26 @@ namespace AllPawnsMustDie
             }
             bool foundCommand = (String.Compare(dummyCommand, cep.Command) != 0);
             bool dequeue = false;
-            SendVerboseEvent(e.Data); 
+            SendVerboseEvent(data); 
 
             // First check if we need to wait on a ReadyOK response
-            if (foundCommand && (String.Compare(e.Data, ReadyOk) == 0) && (needIsReadySync))
+            if (foundCommand && (String.Compare(data, ReadyOk) == 0) && (needIsReadySync))
             {
                 dequeue = true;
-                commandResponse = e.Data;
+                commandResponse = data;
                 needIsReadySync = false; 
             }
-            else if (foundCommand && e.Data.StartsWith(cep.Expected))
+            else if (foundCommand && data.StartsWith(cep.Expected))
             {
                 dequeue = true;
-                commandResponse = e.Data;
+                commandResponse = data;
                 
                 // If we're asking for a move - then save the response we care about
                 // the SAN for the move - it comes right after "bestmove"
                 // If no move (e.g. mate) will return 'bestmove (none)'
-                if (e.Data.StartsWith(BestMoveResponse))
+                if (data.StartsWith(BestMoveResponse))
                 {
-                    string[] parts = e.Data.Split(' ');
+                    string[] parts = data.Split(' ');
                     bestMove = parts[1];
                 }
             }

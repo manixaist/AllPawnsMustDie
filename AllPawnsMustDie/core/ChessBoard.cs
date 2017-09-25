@@ -43,6 +43,15 @@ namespace AllPawnsMustDie
             }
 
             /// <summary>
+            /// returns san string for square e.g. "e2"
+            /// </summary>
+            /// <returns></returns>
+            public override string ToString()
+            {
+                return String.Concat(File.ToString(), Rank.ToString());
+            }
+
+            /// <summary>
             /// Override for equality tests
             /// </summary>
             /// <param name="obj">object testing</param>
@@ -114,8 +123,10 @@ namespace AllPawnsMustDie
             /// <param name="start">starting square</param>
             /// <param name="end">ending square</param>
             /// <param name="deployed">true if piece has ever moved, prior to this move</param>
-            public MoveInformation(BoardSquare start, BoardSquare end, bool deployed)
+            /// <param name="oldFEN">last FEN for board</param>
+            public MoveInformation(BoardSquare start, BoardSquare end, bool deployed, string oldFEN)
             {
+                prevFEN = oldFEN;
                 ancillaryPiece = null;
                 promotionClass = PieceClass.King; // Invalid promotion job
                 startSquare = start;
@@ -230,6 +241,9 @@ namespace AllPawnsMustDie
             /// <summary>true if move was a castle</summary>
             public bool IsCastle { get { return isCastle; } }
 
+            /// <summary>board FEN prior to move</summary>
+            public string PreviousFEN { get { return prevFEN; } }
+
             BoardSquare startSquare;
             BoardSquare endSquare;
             ChessPiece ancillaryPiece;
@@ -239,6 +253,7 @@ namespace AllPawnsMustDie
             bool firstMove;
             bool isCapture;
             bool isCastle;
+            string prevFEN;
         }
         #endregion
 
@@ -249,6 +264,7 @@ namespace AllPawnsMustDie
         public ChessBoard()
         {
             initialFEN = InitialFENPosition;
+            currentFEN = initialFEN;
             enPassantValid = false;
             NewGame();
         }
@@ -269,7 +285,18 @@ namespace AllPawnsMustDie
         public void NewPosition(string fen)
         {
             initialFEN = fen;
+            currentFEN = fen;
             CreateAndPlacePieces(initialFEN);
+        }
+
+        /// <summary>
+        /// Returns opposite color e.g. white->black black->white
+        /// </summary>
+        /// <param name="color">color to oppose</param>
+        /// <returns>Opposite of 'color'</returns>
+        public static PieceColor OppositeColor(PieceColor color)
+        {
+            return (color == PieceColor.White) ? PieceColor.Black : PieceColor.White;
         }
 
         /// <summary>
@@ -415,67 +442,20 @@ namespace AllPawnsMustDie
                 }
             }
 
-            // Update castling rights - moving the king ruins all castling forever
-            if ((playerPiece.Job == PieceClass.King) && (moveInfo.FirstMove))
-            {
-                ActivePlayerCastlingRights = BoardSide.None;
-            }
-            // moving the rook removes the possibility on that side
-            else if ((playerPiece.Job == PieceClass.Rook) && (moveInfo.FirstMove))
-            {
-                if (moveInfo.Start.File.ToInt() == 8)
-                {
-                    ActivePlayerCastlingRights &= ~BoardSide.King;
-                }
-                else if (moveInfo.Start.File.ToInt() == 1)
-                {
-                    ActivePlayerCastlingRights &= ~BoardSide.Queen;
-                }
-            }
-            // Capturing the opponent's rook removes castling rights for them on that side
-            else if ((moveInfo.IsCapture) && (moveInfo.CapturedPiece.Job == PieceClass.Rook))
-            {
-                if (moveInfo.Start.File.ToInt() == 8)
-                {
-                    OpponentPlayerCastlingRights &= ~BoardSide.King;
-                }
-                else if (moveInfo.Start.File.ToInt() == 1)
-                {
-                    OpponentPlayerCastlingRights &= ~BoardSide.Queen;
-                }
-            }
-
-            // If it's Black's turn, then we just finished a full move
-            if (activePlayer == PieceColor.Black)
-            {
-                fullMoveCount++;    // Increment our fullmove counter
-            }
-
-            // Update the Halfmove tracker.  This is used in the "draw by 50" rule
-            // and tracks the number of halfmoves (single moves by either side)
-            // since the capture of any piece, or the advancement of any pawn
-            // The rationale is if neither of those things has happened in 50 moves
-            // then no progress is being made and the game is drawn and the players
-            // are too stubborn to admit it.
-            halfMoveCount++;
-            if ((moveInfo.IsCapture) || (playerPiece.Job == PieceClass.Pawn))
-            {
-                halfMoveCount = 0;
-            }
-
-            // Flip players
-            activePlayer = (activePlayer == PieceColor.White) ? PieceColor.Black : PieceColor.White;
-
-            // Reset this target flag for all pieces except the pawn, which handles it in HandleEnPassant
-            if (playerPiece.Job != PieceClass.Pawn)
-            {
-                enPassantValid = false;
-            }
-
             // save the last capture state for external callers
             lastMoveWasCapture = moveInfo.IsCapture;
 
             Moves.Add(moveInfo);
+
+            // Update our FEN
+            currentFEN = FenParser.ApplyMoveToFEN(currentFEN, moveInfo.ToString());
+            enPassantValid = FenParser.ExtractEnPassantTarget(currentFEN, out enPassantTarget);
+
+            FenParser.ExtractCastlingRights(CurrentFEN, ref whiteCastlingRights, ref blackCastlingRights);
+            FenParser.ExtractMoveCounts(CurrentFEN, ref halfMoveCount, ref fullMoveCount);
+
+            // Flip players - easy to just do here rather than parse the FEN again
+            activePlayer = OppositeColor(activePlayer);
         }
 
         /// <summary>
@@ -628,9 +608,12 @@ namespace AllPawnsMustDie
 
             // Reset castling rights
             ActivePlayerCastlingRights = lastMove.CastlingRights;
-            
+
             // Flip players
-            activePlayer = (activePlayer == PieceColor.White) ? PieceColor.Black : PieceColor.White;
+            activePlayer = OppositeColor(activePlayer);
+
+            // Set last FEN
+            currentFEN = lastMove.PreviousFEN;
         }
 
         /// <summary>
@@ -682,20 +665,13 @@ namespace AllPawnsMustDie
             // Top->Bottom
             string fenString = fen.Trim();
 
-            FenParser parser = new FenParser(fenString);
+            activePlayer = FenParser.ExtractActivePlayer(fenString);
+            FenParser.ExtractCastlingRights(fenString, ref whiteCastlingRights, ref blackCastlingRights);
+            enPassantValid = FenParser.ExtractEnPassantTarget(fenString, out enPassantTarget);
+            FenParser.ExtractMoveCounts(fenString, ref halfMoveCount, ref fullMoveCount);
 
-            activePlayer = parser.ActivePlayer;
-            whiteCastlingRights =  parser.WhiteCastlingRights;
-            blackCastlingRights = parser.BlackCastlingRights;
-            enPassantValid = parser.IsEnPassantTargetValid;
-            if (parser.IsEnPassantTargetValid)
-            {
-                enPassantTarget = parser.EnPassantTarget;
-            }
-            fullMoveCount = parser.FullMoves;
-            halfMoveCount = parser.HalfMoves;
-            
-            foreach (ChessPiece fenPiece in parser.Pieces)
+            List<ChessPiece> pieces = FenParser.ExtractPieces(fenString);
+            foreach (ChessPiece fenPiece in pieces)
             {
                 // For pawns and rooks and kings, deployment matters, check if they're on their home
                 // rank/square and if not, set it to true
@@ -786,7 +762,6 @@ namespace AllPawnsMustDie
         /// <returns>captured piece or null</returns>
         private ChessPiece HandleEnPassant(PieceFile startFile, int startRank, PieceFile targetFile, int targetRank)
         {
-            enPassantValid = false;
             ChessPiece enPassantVictim = null;
             if ((startFile != targetFile) &&                      // Diagonal move
                 (!IsAnyPieceAtLocation(targetFile, targetRank)))  // There is some piece behind us
@@ -800,17 +775,6 @@ namespace AllPawnsMustDie
 
                 // Capture the piece
                 enPassantVictim.Visible = false;
-            }
-            else
-            {
-                // Check if we need to set the target en-passant square
-                if (Math.Abs(startRank - targetRank) == 2)
-                {
-                    // Target is one space behind the pawn that just jumped 2 spaces
-                    targetRank += (ActivePlayer == PieceColor.White) ? -1 : 1;
-                    enPassantTarget = new BoardSquare(targetFile, targetRank);
-                    enPassantValid = true;
-                }
             }
             return enPassantVictim;
         }
@@ -1007,6 +971,11 @@ namespace AllPawnsMustDie
         /// Returns initial position
         /// </summary>
         public string InitialFEN { get { return initialFEN; } }
+
+        /// <summary>
+        /// Returns the current board FEN (updated every move)
+        /// </summary>
+        public string CurrentFEN { get { return currentFEN; } }
         #endregion
 
         #region Private Properties
@@ -1065,13 +1034,7 @@ namespace AllPawnsMustDie
         /// <summary>
         /// FEN for the standard starting position
         /// </summary>
-        public static String InitialFENPosition = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 0";
-
-        // Some interesting test positions for legal moves, etc
-        //public static String InitialFENPosition = "r3kb1r/pp1npppp/3p4/2P5/4q3/8/P4P1P/3QK2R w KQkq - 0 0";
-        //public static String InitialFENPosition = "3k1r2/8/4N3/2N5/8/8/3PP3/r2RK3 w KQkq - 0 0";
-        //public static String InitialFENPosition = "r1b1kb1r/pppp1p1p/1q3np1/2n1p3/1BQ3N1/3N1B2/PPP3PP/R3K2R w KQkq - 0 0";
-        //public static String InitialFENPosition = "2b1k2r/pppp1p1p/3r1np1/b1n1p3/2Q1q1N1/2B1NB2/PPP3PP/R3K2R w KQkq - 0 0";
+        public static String InitialFENPosition = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1";
         #endregion
 
         #region Private Fields
@@ -1088,6 +1051,7 @@ namespace AllPawnsMustDie
         private bool enPassantValid;
         private BoardSquare enPassantTarget;
         private string initialFEN;
+        private string currentFEN;
         #endregion
     }
 }

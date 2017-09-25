@@ -92,7 +92,6 @@ namespace AllPawnsMustDie
             DialogResult result = newGameDialog.ShowDialog(this);
             if (result == DialogResult.OK)
             {
-                chessGame?.StopEngineSelfPlay();
                 NewGame(String.Empty, newGameDialog.Info.PlayerColor, newGameDialog.Info.ThinkTime);
             }
         }
@@ -110,7 +109,6 @@ namespace AllPawnsMustDie
             DialogResult result = newGameDialog.ShowDialog(this);
             if (result == DialogResult.OK)
             {
-                chessGame?.StopEngineSelfPlay();
                 NewGame(newGameDialog.StartingPosition, PieceColor.White, newGameDialog.Info.ThinkTime);
             }
         }
@@ -139,6 +137,8 @@ namespace AllPawnsMustDie
             DialogResult result = openFileDialog.ShowDialog();
             if (result == DialogResult.OK)
             {
+                chessGame?.StopEngineSelfPlay();
+
                 fullPathToChessExe = openFileDialog.FileName;
 
                 // Resize the form if needed
@@ -147,6 +147,8 @@ namespace AllPawnsMustDie
                 textBoxMoveHistory.Height = ChessBoardView.BoardSizeInPixels / 2;
                 textBoxMoveHistory.Width = ChessBoardView.MoveHistoryWidthInPixels;
                 textBoxMoveHistory.Font = new Font("Segoe UI", 8);
+
+                Text = String.Format("All Pawns Must Die [{0}]", openFileDialog.SafeFileName);
 
                 // Trigger Paint event
                 Invalidate();
@@ -215,6 +217,7 @@ namespace AllPawnsMustDie
             System.Windows.Forms.Timer timer = sender as System.Windows.Forms.Timer;
             if (timer != null)
             {
+                chessGame?.StopEngineSelfPlay();
                 SelfPlayResultEventArgs spea = new SelfPlayResultEventArgs(true);
                 selfPlayToolStripSelfPlay_Click(sender, spea);
                 timer.Enabled = false;
@@ -251,6 +254,8 @@ namespace AllPawnsMustDie
         {
             if (fullPathToChessExe != null)
             {
+                chessGame?.StopEngineSelfPlay();
+
                 textBoxMoveHistory.Text = String.Empty;
 
                 // Old game is dead to us

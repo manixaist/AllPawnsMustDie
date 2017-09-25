@@ -314,7 +314,7 @@ namespace AllPawnsMustDieUnitTests
                 // Basic opening pawn move "e2e4"
                 Trace.WriteLine("Applying a basic pawn move...e2e4");
                 ChessBoard.MoveInformation moveInfo = new CB.MoveInformation(
-                    new ChessBoard.BoardSquare(E_FILE, 2), new ChessBoard.BoardSquare(E_FILE, 4), false);
+                    new ChessBoard.BoardSquare(E_FILE, 2), new ChessBoard.BoardSquare(E_FILE, 4), false, testBoard.CurrentFEN);
                 testBoard.MovePiece(ref moveInfo);
 
                 Trace.WriteLine("Verify pawn is found at new location...");
@@ -356,7 +356,7 @@ namespace AllPawnsMustDieUnitTests
                 // Castle White Kingside
                 Trace.WriteLine("Castle White Kingside - e1g1");
                 ChessBoard.MoveInformation moveInfo = new CB.MoveInformation(
-                    new ChessBoard.BoardSquare(E_FILE, 1), new ChessBoard.BoardSquare(G_FILE, 1), false);
+                    new ChessBoard.BoardSquare(E_FILE, 1), new ChessBoard.BoardSquare(G_FILE, 1), false, testBoard.CurrentFEN);
                 testBoard.MovePiece(ref moveInfo);
 
                 // Verify the rook moved as well
@@ -373,7 +373,7 @@ namespace AllPawnsMustDieUnitTests
                 // Castle White Queenside
                 Trace.WriteLine("Castle White Kingside - e1c1");
                 moveInfo = new CB.MoveInformation(
-                    new ChessBoard.BoardSquare(E_FILE, 1), new ChessBoard.BoardSquare(C_FILE, 1), false);
+                    new ChessBoard.BoardSquare(E_FILE, 1), new ChessBoard.BoardSquare(C_FILE, 1), false, testBoard.CurrentFEN);
                 testBoard.MovePiece(ref moveInfo);
 
                 // Verify the rook moved as well
@@ -390,7 +390,7 @@ namespace AllPawnsMustDieUnitTests
                 // Castle Black Kingside
                 Trace.WriteLine("Castle White Kingside - e8g8");
                 moveInfo = new CB.MoveInformation(
-                    new ChessBoard.BoardSquare(E_FILE, 8), new ChessBoard.BoardSquare(G_FILE, 8), false);
+                    new ChessBoard.BoardSquare(E_FILE, 8), new ChessBoard.BoardSquare(G_FILE, 8), false, testBoard.CurrentFEN);
                 testBoard.MovePiece(ref moveInfo);
 
                 // Verify the rook moved as well
@@ -407,7 +407,7 @@ namespace AllPawnsMustDieUnitTests
                 // Castle Black Queenside
                 Trace.WriteLine("Castle White Kingside - e8c8");
                 moveInfo = new CB.MoveInformation(
-                    new ChessBoard.BoardSquare(E_FILE, 8), new ChessBoard.BoardSquare(C_FILE, 8), false);
+                    new ChessBoard.BoardSquare(E_FILE, 8), new ChessBoard.BoardSquare(C_FILE, 8), false, testBoard.CurrentFEN);
                 testBoard.MovePiece(ref moveInfo);
 
                 // Verify the rook moved as well
@@ -449,13 +449,13 @@ namespace AllPawnsMustDieUnitTests
                 // Prepare our en-passant target
                 Trace.WriteLine("Preparing en-passant victim d7d5...");
                 ChessBoard.MoveInformation moveInfo = new CB.MoveInformation(
-                    new ChessBoard.BoardSquare(D_FILE, 7), new ChessBoard.BoardSquare(D_FILE, 5), false);
+                    new ChessBoard.BoardSquare(D_FILE, 7), new ChessBoard.BoardSquare(D_FILE, 5), false, testBoard.CurrentFEN);
                 testBoard.MovePiece(ref moveInfo);
 
                 // Now attempt the en-passant e5d6
                 Trace.WriteLine("Capture the black pawn by en-passant e5d6...");
                 moveInfo = new CB.MoveInformation(
-                    new ChessBoard.BoardSquare(E_FILE, 5), new ChessBoard.BoardSquare(D_FILE, 6), true);
+                    new ChessBoard.BoardSquare(E_FILE, 5), new ChessBoard.BoardSquare(D_FILE, 6), true, testBoard.CurrentFEN);
                 testBoard.MovePiece(ref moveInfo);
 
                 // Verify the capture
@@ -503,7 +503,7 @@ namespace AllPawnsMustDieUnitTests
                 // Prepare our en-passant target
                 Trace.WriteLine("Preparing en-passant victim d7d5...");
                 ChessBoard.MoveInformation moveInfo = new CB.MoveInformation(
-                    new ChessBoard.BoardSquare(D_FILE, 7), new ChessBoard.BoardSquare(D_FILE, 5), false);
+                    new ChessBoard.BoardSquare(D_FILE, 7), new ChessBoard.BoardSquare(D_FILE, 5), false, testBoard.CurrentFEN);
                 testBoard.MovePiece(ref moveInfo);
 
                 // Verify the target was set
@@ -515,7 +515,7 @@ namespace AllPawnsMustDieUnitTests
                 // Make another mover
                 Trace.WriteLine("ignore capture opportunity a2a3...");
                 moveInfo = new CB.MoveInformation(
-                    new ChessBoard.BoardSquare(A_FILE, 2), new ChessBoard.BoardSquare(A_FILE, 3), false);
+                    new ChessBoard.BoardSquare(A_FILE, 2), new ChessBoard.BoardSquare(A_FILE, 3), false, testBoard.CurrentFEN);
                 testBoard.MovePiece(ref moveInfo);
 
                 // Verify the target was cleared
@@ -571,7 +571,7 @@ namespace AllPawnsMustDieUnitTests
                 // Move the white kingside rook h1g1
                 Trace.WriteLine("Moving kingside rook, h1g1...");
                 ChessBoard.MoveInformation moveInfo = new CB.MoveInformation(
-                    new ChessBoard.BoardSquare(H_FILE, 1), new ChessBoard.BoardSquare(G_FILE, 1), false);
+                    new ChessBoard.BoardSquare(H_FILE, 1), new ChessBoard.BoardSquare(G_FILE, 1), false, testBoard.CurrentFEN);
                 testBoard.MovePiece(ref moveInfo);
 
                 // Verify white kingside rights are gone
@@ -581,7 +581,7 @@ namespace AllPawnsMustDieUnitTests
                 // Move the black kingside rook h8g8
                 Trace.WriteLine("Moving kingside rook, h8g8...");
                 moveInfo = new CB.MoveInformation(
-                    new ChessBoard.BoardSquare(H_FILE, 8), new ChessBoard.BoardSquare(G_FILE, 8), false);
+                    new ChessBoard.BoardSquare(H_FILE, 8), new ChessBoard.BoardSquare(G_FILE, 8), false, testBoard.CurrentFEN);
                 testBoard.MovePiece(ref moveInfo);
 
                 // Verify black kingside rights are gone
@@ -591,7 +591,7 @@ namespace AllPawnsMustDieUnitTests
                 // Move the white queenside rook a1b1
                 Trace.WriteLine("Moving queenside rook, a1b1...");
                 moveInfo = new CB.MoveInformation(
-                    new ChessBoard.BoardSquare(A_FILE, 1), new ChessBoard.BoardSquare(B_FILE, 1), false);
+                    new ChessBoard.BoardSquare(A_FILE, 1), new ChessBoard.BoardSquare(B_FILE, 1), false, testBoard.CurrentFEN);
                 testBoard.MovePiece(ref moveInfo);
 
                 // Verify white queenside rights are gone
@@ -601,7 +601,7 @@ namespace AllPawnsMustDieUnitTests
                 // Move the black queenside rook a8b8
                 Trace.WriteLine("Moving queenside rook, a8b8...");
                 moveInfo = new CB.MoveInformation(
-                    new ChessBoard.BoardSquare(A_FILE, 8), new ChessBoard.BoardSquare(B_FILE, 8), false);
+                    new ChessBoard.BoardSquare(A_FILE, 8), new ChessBoard.BoardSquare(B_FILE, 8), false, testBoard.CurrentFEN);
                 testBoard.MovePiece(ref moveInfo);
 
                 // Verify black queenside rights are gone
@@ -650,7 +650,7 @@ namespace AllPawnsMustDieUnitTests
                 // Don't promote to Queen or Rook as the next move will be illegal with Black
                 // King in check
                 ChessBoard.MoveInformation moveInfo = new CB.MoveInformation(
-                    new ChessBoard.BoardSquare(F_FILE, 7), new ChessBoard.BoardSquare(G_FILE, 8), false);
+                    new ChessBoard.BoardSquare(F_FILE, 7), new ChessBoard.BoardSquare(G_FILE, 8), false, testBoard.CurrentFEN);
                 testBoard.PromotePiece(F_FILE, 7, G_FILE, 8, PieceClass.Knight, ref moveInfo);
                 testBoard.MovePiece(ref moveInfo);
 
@@ -661,7 +661,7 @@ namespace AllPawnsMustDieUnitTests
 
                 // Promote black pawn b2b1q
                 moveInfo = new CB.MoveInformation(
-                    new ChessBoard.BoardSquare(B_FILE, 2), new ChessBoard.BoardSquare(B_FILE, 1), false);
+                    new ChessBoard.BoardSquare(B_FILE, 2), new ChessBoard.BoardSquare(B_FILE, 1), false, testBoard.CurrentFEN);
                 testBoard.PromotePiece(B_FILE, 2, B_FILE, 1, PieceClass.Queen, ref moveInfo);
                 testBoard.MovePiece(ref moveInfo);
 
@@ -791,7 +791,7 @@ namespace AllPawnsMustDieUnitTests
                 // Basic opening pawn move "e2e4"
                 Trace.WriteLine("Applying a basic pawn move...e2e4");
                 ChessBoard.MoveInformation moveInfo = new CB.MoveInformation(
-                    new ChessBoard.BoardSquare(E_FILE, 2), new ChessBoard.BoardSquare(E_FILE, 4), false);
+                    new ChessBoard.BoardSquare(E_FILE, 2), new ChessBoard.BoardSquare(E_FILE, 4), false, testBoard.CurrentFEN);
                 testBoard.MovePiece(ref moveInfo);
 
                 Trace.WriteLine("Verify pawn is found at new location...");
@@ -844,7 +844,7 @@ namespace AllPawnsMustDieUnitTests
                 // Castle White Kingside
                 Trace.WriteLine("Castle White Kingside - e1g1");
                 ChessBoard.MoveInformation moveInfo = new CB.MoveInformation(
-                    new ChessBoard.BoardSquare(E_FILE, 1), new ChessBoard.BoardSquare(G_FILE, 1), false);
+                    new ChessBoard.BoardSquare(E_FILE, 1), new ChessBoard.BoardSquare(G_FILE, 1), false, testBoard.CurrentFEN);
                 testBoard.MovePiece(ref moveInfo);
 
                 // Verify the rook moved as well
@@ -907,7 +907,7 @@ namespace AllPawnsMustDieUnitTests
 
                 // setup the promotion move f7g8n
                 ChessBoard.MoveInformation moveInfo = new CB.MoveInformation(
-                    new ChessBoard.BoardSquare(F_FILE, 7), new ChessBoard.BoardSquare(G_FILE, 8), false);
+                    new ChessBoard.BoardSquare(F_FILE, 7), new ChessBoard.BoardSquare(G_FILE, 8), false, testBoard.CurrentFEN);
                 testBoard.PromotePiece(F_FILE, 7, G_FILE, 8, PieceClass.Knight, ref moveInfo);
                 testBoard.MovePiece(ref moveInfo);
 
@@ -958,7 +958,7 @@ namespace AllPawnsMustDieUnitTests
 
                 // Black queen takes white bishop
                 ChessBoard.MoveInformation moveInfo = new CB.MoveInformation(
-                    new ChessBoard.BoardSquare(B_FILE, 6), new ChessBoard.BoardSquare(E_FILE, 3), false);
+                    new ChessBoard.BoardSquare(B_FILE, 6), new ChessBoard.BoardSquare(E_FILE, 3), false, testBoard.CurrentFEN);
                 testBoard.MovePiece(ref moveInfo);
 
                 // Verify Properties

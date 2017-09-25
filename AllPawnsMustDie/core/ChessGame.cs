@@ -485,8 +485,7 @@ namespace AllPawnsMustDie
         /// <returns>current FEN for the board</returns>
         public string GetCurrentFEN()
         {
-            FenParser parser = new FenParser(board);
-            return parser.FEN;
+            return board.CurrentFEN;
         }
 
         /// <summary>
@@ -593,7 +592,7 @@ namespace AllPawnsMustDie
                 {
                     // Done - this is the move
                     ChessBoard.MoveInformation moveInfo = new ChessBoard.MoveInformation(
-                        new ChessBoard.BoardSquare(selectedPiece.File, selectedPiece.Rank), move, selectedPiece.Deployed);
+                        new ChessBoard.BoardSquare(selectedPiece.File, selectedPiece.Rank), move, selectedPiece.Deployed, board.CurrentFEN);
 
                     moveInfo.Color = selectedPiece.Color;
                     moveInfo.CastlingRights = board.ActivePlayerCastlingRights;
@@ -643,10 +642,13 @@ namespace AllPawnsMustDie
 
             // Get the best move from the engine
             string bestMove = chessEngine.BestMove;
-            if ((String.Compare(bestMove, "(none)") == 0) || // Stockfish
+            if ((String.Compare(bestMove, "(none)") == 0) || // Stockfish (and converted ones)
                 (String.Compare(bestMove, "a1a1") == 0)   || // Rybka
                 (board.HalfMoveCount >= HalfMovesUntilDraw)) // Propably spinning on self play or just a draw
             {
+                // Debug at the end to compare the board states
+                chessEngine.Engine.SendCommandAsync("d", "Checkers:");
+
                 if (board.HalfMoveCount >= HalfMovesUntilDraw)
                 {
                     Debug.WriteLine("Draw by 50 moves rule...");
@@ -655,9 +657,14 @@ namespace AllPawnsMustDie
                         OnChessGameSelfPlayGameOver(this, null);
                     }
                 }
-
-                // Debug at the end to compare the board states
-                chessEngine.Engine.SendCommandAsync("d", "Checkers:");
+                else
+                {
+                    // Fire event if there is a listener
+                    if (OnChessGameSelfPlayGameOver != null)
+                    {
+                        OnChessGameSelfPlayGameOver(this, null);
+                    }
+                }
             }
             else if (GetInputState() == InputState.WaitingOnOpponentMove)
             {
@@ -671,7 +678,7 @@ namespace AllPawnsMustDie
                 ChessBoard.MoveInformation moveInfo = new ChessBoard.MoveInformation(
                         new ChessBoard.BoardSquare(startFile, startRank),
                         new ChessBoard.BoardSquare(destFile, destRank),
-                        foundPiece.Deployed);
+                        foundPiece.Deployed, board.CurrentFEN);
 
                 moveInfo.Color = foundPiece.Color;
                 moveInfo.CastlingRights = board.ActivePlayerCastlingRights;
@@ -711,14 +718,7 @@ namespace AllPawnsMustDie
                 // Now trigger getting the next move from the engine and exit
                 GetBestMoveAsync();
             }
-            else if (response.StartsWith("Checkers:"))
-            {
-                // Fire event if there is a listener
-                if (OnChessGameSelfPlayGameOver != null)
-                {
-                    OnChessGameSelfPlayGameOver(this, null);
-                }
-            }
+            
             // If this is a "bestmove" response, apply it, then ask for the next one
             // We also need to update the ChessBoard class so the view updates
             else if (response.StartsWith("bestmove"))
@@ -838,27 +838,21 @@ namespace AllPawnsMustDie
         }
 
         /// <summary>
-        /// Update the position with the chess engine.  Once a move is applied wit the
+        /// Update the position with the chess engine.  Once a move is applied with the
         /// board, then engine needs to know, so it can analyze the next move whether
         /// this came from a player or the engine iteself
         /// </summary>
         private void UpdateEnginePosition()
         {
-            // Get the current moves list from the board
-            // build the command string to find the best move
-            // send the command.  This block of code will be reused in
-            // ChessEngineResponseReceivedEventHandler as well
-            //chessEngine.Engine.SendCommand()
-            string movesList = String.Empty;
-            foreach (ChessBoard.MoveInformation move in board.Moves)
-            {
-                movesList = String.Concat(movesList, " ");
-                movesList = String.Concat(movesList, move.ToString());
-            }
+            // The board constantly updates its FEN, so send the FEN to the engine
+            // Some engines have a limited input buffer, so games with many many
+            // moves will eventually exceed the buffer length and then it breaks.
+            // This method ensures we'll fit in any reasonable buffer lenghth, but
+            // puts the burden on the board to keep it constantly updated
+            // See FenParser class for those details
             updatingPosition = true;
-
-            string position = String.Format("fen {0}", board.InitialFEN);
-            chessEngine.Engine.SendCommandAsync(String.Format("position {0} moves{1}", position, movesList), "");
+            string position = String.Format("position fen {0}", board.CurrentFEN);
+            chessEngine.Engine.SendCommandAsync(position, "");
         }
 
         /// <summary>
