@@ -52,6 +52,7 @@ namespace AllPawnsMustDie
         public APMD_Form()
         {
             InitializeComponent();
+            reduceEngineStrength = false;
         }
         #endregion
 
@@ -267,7 +268,7 @@ namespace AllPawnsMustDie
                 chessGame?.Dispose();
 
                 // Now we have the engine path, so create an instance of the game class
-                chessGame = new ChessGame(this, fullPathToChessExe, Thread.CurrentThread.CurrentCulture);
+                chessGame = new ChessGame(this, fullPathToChessExe, reduceEngineStrength, Thread.CurrentThread.CurrentCulture);
                 chessGame.OnChessGameSelfPlayGameOver += ChessGameSelfPlayGameOverEventHandler;
                 chessGame.OnChessGameNormalPlayGameOver += ChessGameNormalPlayGameOverEventHandler;
 
@@ -343,6 +344,18 @@ namespace AllPawnsMustDie
                 fenDialog.ShowDialog();
             }
         }
+
+        /// <summary>
+        /// Edit->Options handler
+        /// </summary>
+        /// <param name="sender">Ignored</param>
+        /// <param name="e">Ignored</param>
+        private void optionsToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            EngineOptionsDialog optionsDialog = new EngineOptionsDialog();
+            optionsDialog.ShowDialog(this);
+            reduceEngineStrength = optionsDialog.ReduceEngineStrength;
+        }
         #endregion
 
         #region Public Fields
@@ -362,6 +375,7 @@ namespace AllPawnsMustDie
         private string fullPathToChessExe;
         private ChessGame chessGame;
         private int selfPlayThinkTime;
+        private bool reduceEngineStrength;
         #endregion
     }
 }

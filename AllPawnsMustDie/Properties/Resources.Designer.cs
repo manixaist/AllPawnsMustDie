@@ -19,7 +19,7 @@ namespace AllPawnsMustDie.Properties {
     // class via a tool like ResGen or Visual Studio.
     // To add or remove a member, edit your .ResX file then rerun ResGen
     // with the /str option, or rebuild your VS project.
-    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "4.0.0.0")]
+    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "15.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
     internal class Resources {
@@ -198,6 +198,15 @@ namespace AllPawnsMustDie.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to &amp;Options.
+        /// </summary>
+        internal static string MenuEditOptions {
+            get {
+                return ResourceManager.GetString("MenuEditOptions", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Show &amp;FEN.
         /// </summary>
         internal static string MenuEditShowFen {
@@ -306,6 +315,15 @@ namespace AllPawnsMustDie.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Options.
+        /// </summary>
+        internal static string OptionsDialogTitle {
+            get {
+                return ResourceManager.GetString("OptionsDialogTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Player color.
         /// </summary>
         internal static string PlayerColorGroupBox {
@@ -383,6 +401,24 @@ namespace AllPawnsMustDie.Properties {
         internal static string PromotionRook {
             get {
                 return ResourceManager.GetString("PromotionRook", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Enabling this will attempt to reduce the playing strength of engines loaded..
+        /// </summary>
+        internal static string ReduceEngineStrenghExplanationHelpText {
+            get {
+                return ResourceManager.GetString("ReduceEngineStrenghExplanationHelpText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to &amp;Reduce engine playing strength.
+        /// </summary>
+        internal static string ReduceEngineStrengthCheckboxLabel {
+            get {
+                return ResourceManager.GetString("ReduceEngineStrengthCheckboxLabel", resourceCulture);
             }
         }
         

@@ -50,6 +50,7 @@
             this.editToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.showFENToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.UndoLastMoveToolStripMenuItemUndoLastMove = new System.Windows.Forms.ToolStripMenuItem();
+            this.optionsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.helpToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.aboutToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.labelVerbose = new System.Windows.Forms.Label();
@@ -151,7 +152,8 @@
             // 
             this.editToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.showFENToolStripMenuItem,
-            this.UndoLastMoveToolStripMenuItemUndoLastMove});
+            this.UndoLastMoveToolStripMenuItemUndoLastMove,
+            this.optionsToolStripMenuItem});
             this.editToolStripMenuItem.Name = "editToolStripMenuItem";
             this.editToolStripMenuItem.Size = new System.Drawing.Size(39, 20);
             this.editToolStripMenuItem.Text = global::AllPawnsMustDie.Properties.Resources.MenuEdit;
@@ -170,6 +172,13 @@
             this.UndoLastMoveToolStripMenuItemUndoLastMove.Size = new System.Drawing.Size(198, 22);
             this.UndoLastMoveToolStripMenuItemUndoLastMove.Text = global::AllPawnsMustDie.Properties.Resources.MenuEditUndo;
             this.UndoLastMoveToolStripMenuItemUndoLastMove.Click += new System.EventHandler(this.UndoLastMoveToolStripMenuItemUndoLastMove_Click);
+            // 
+            // optionsToolStripMenuItem
+            // 
+            this.optionsToolStripMenuItem.Name = "optionsToolStripMenuItem";
+            this.optionsToolStripMenuItem.Size = new System.Drawing.Size(198, 22);
+            this.optionsToolStripMenuItem.Text = global::AllPawnsMustDie.Properties.Resources.MenuEditOptions;
+            this.optionsToolStripMenuItem.Click += new System.EventHandler(this.optionsToolStripMenuItem_Click);
             // 
             // helpToolStripMenuItem
             // 
@@ -251,6 +260,7 @@
         private System.Windows.Forms.ToolStripMenuItem helpToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem aboutToolStripMenuItem;
         private System.Windows.Forms.TextBox textBoxMoveHistory;
+        private System.Windows.Forms.ToolStripMenuItem optionsToolStripMenuItem;
     }
 }
 

@@ -250,8 +250,9 @@ namespace AllPawnsMustDie
         /// </summary>
         /// <param name="clientForm">Windows Form the game will draw to</param>
         /// <param name="fullPathToEngine">Full path the chess engine exe</param>
+        /// <param name="reduceEngineStrength">true to make the engine weaker</param>
         /// <param name="cultureInfo">CultureInfo for main form</param>
-        public ChessGame(Form clientForm, string fullPathToEngine, CultureInfo cultureInfo)
+        public ChessGame(Form clientForm, string fullPathToEngine, bool reduceEngineStrength, CultureInfo cultureInfo)
         {
             // Save the form
             form = clientForm;
@@ -285,7 +286,7 @@ namespace AllPawnsMustDie
             // Other UCI engines use different options, several a combination of UCI_LimitStrength and UCI_ELO
             // Eventually this will need to be handled in some options dialog that will either
             // be customizable per engine, or provide a standard way to select things like play strength and time
-            if (fullPathToEngine.Contains("stockfish"))
+            if (fullPathToEngine.Contains("stockfish") && reduceEngineStrength)
             {
                 engine.SendCommandAsync("setoption name Skill Level value 0", String.Empty);
             }
@@ -609,7 +610,7 @@ namespace AllPawnsMustDie
                     if ((selectedPiece.Job == PieceClass.Pawn) && isPawnMovingToBackRank)
                     {
                         PromotionDialog pd = new PromotionDialog();
-                        pd.ShowDialog();
+                        pd.ShowDialog(form);
                         board.PromotePiece(moveInfo.Start.File, moveInfo.Start.Rank, moveInfo.End.File, moveInfo.End.Rank, pd.PromotionJob, ref moveInfo);
                     }
                     
@@ -655,19 +656,8 @@ namespace AllPawnsMustDie
                 if (board.HalfMoveCount >= HalfMovesUntilDraw)
                 {
                     Debug.WriteLine("Draw by 50 moves rule...");
-                    if (OnChessGameSelfPlayGameOver != null)
-                    {
-                        OnChessGameSelfPlayGameOver(this, null);
-                    }
                 }
-                else
-                {
-                    // Fire event if there is a listener
-                    if (OnChessGameSelfPlayGameOver != null)
-                    {
-                        OnChessGameSelfPlayGameOver(this, null);
-                    }
-                }
+                GameOverHandler();
             }
             else if (GetInputState() == InputState.WaitingOnOpponentMove)
             {
@@ -702,6 +692,27 @@ namespace AllPawnsMustDie
 
                 // Apply the move the engine just gave us with the engine (update it's own move)
                 UpdateEnginePosition();
+            }
+        }
+
+        /// <summary>
+        /// Calls the valid handler for game over depending on state
+        /// </summary>
+        private void GameOverHandler()
+        {
+            if (selfPlay)
+            {
+                if (OnChessGameSelfPlayGameOver != null)
+                {
+                    OnChessGameSelfPlayGameOver(this, null);
+                }
+            }
+            else
+            {
+                if (OnChessGameNormalPlayGameOver != null)
+                {
+                    OnChessGameNormalPlayGameOver(this, null);
+                }
             }
         }
 
@@ -749,14 +760,6 @@ namespace AllPawnsMustDie
                 // We just finished sending our move to the engine, this is just an
                 // update and if our logic is correct won't be illegal
                 GetBestMoveAsync();
-            }
-            else if (response.StartsWith("Checkers:"))
-            {
-                // Fire event if there is a listener
-                if (OnChessGameNormalPlayGameOver != null)
-                {
-                    OnChessGameNormalPlayGameOver(this, null);
-                }
             }
             else if (response.StartsWith("bestmove"))
             {

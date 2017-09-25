@@ -63,6 +63,12 @@
       <DependentUpon>DisplayFENDialog.cs</DependentUpon>
     </Compile>
     <Compile Include="core\FenParser.cs" />
+    <Compile Include="UI\EngineOptionsDialog.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="UI\EngineOptionsDialog.Designer.cs">
+      <DependentUpon>EngineOptionsDialog.cs</DependentUpon>
+    </Compile>
     <Compile Include="UI\Form1.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -90,6 +96,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="UI\DisplayFENDialog.resx">
       <DependentUpon>DisplayFENDialog.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UI\EngineOptionsDialog.resx">
+      <DependentUpon>EngineOptionsDialog.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="UI\Form1.resx">
       <DependentUpon>Form1.cs</DependentUpon>

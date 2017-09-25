@@ -160,6 +160,9 @@ die MIT-Lizenz.</value>
   <data name="MenuEdit" xml:space="preserve">
     <value>&amp;Bearbeiten</value>
   </data>
+  <data name="MenuEditOptions" xml:space="preserve">
+    <value>&amp;Optionen</value>
+  </data>
   <data name="MenuEditShowFen" xml:space="preserve">
     <value>Weisen &amp;FEN</value>
   </data>
@@ -196,6 +199,9 @@ die MIT-Lizenz.</value>
   <data name="Ok" xml:space="preserve">
     <value>&amp;Ok</value>
   </data>
+  <data name="OptionsDialogTitle" xml:space="preserve">
+    <value>Optionen</value>
+  </data>
   <data name="PlayerColorGroupBox" xml:space="preserve">
     <value>Spielerfarbe</value>
   </data>
@@ -222,6 +228,12 @@ die MIT-Lizenz.</value>
   </data>
   <data name="PromotionRook" xml:space="preserve">
     <value>&amp;Turm</value>
+  </data>
+  <data name="ReduceEngineStrenghExplanationHelpText" xml:space="preserve">
+    <value>Dadurch wird versucht, die Spielstärke zu reduzieren.</value>
+  </data>
+  <data name="ReduceEngineStrengthCheckboxLabel" xml:space="preserve">
+    <value>&amp;Reduzieren Sie Computerspielstärke</value>
   </data>
   <data name="Thinking" xml:space="preserve">
     <value>Darüber nachdenken</value>
