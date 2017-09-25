@@ -268,11 +268,17 @@ namespace AllPawnsMustDie
             selectedPiece = null;
 
             // Create the board, the view, and the engine
-            chessEngine = new ChessEngineWrapper(fullPathToEngine);
+            // Create new UCI engine object
+            UCIChessEngine uciEngine = new UCIChessEngine();
+            engine = (IChessEngine)uciEngine;
+
+            // This will launch the process
+            engine.LoadEngine(fullPathToEngine);
+            engine.SendCommandAsync(UCIChessEngine.Uci, UCIChessEngine.UciOk);
 
             // Subscribe to events from the engine (commands and verbose)
-            chessEngine.Engine.OnChessEngineResponseReceived += ChessEngineResponseReceivedEventHandler;
-            chessEngine.Engine.OnChessEngineVerboseOutputReceived += ChessEngineVerboseOutputReceivedEventHandler;
+            engine.OnChessEngineResponseReceived += ChessEngineResponseReceivedEventHandler;
+            engine.OnChessEngineVerboseOutputReceived += ChessEngineVerboseOutputReceivedEventHandler;
 
             // Initialize the chess engine with optional parameters
             // Note this is engine dependent and this version only works with stockfish (to my knowledge)
@@ -281,7 +287,7 @@ namespace AllPawnsMustDie
             // be customizable per engine, or provide a standard way to select things like play strength and time
             if (fullPathToEngine.Contains("stockfish"))
             {
-                chessEngine.Engine.SendCommandAsync("setoption name Skill Level value 0", String.Empty);
+                engine.SendCommandAsync("setoption name Skill Level value 0", String.Empty);
             }
         }
 
@@ -300,10 +306,10 @@ namespace AllPawnsMustDie
         {
             if (!disposed)
             {
-                chessEngine.Engine.OnChessEngineResponseReceived -= ChessEngineResponseReceivedEventHandler;
-                chessEngine.Engine.OnChessEngineVerboseOutputReceived -= ChessEngineVerboseOutputReceivedEventHandler;
+                engine.OnChessEngineResponseReceived -= ChessEngineResponseReceivedEventHandler;
+                engine.OnChessEngineVerboseOutputReceived -= ChessEngineVerboseOutputReceivedEventHandler;
                 ((IDisposable)view).Dispose();
-                ((ChessEngineWrapper)chessEngine).Dispose();
+                ((UCIChessEngine)engine).Dispose();
                 GC.SuppressFinalize(this);
                 disposed = true;
             }
@@ -323,7 +329,7 @@ namespace AllPawnsMustDie
             board.NewGame();
 
             // Initialize the engine
-            chessEngine.NewGame();
+            engine.Reset();
 
             // Start the game if the computer goes first
             if (playerColor != PieceColor.White)
@@ -357,10 +363,8 @@ namespace AllPawnsMustDie
         /// </summary>
         public void GetBestMoveAsync()
         {
-            // TODO - Really this layer should not have this knoweledge, but the only
-            // supported engine type is UCI right now
             string moveCommand = String.Format("{0} {1}", MoveCommand, thinkTime);
-            chessEngine.Engine.SendCommandAsync(moveCommand, UCIChessEngine.BestMoveResponse);
+            engine.SendCommandAsync(moveCommand, UCIChessEngine.BestMoveResponse);
         }
 
         /// <summary>
@@ -379,7 +383,7 @@ namespace AllPawnsMustDie
             board.NewPosition(fenNotation);
 
             // Initialize the engine with a new position
-            chessEngine.NewPosition(fenNotation);
+            UpdateEnginePosition();
         }
 
         /// <summary>
@@ -439,7 +443,7 @@ namespace AllPawnsMustDie
         public void Quit()
         {
             // Close the engine (external process)
-            chessEngine.Quit();
+            engine.Quit();
         }
 
         /// <summary>
@@ -618,7 +622,6 @@ namespace AllPawnsMustDie
                     Debug.WriteLine(String.Format("WhCastle: {0}", board.WhiteCastlingRights.ToString()));
                     Debug.WriteLine(String.Format("BlCastle: {0}", board.BlackCastlingRights.ToString()));
 
-
                     // Update the position with the engine
                     UpdateEnginePosition();
                     break;
@@ -641,13 +644,13 @@ namespace AllPawnsMustDie
             thinkingIndex = 0;  // reset index counter for simple progress text
 
             // Get the best move from the engine
-            string bestMove = chessEngine.BestMove;
+            string bestMove = ((UCIChessEngine)engine).BestMove;
             if ((String.Compare(bestMove, "(none)") == 0) || // Stockfish (and converted ones)
                 (String.Compare(bestMove, "a1a1") == 0)   || // Rybka
                 (board.HalfMoveCount >= HalfMovesUntilDraw)) // Propably spinning on self play or just a draw
             {
                 // Debug at the end to compare the board states
-                chessEngine.Engine.SendCommandAsync("d", "Checkers:");
+                engine.SendCommandAsync("d", "Checkers:");
 
                 if (board.HalfMoveCount >= HalfMovesUntilDraw)
                 {
@@ -852,7 +855,7 @@ namespace AllPawnsMustDie
             // See FenParser class for those details
             updatingPosition = true;
             string position = String.Format("position fen {0}", board.CurrentFEN);
-            chessEngine.Engine.SendCommandAsync(position, "");
+            engine.SendCommandAsync(position, "");
         }
 
         /// <summary>
@@ -1579,7 +1582,7 @@ namespace AllPawnsMustDie
         private PieceColor playerColor;
         private ChessBoard board;
         private ChessBoardView view;
-        private ChessEngineWrapper chessEngine;
+        private IChessEngine engine;
         private Form form;
         private ChessPiece selectedPiece;
         private List<ChessBoard.BoardSquare> legalMoves;

@@ -54,7 +54,6 @@
     </Compile>
     <Compile Include="core\ChessBoard.cs" />
     <Compile Include="core\ChessBoardView.cs" />
-    <Compile Include="core\ChessEngineWrapper.cs" />
     <Compile Include="core\ChessGame.cs" />
     <Compile Include="core\ChessPiece.cs" />
     <Compile Include="UI\DisplayFENDialog.cs">

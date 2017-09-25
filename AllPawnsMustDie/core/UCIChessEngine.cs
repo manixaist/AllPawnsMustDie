@@ -239,16 +239,6 @@ namespace AllPawnsMustDie
         }
 
         /// <summary>
-        /// Set an initial position with the engine
-        /// </summary>
-        /// <param name="fen">fen to store</param>
-        void IChessEngine.SetInitialPosition(string fen)
-        {
-            initialFEN = fen;
-            ((IChessEngine)this).Reset();
-        }
-
-        /// <summary>
         /// Send a command to the chess engine.  Commands are serialized on another thread
         /// </summary>
         /// <param name="commandString">command to send</param>

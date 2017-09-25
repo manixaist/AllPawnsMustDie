@@ -59,12 +59,6 @@ namespace AllPawnsMustDie
         void Reset();
 
         /// <summary>
-        /// Set an initial position with the engine
-        /// </summary>
-        /// <param name="fen"></param>
-        void SetInitialPosition(string fen);
-
-        /// <summary>
         /// Send a command to the chess engine, does not block, fires events above
         /// </summary>
         /// <param name="commandString">command to send</param>
