@@ -139,19 +139,8 @@ namespace AllPawnsMustDie
             if (result == DialogResult.OK)
             {
                 chessGame?.StopEngineSelfPlay();
-
                 fullPathToChessExe = openFileDialog.FileName;
-
-                // Resize the form if needed
-                ClientSize = ChessGame.RequestedSize;
-                textBoxMoveHistory.Location = new Point(ClientSize.Width - ChessBoardView.MoveHistoryWidthInPixels - 25, 75);
-                textBoxMoveHistory.Height = ChessBoardView.BoardSizeInPixels / 2;
-                textBoxMoveHistory.Width = ChessBoardView.MoveHistoryWidthInPixels;
-                textBoxMoveHistory.Font = new Font("Segoe UI", 8);
-
                 Text = String.Format("All Pawns Must Die [{0}]", openFileDialog.SafeFileName);
-
-                // Trigger Paint event
                 Invalidate();
             }
         }
@@ -256,7 +245,14 @@ namespace AllPawnsMustDie
             if (fullPathToChessExe != null)
             {
                 chessGame?.StopEngineSelfPlay();
-
+                
+                // Resize the form if needed
+                Size gameSize = ChessGame.RequestedSize;
+                ClientSize = gameSize;
+                textBoxMoveHistory.Location = new Point(ClientSize.Width - ChessBoardView.MoveHistoryWidthInPixels - 25, 75);
+                textBoxMoveHistory.Height = ChessBoardView.BoardSizeInPixels / 2;
+                textBoxMoveHistory.Width = ChessBoardView.MoveHistoryWidthInPixels;
+                textBoxMoveHistory.Font = new Font("Segoe UI", 8);
                 textBoxMoveHistory.Text = String.Empty;
 
                 // Old game is dead to us
@@ -352,7 +348,7 @@ namespace AllPawnsMustDie
         /// <param name="e">Ignored</param>
         private void optionsToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            EngineOptionsDialog optionsDialog = new EngineOptionsDialog();
+            EngineOptionsDialog optionsDialog = new EngineOptionsDialog(reduceEngineStrength);
             optionsDialog.ShowDialog(this);
             reduceEngineStrength = optionsDialog.ReduceEngineStrength;
         }
@@ -363,7 +359,7 @@ namespace AllPawnsMustDie
         /// Verbose text label control name - used to write verbose output from the
         /// engine, though currently, it only shows a progress string
         /// </summary>
-        public static string VerboseOutputControlName = "labelVerbose";
+        public static string EngineUpdateControlName = "labelVerbose";
 
         /// <summary>
         /// Text box on main form for the move history

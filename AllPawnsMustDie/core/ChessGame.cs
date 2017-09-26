@@ -1,4 +1,5 @@
 ﻿using System;
+using System.IO;
 using System.Threading;
 using System.Globalization;
 using System.Diagnostics;
@@ -82,6 +83,8 @@ namespace AllPawnsMustDie
         Stalemate,
         /// <summary>No one wins by move count or mutual decision!</summary>
         Draw,
+        /// <summary>No winner or loser yet</summary>
+        Contested,
     };
     #endregion
 
@@ -273,22 +276,56 @@ namespace AllPawnsMustDie
             UCIChessEngine uciEngine = new UCIChessEngine();
             engine = (IChessEngine)uciEngine;
 
-            // This will launch the process
-            engine.LoadEngine(fullPathToEngine);
-            engine.SendCommandAsync(UCIChessEngine.Uci, UCIChessEngine.UciOk);
-
             // Subscribe to events from the engine (commands and verbose)
             engine.OnChessEngineResponseReceived += ChessEngineResponseReceivedEventHandler;
             engine.OnChessEngineVerboseOutputReceived += ChessEngineVerboseOutputReceivedEventHandler;
+
+            // This will launch the process
+            engine.LoadEngine(fullPathToEngine);
+            engine.SendCommandAsync(UCIChessEngine.Uci, UCIChessEngine.UciOk);
 
             // Initialize the chess engine with optional parameters
             // Note this is engine dependent and this version only works with stockfish (to my knowledge)
             // Other UCI engines use different options, several a combination of UCI_LimitStrength and UCI_ELO
             // Eventually this will need to be handled in some options dialog that will either
             // be customizable per engine, or provide a standard way to select things like play strength and time
-            if (fullPathToEngine.Contains("stockfish") && reduceEngineStrength)
+            if (reduceEngineStrength)
             {
-                engine.SendCommandAsync("setoption name Skill Level value 0", String.Empty);
+                string exeName = Path.GetFileName(fullPathToEngine);
+                exeName = exeName.ToLower();
+                string gimpedElo = String.Empty;
+
+                //No Options listed (when tested at console)
+                //===================
+                //SOS 5 Arena
+                //Anmon 5.75
+                //Hermann28_32
+                //Ruffian 105
+
+                if (exeName.StartsWith("stockfish_8"))
+                {
+                    engine.SendCommandAsync("setoption name Skill Level value 0", String.Empty);
+                }
+                else if (exeName.StartsWith("rybkav2.3.2a"))
+                {
+                    gimpedElo = "1200";
+                }
+                else if (exeName.StartsWith("spike1.4"))
+                {
+                    gimpedElo = "1300";
+                }
+                //MadChess
+                //option name UCI_LimitStrength type check default false
+                //option name UCI_Elo type spin default 400 min 400 max 2200
+                // Removed because it seems to take forever to return once this is
+                // set with the engine.  The same behavior at the console, so 
+                // ignore it here
+
+                if (gimpedElo != String.Empty)
+                {
+                    engine.SendCommandAsync("setoption name UCI_LimitStrength value true", String.Empty);
+                    engine.SendCommandAsync(String.Format("setoption name UCI_Elo value {0}", gimpedElo), String.Empty);
+                }
             }
         }
 
@@ -470,18 +507,37 @@ namespace AllPawnsMustDie
         /// <returns>GameResult value</returns>
         public GameResult GetWinner()
         {
-            bool stalemate = false;
-            if (PlayerMated(PieceColor.White, out stalemate))
+            bool whiteStalemate = false;
+            bool whiteMated = PlayerMated(PieceColor.White, out whiteStalemate);
+
+            bool blackStalemate = false;
+            bool blackMated = PlayerMated(PieceColor.Black, out blackStalemate);
+
+            bool activeMated = (ActivePlayer == PieceColor.White) ? whiteMated : blackMated;
+            bool opponentMated = (ActivePlayer == PieceColor.White) ? blackMated : whiteMated;
+            bool activeStalemate = (ActivePlayer == PieceColor.White) ? whiteStalemate : blackStalemate;
+
+            //Drawn - neither player has legal moves and neither is in check
+            if (!opponentMated && activeMated && activeStalemate)
             {
-                return stalemate ? GameResult.Stalemate : GameResult.BlackWins;
+                return GameResult.Draw;
             }
 
-            if (PlayerMated(PieceColor.Black, out stalemate))
+            // Stalemate is stalemate at this point
+            if (whiteStalemate)
             {
-                return stalemate ? GameResult.Stalemate : GameResult.WhiteWins;
+                return GameResult.Stalemate;
             }
 
-            throw new InvalidOperationException();
+            // Still going....needed to check agains engines that behave questionably
+            // in drawn and or mated positions
+            if (!opponentMated && !activeMated)
+            {
+                return GameResult.Contested;
+            }
+
+            // we must have an actual winner
+            return whiteMated ? GameResult.BlackWins : GameResult.WhiteWins;
         }
 
         /// <summary>
@@ -650,9 +706,6 @@ namespace AllPawnsMustDie
                 (String.Compare(bestMove, "a1a1") == 0)   || // Rybka
                 (board.HalfMoveCount >= HalfMovesUntilDraw)) // Propably spinning on self play or just a draw
             {
-                // Debug at the end to compare the board states
-                engine.SendCommandAsync("d", "Checkers:");
-
                 if (board.HalfMoveCount >= HalfMovesUntilDraw)
                 {
                     Debug.WriteLine("Draw by 50 moves rule...");
@@ -700,6 +753,16 @@ namespace AllPawnsMustDie
         /// </summary>
         private void GameOverHandler()
         {
+            FenParser.DebugFENPosition(board.CurrentFEN);
+
+            // Full verbose output
+            string[] lines = FenParser.FENToStrings(board.CurrentFEN);
+            StringBuilder sb = new StringBuilder();
+            foreach (string line in lines)
+            {
+                sb.Append(line);
+            }
+
             if (selfPlay)
             {
                 if (OnChessGameSelfPlayGameOver != null)
@@ -722,23 +785,8 @@ namespace AllPawnsMustDie
         /// <param name="response">response from the chess engine</param>
         private void OnEngineSelfPlayResponseHandler(string response)
         {
-            Debug.WriteLine(String.Concat("Response: ", response));
-
-            // If this is true, it means we're updating our position with the engine
-            // (e.g. syncing up after a move was applied locally to our object)
-            if (updatingPosition)
-            {
-                updatingPosition = false;
-                // Now trigger getting the next move from the engine and exit
-                GetBestMoveAsync();
-            }
-            
-            // If this is a "bestmove" response, apply it, then ask for the next one
-            // We also need to update the ChessBoard class so the view updates
-            else if (response.StartsWith("bestmove"))
-            {
-                OnEngineBestMoveResponse();
-            }
+            // The code is the same right now again...but may change
+            OnEngineNormalPlayResponseHandler(response);
         }
 
         /// <summary>
@@ -755,11 +803,24 @@ namespace AllPawnsMustDie
             // (e.g. syncing up after a move was applied locally to our object)
             if (updatingPosition)
             {
+                // Unfortunately - some engines are wonky when it comes to drawn or
+                // mated positions, so just check first before
+                // However, this pretty much negates the "bestmove" handling for the
+                // end game - so engines that behaved badly there otherwise will
+                // also be "fixed" by this - it slows the handling down, but not
+                // really noticeably even in fast self play.
                 updatingPosition = false;
-
-                // We just finished sending our move to the engine, this is just an
-                // update and if our logic is correct won't be illegal
-                GetBestMoveAsync();
+                GameResult result = GetWinner();
+                if (result == GameResult.Contested)
+                {
+                    // Now trigger getting the next move from the engine and exit
+                    GetBestMoveAsync();
+                }
+                else
+                {
+                    Debug.WriteLine(String.Format("GameOver Detected: {0} - stop updating engine.", result.ToString()));
+                    GameOverHandler();
+                }
             }
             else if (response.StartsWith("bestmove"))
             {
@@ -805,7 +866,7 @@ namespace AllPawnsMustDie
             }
 
             // Get the control name w're using to output verbose for now (it's a label)
-            Control verboseControl = form.Controls[APMD_Form.VerboseOutputControlName];
+            Control verboseControl = form.Controls[APMD_Form.EngineUpdateControlName];
 
             // Build the progress text bar
             StringBuilder sb = new StringBuilder(": [");

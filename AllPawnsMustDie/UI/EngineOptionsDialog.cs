@@ -18,9 +18,10 @@ namespace AllPawnsMustDie
         /// <summary>
         /// Create the options dialog
         /// </summary>
-        public EngineOptionsDialog()
+        public EngineOptionsDialog(bool reduceStrengthChecked)
         {
             InitializeComponent();
+            checkBoxReduceEngineStrength.Checked = reduceStrengthChecked;
         }
 
         /// <summary>

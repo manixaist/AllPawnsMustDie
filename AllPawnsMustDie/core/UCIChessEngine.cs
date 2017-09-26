@@ -45,6 +45,11 @@ namespace AllPawnsMustDie
             }
 
             /// <summary>
+            /// Returns the need for a sync after the command (no response)
+            /// </summary>
+            public bool NeedsIsReadySync { get { return (expected == String.Empty); } }
+
+            /// <summary>
             /// Returns the command for execution
             /// </summary>
             public string Command { get { return command; } }
@@ -66,7 +71,6 @@ namespace AllPawnsMustDie
         public UCIChessEngine()
         {
             initialFEN = null;
-            needIsReadySync = false;
             queueThread = null;
             bestMove = String.Empty;
             queue_lock = new object();
@@ -123,12 +127,25 @@ namespace AllPawnsMustDie
             }
 
             string data = e.Data;
+            SendVerboseEvent(data); // let the verbose handler get the empty lines
+
+            if (data == String.Empty)
+            {
+                return; // don't bother, nothing to do
+            }
 
             // Spike 1.1
             if (String.Compare(data, "Error: Fatal no best move") == 0)
             {
                 // Convert to something approaching a real protocol response
                 data = "bestmove (none)";
+                SendVerboseEvent(String.Format("Fixed formatting to \"{0}\"", data)); 
+            }
+            // MadChess
+            else if (String.Compare(data, "bestmove Null") == 0)
+            {
+                data = "bestmove (none)";
+                SendVerboseEvent(String.Format("Fixed formatting to \"{0}\"", data));
             }
 
             // Set to an empty one since it's a value type...but we only care
@@ -144,27 +161,32 @@ namespace AllPawnsMustDie
             }
             bool foundCommand = (String.Compare(dummyCommand, cep.Command) != 0);
             bool dequeue = false;
-            SendVerboseEvent(data); 
-
-            // First check if we need to wait on a ReadyOK response
-            if (foundCommand && (String.Compare(data, ReadyOk) == 0) && (needIsReadySync))
+            
+            if (foundCommand)
             {
-                dequeue = true;
-                commandResponse = data;
-                needIsReadySync = false; 
-            }
-            else if (foundCommand && data.StartsWith(cep.Expected))
-            {
-                dequeue = true;
-                commandResponse = data;
-                
-                // If we're asking for a move - then save the response we care about
-                // the SAN for the move - it comes right after "bestmove"
-                // If no move (e.g. mate) will return 'bestmove (none)'
-                if (data.StartsWith(BestMoveResponse))
+                // First check if we need to wait on a ReadyOK response, this happens
+                // when there is no expected response when queued
+                if (cep.NeedsIsReadySync)
                 {
-                    string[] parts = data.Split(' ');
-                    bestMove = parts[1];
+                    if (String.Compare(data, ReadyOk) == 0)
+                    {
+                        dequeue = true;         // This dequeues the original command
+                        commandResponse = data; // nothing was actually queued for the "IsReady" write
+                    }
+                }
+                else if (data.StartsWith(cep.Expected))
+                {
+                    dequeue = true;         // Mark command for dequeue and
+                    commandResponse = data; // save the response
+
+                    // If we're asking for a move - then save the response we care about
+                    // the SAN for the move - it comes right after "bestmove"
+                    // If no move (e.g. mate) will return 'bestmove (none)'
+                    if (data.StartsWith(BestMoveResponse))
+                    {
+                        string[] parts = data.Split(' ');
+                        bestMove = parts[1];
+                    }
                 }
             }
 
@@ -323,15 +345,13 @@ namespace AllPawnsMustDie
 
                     if ((String.Compare(cep.Command, dummyCommand) != 0) && (engineProcess.StandardInput != null))
                     {
-                        // Found something - write it to the process, but first check if we're
-                        // going to get a response to wait on
-                        needIsReadySync = (String.Compare(cep.Expected, String.Empty) == 0);
+                        // Found something - write it to the process, 
 
                         Debug.WriteLine(String.Concat("=>Engine: ", cep.Command));
                         engineProcess.StandardInput.WriteLine(cep.Command);
 
                         // If this is true, the above command has no response, and we'd wait here forever
-                        if (needIsReadySync)
+                        if (cep.NeedsIsReadySync)
                         {
                             // So instead, send it an "IsReady" and wait on the reply
                             engineProcess.StandardInput.WriteLine(IsReady);
@@ -395,6 +415,7 @@ namespace AllPawnsMustDie
             }
         }
         #endregion
+
         #region Public Properties
         /// <summary>
         /// Returns true if the object has already been disposed
@@ -449,7 +470,6 @@ namespace AllPawnsMustDie
         private AutoResetEvent uciCommandFinished;
         private object queue_lock;
         private Thread queueThread;
-        private bool needIsReadySync;
         #endregion
     }
 }

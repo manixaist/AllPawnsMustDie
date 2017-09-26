@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -576,6 +577,100 @@ namespace AllPawnsMustDie
         {
             return char.IsUpper(fenPiece) ? PieceColor.White : PieceColor.Black;
         }
+
+        /// <summary>
+        /// Convert state FEN to a text board a la StockFish's "d" command.
+        /// </summary>
+        /// <param name="fen">A valid FEN string</param>
+        public static string[] FENToStrings(string fen)
+        {
+            // Helper to mimic stockfish's 'd' command for an arbitrary FEN
+            // This is an empty board - it gets filled in with FEN pieces in
+            // the appropriate squares (a1 on bottom-left - White position)
+            // *+---+---+---+---+---+---+---+---+
+            // *|   |   |   |   |   |   |   |   |
+            // *+---+---+---+---+---+---+---+---+
+            // *|   |   |   |   |   |   |   |   |
+            // *+---+---+---+---+---+---+---+---+
+            // *|   |   |   |   |   |   |   |   |
+            // *+---+---+---+---+---+---+---+---+
+            // *|   |   |   |   |   |   |   |   |
+            // *+---+---+---+---+---+---+---+---+
+            // *|   |   |   |   |   |   |   |   |
+            // *+---+---+---+---+---+---+---+---+
+            // *|   |   |   |   |   |   |   |   |
+            // *+---+---+---+---+---+---+---+---+
+            // *|   |   |   |   |   |   |   |   |
+            // *+---+---+---+---+---+---+---+---+
+            // *|   |   |   |   |   |   |   |   |
+            // *+---+---+---+---+---+---+---+---+
+            string boardEdge = "+---+---+---+---+---+---+---+---+\r\n";
+            string boardEnd = "|";
+            string boardSquaresFormat = " {0} |";
+            string[] fenTokens = TokenizeFEN(fen);
+            string boardPieces = fenTokens[0];
+
+            // Split out each of the 8 rows in the first token
+            string[] boardPiecesByRow = boardPieces.Split('/');
+
+            List<string> output = new List<string>();
+
+            // Draw the top edge
+            output.Add(boardEdge);
+
+            // Iterate on each row and print out either empty squares
+            // or pieces, dictated by the FEN
+            foreach (string boardRow in boardPiecesByRow)
+            {
+                StringBuilder sb = new StringBuilder(boardEnd);
+                for (int charIndex = 0; charIndex < boardRow.Length; charIndex++)
+                {
+                    if (char.IsDigit(boardRow[charIndex]))
+                    {
+                        int emptySquareCount = (Convert.ToUInt16(boardRow[charIndex]) - Convert.ToUInt16('0'));
+                        for (int i = 0; i < emptySquareCount; i++)
+                        {
+                            sb.AppendFormat(boardSquaresFormat, ' ');
+                        }
+                    }
+                    else
+                    {
+                        sb.AppendFormat(boardSquaresFormat, boardRow[charIndex]);
+                    }
+                }
+                output.Add(sb.Append("\r\n").ToString());
+                output.Add(boardEdge);
+            }
+
+            return output.ToArray();
+        }
+
+#if DEBUG
+        /// <summary>
+        /// DEBUG only method to dump the state of the board given a FEN
+        /// a la StockFish's "d" command.
+        /// </summary>
+        /// <param name="fen">A valid FEN string</param>
+        public static void DebugFENPosition(string fen)
+        {
+            string[] lines = FENToStrings(fen);
+            foreach (string line in lines)
+            {
+                Debug.Write(line);
+            }
+        }
+#else
+        /// <summary>
+        /// DEBUG only method to dump the state of the board given a FEN
+        /// a la StockFish's "d" command. Does nothing in Release
+        /// </summary>
+        /// <param name="fen">A valid FEN string</param>
+        public static void DebugFENPosition(string fen)
+        {
+            // No OP
+        }
+#endif
+
         #endregion
 
         #region Private Static Methods
@@ -673,6 +768,6 @@ namespace AllPawnsMustDie
         }
 
         private delegate void UpdateCastlingRightsOnEqualRank(int rankA, int rankB, ChessBoard.BoardSquare targetSquare, PieceColor color);
-        #endregion
+#endregion
     }
 }
