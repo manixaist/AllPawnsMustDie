@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics;
 using System.Threading;
 using System.Globalization;
 using System.IO;
@@ -53,6 +54,8 @@ namespace AllPawnsMustDie
         {
             InitializeComponent();
             reduceEngineStrength = false;
+            upTime = new Stopwatch();
+            upTime.Start();
         }
         #endregion
 
@@ -180,6 +183,8 @@ namespace AllPawnsMustDie
         /// <param name="e">Ignored/passed through</param>
         private void ChessGameSelfPlayGameOverEventHandler(object sender, EventArgs e)
         {
+            ReportUptime();
+
             // Start a new game - for now just forward it to the menu handler.
             // Really we could subcribe there directly, but this will allow more
             // to happen on this path later
@@ -221,6 +226,8 @@ namespace AllPawnsMustDie
         /// <param name="e">Ignored/passed through</param>
         private void ChessGameNormalPlayGameOverEventHandler(object sender, EventArgs e)
         {
+            ReportUptime();
+
             // Probably coming from the non-UI thread the engine is using
             Invoke((MethodInvoker)delegate
             {
@@ -289,6 +296,18 @@ namespace AllPawnsMustDie
         }
 
         /// <summary>
+        /// Writes uptime to the trace
+        /// </summary>
+        private void ReportUptime()
+        {
+            TimeSpan ts = upTime.Elapsed;
+            string elapsedTime = String.Format("{0:00}:{1:00}:{2:00}.{3:00}",
+                ts.Hours, ts.Minutes, ts.Seconds,
+                ts.Milliseconds / 10);
+            Trace.WriteLine("Total Uptime: " + elapsedTime);
+        }
+
+        /// <summary>
         /// Called when the form is closing.
         /// </summary>
         /// <param name="sender"></param>
@@ -301,6 +320,7 @@ namespace AllPawnsMustDie
                 chessGame.OnChessGameNormalPlayGameOver -= ChessGameNormalPlayGameOverEventHandler;
             }
             chessGame?.Quit(); // Quit any current game
+            upTime.Stop();
         }
 
         /// <summary>
@@ -372,6 +392,7 @@ namespace AllPawnsMustDie
         private ChessGame chessGame;
         private int selfPlayThinkTime;
         private bool reduceEngineStrength;
+        private Stopwatch upTime;
         #endregion
     }
 }
