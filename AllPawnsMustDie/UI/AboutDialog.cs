@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Reflection;
 using System.Diagnostics;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -22,6 +23,8 @@ namespace AllPawnsMustDie
         public AboutDialog()
         {
             InitializeComponent();
+
+            labelBuildVersion.Text = String.Format("{0}", Assembly.GetExecutingAssembly().GetName().Version);
         }
 
         /// <summary>
