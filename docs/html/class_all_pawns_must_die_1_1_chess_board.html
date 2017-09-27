@@ -139,6 +139,9 @@ Public Member Functions</h2></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-static-methods"></a>
 Static Public Member Functions</h2></td></tr>
+<tr class="memitem:ab38ffcd9f8707915c9a590ffbb8b60d7"><td class="memItemLeft" align="right" valign="top">static <a class="el" href="namespace_all_pawns_must_die.html#a85861edb29de64dca36dafa5084cb252">PieceColor</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_all_pawns_must_die_1_1_chess_board.html#ab38ffcd9f8707915c9a590ffbb8b60d7">OppositeColor</a> (<a class="el" href="namespace_all_pawns_must_die.html#a85861edb29de64dca36dafa5084cb252">PieceColor</a> color)</td></tr>
+<tr class="memdesc:ab38ffcd9f8707915c9a590ffbb8b60d7"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns opposite color e.g. white-&gt;black black-&gt;white  <a href="#ab38ffcd9f8707915c9a590ffbb8b60d7">More...</a><br /></td></tr>
+<tr class="separator:ab38ffcd9f8707915c9a590ffbb8b60d7"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aa9afaabedc5086f133039cfef21b2d16"><td class="memItemLeft" align="right" valign="top">static <a class="el" href="namespace_all_pawns_must_die.html#ac442d1a8ebdbf826c03394e256ebbff7">PieceClass</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_all_pawns_must_die_1_1_chess_board.html#aa9afaabedc5086f133039cfef21b2d16">PieceClassFromFen</a> (Char fenChar)</td></tr>
 <tr class="memdesc:aa9afaabedc5086f133039cfef21b2d16"><td class="mdescLeft">&#160;</td><td class="mdescRight">Determine piece class based on the fen character  <a href="#aa9afaabedc5086f133039cfef21b2d16">More...</a><br /></td></tr>
 <tr class="separator:aa9afaabedc5086f133039cfef21b2d16"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -154,7 +157,7 @@ Static Public Member Functions</h2></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-static-attribs"></a>
 Static Public Attributes</h2></td></tr>
-<tr class="memitem:aaa98ff1cd82c6660404c7cefee84d142"><td class="memItemLeft" align="right" valign="top">static String&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_all_pawns_must_die_1_1_chess_board.html#aaa98ff1cd82c6660404c7cefee84d142">InitialFENPosition</a> = &quot;rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 0&quot;</td></tr>
+<tr class="memitem:aaa98ff1cd82c6660404c7cefee84d142"><td class="memItemLeft" align="right" valign="top">static String&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_all_pawns_must_die_1_1_chess_board.html#aaa98ff1cd82c6660404c7cefee84d142">InitialFENPosition</a> = &quot;rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1&quot;</td></tr>
 <tr class="memdesc:aaa98ff1cd82c6660404c7cefee84d142"><td class="mdescLeft">&#160;</td><td class="mdescRight">FEN for the standard starting position  <a href="#aaa98ff1cd82c6660404c7cefee84d142">More...</a><br /></td></tr>
 <tr class="separator:aaa98ff1cd82c6660404c7cefee84d142"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
@@ -199,6 +202,9 @@ Properties</h2></td></tr>
 <tr class="memitem:ab4a5d447c46cd163f00ed41378e5418e"><td class="memItemLeft" align="right" valign="top">string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_all_pawns_must_die_1_1_chess_board.html#ab4a5d447c46cd163f00ed41378e5418e">InitialFEN</a><code> [get]</code></td></tr>
 <tr class="memdesc:ab4a5d447c46cd163f00ed41378e5418e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns initial position  <a href="#ab4a5d447c46cd163f00ed41378e5418e">More...</a><br /></td></tr>
 <tr class="separator:ab4a5d447c46cd163f00ed41378e5418e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a3592652f7f68edad90bdc45c59c46c5b"><td class="memItemLeft" align="right" valign="top">string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_all_pawns_must_die_1_1_chess_board.html#a3592652f7f68edad90bdc45c59c46c5b">CurrentFEN</a><code> [get]</code></td></tr>
+<tr class="memdesc:a3592652f7f68edad90bdc45c59c46c5b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the current board FEN (updated every move)  <a href="#a3592652f7f68edad90bdc45c59c46c5b">More...</a><br /></td></tr>
+<tr class="separator:a3592652f7f68edad90bdc45c59c46c5b"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>Encapsulates a chess board. The board owns the pieces and the history </p>
@@ -470,6 +476,41 @@ Properties</h2></td></tr>
 
 </div>
 </div>
+<a id="ab38ffcd9f8707915c9a590ffbb8b60d7"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ab38ffcd9f8707915c9a590ffbb8b60d7">&#9670;&nbsp;</a></span>OppositeColor()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">static <a class="el" href="namespace_all_pawns_must_die.html#a85861edb29de64dca36dafa5084cb252">PieceColor</a> AllPawnsMustDie.ChessBoard.OppositeColor </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="namespace_all_pawns_must_die.html#a85861edb29de64dca36dafa5084cb252">PieceColor</a>&#160;</td>
+          <td class="paramname"><em>color</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Returns opposite color e.g. white-&gt;black black-&gt;white </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">color</td><td>color to oppose</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>Opposite of 'color'</dd></dl>
+
+</div>
+</div>
 <a id="a0ff94551af553e0973824fcfef575e91"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a0ff94551af553e0973824fcfef575e91">&#9670;&nbsp;</a></span>PawnHomeRank()</h2>
 
@@ -670,7 +711,7 @@ Properties</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">String AllPawnsMustDie.ChessBoard.InitialFENPosition = &quot;rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 0&quot;</td>
+          <td class="memname">String AllPawnsMustDie.ChessBoard.InitialFENPosition = &quot;rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1&quot;</td>
         </tr>
       </table>
   </td>
@@ -778,6 +819,30 @@ Properties</h2></td></tr>
 </div><div class="memdoc">
 
 <p>Set of active black pieces </p>
+
+</div>
+</div>
+<a id="a3592652f7f68edad90bdc45c59c46c5b"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a3592652f7f68edad90bdc45c59c46c5b">&#9670;&nbsp;</a></span>CurrentFEN</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">string AllPawnsMustDie.ChessBoard.CurrentFEN</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">get</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Returns the current board FEN (updated every move) </p>
 
 </div>
 </div>
@@ -998,7 +1063,7 @@ Properties</h2></td></tr>
 </div>
 </div>
 <hr/>The documentation for this class was generated from the following file:<ul>
-<li>AllPawnsMustDie/ChessBoard.cs</li>
+<li>AllPawnsMustDie/core/ChessBoard.cs</li>
 </ul>
 </div><!-- contents -->
 </div><!-- doc-content -->

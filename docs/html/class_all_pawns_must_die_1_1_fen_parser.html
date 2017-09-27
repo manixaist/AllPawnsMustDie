@@ -81,114 +81,360 @@ $(document).ready(function(){initNavTree('class_all_pawns_must_die_1_1_fen_parse
 
 <div class="header">
   <div class="summary">
-<a href="#pub-methods">Public Member Functions</a> &#124;
-<a href="#properties">Properties</a> &#124;
+<a href="#pub-static-methods">Static Public Member Functions</a> &#124;
 <a href="class_all_pawns_must_die_1_1_fen_parser-members.html">List of all members</a>  </div>
   <div class="headertitle">
 <div class="title">AllPawnsMustDie.FenParser Class Reference</div>  </div>
 </div><!--header-->
 <div class="contents">
 
-<p>Helper class to parse and extract information from a FEN string  
+<p>Stateles FEN Parser Helper Methods  
  <a href="class_all_pawns_must_die_1_1_fen_parser.html#details">More...</a></p>
 <table class="memberdecls">
-<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
-Public Member Functions</h2></td></tr>
-<tr class="memitem:ac21fb51162d9c83465107439263c8270"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_all_pawns_must_die_1_1_fen_parser.html#ac21fb51162d9c83465107439263c8270">FenParser</a> (string fenInputString)</td></tr>
-<tr class="memdesc:ac21fb51162d9c83465107439263c8270"><td class="mdescLeft">&#160;</td><td class="mdescRight">Construct and parse the given string  <a href="#ac21fb51162d9c83465107439263c8270">More...</a><br /></td></tr>
-<tr class="separator:ac21fb51162d9c83465107439263c8270"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a90fbb610ab0487869cef0ae1df0abcd4"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_all_pawns_must_die_1_1_fen_parser.html#a90fbb610ab0487869cef0ae1df0abcd4">FenParser</a> (<a class="el" href="class_all_pawns_must_die_1_1_chess_board.html">ChessBoard</a> chessBoard)</td></tr>
-<tr class="memdesc:a90fbb610ab0487869cef0ae1df0abcd4"><td class="mdescLeft">&#160;</td><td class="mdescRight">Construct a FEN string given an input <a class="el" href="class_all_pawns_must_die_1_1_chess_board.html" title="Encapsulates a chess board. The board owns the pieces and the history ">ChessBoard</a>  <a href="#a90fbb610ab0487869cef0ae1df0abcd4">More...</a><br /></td></tr>
-<tr class="separator:a90fbb610ab0487869cef0ae1df0abcd4"><td class="memSeparator" colspan="2">&#160;</td></tr>
-</table><table class="memberdecls">
-<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="properties"></a>
-Properties</h2></td></tr>
-<tr class="memitem:ad806f4d5d1e5c13f430fef413ed647df"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespace_all_pawns_must_die.html#a85861edb29de64dca36dafa5084cb252">PieceColor</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_all_pawns_must_die_1_1_fen_parser.html#ad806f4d5d1e5c13f430fef413ed647df">ActivePlayer</a><code> [get]</code></td></tr>
-<tr class="memdesc:ad806f4d5d1e5c13f430fef413ed647df"><td class="mdescLeft">&#160;</td><td class="mdescRight">Active player specified in the FEN  <a href="#ad806f4d5d1e5c13f430fef413ed647df">More...</a><br /></td></tr>
-<tr class="separator:ad806f4d5d1e5c13f430fef413ed647df"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a29af0ffedc5c6c4b90796d04032350f6"><td class="memItemLeft" align="right" valign="top">string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_all_pawns_must_die_1_1_fen_parser.html#a29af0ffedc5c6c4b90796d04032350f6">FEN</a><code> [get]</code></td></tr>
-<tr class="memdesc:a29af0ffedc5c6c4b90796d04032350f6"><td class="mdescLeft">&#160;</td><td class="mdescRight">FEN string from a board construction, or just the echoed input  <a href="#a29af0ffedc5c6c4b90796d04032350f6">More...</a><br /></td></tr>
-<tr class="separator:a29af0ffedc5c6c4b90796d04032350f6"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ae6eaae49d5f73c24e01c49d17394efbd"><td class="memItemLeft" align="right" valign="top">List&lt; <a class="el" href="class_all_pawns_must_die_1_1_chess_piece.html">ChessPiece</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_all_pawns_must_die_1_1_fen_parser.html#ae6eaae49d5f73c24e01c49d17394efbd">Pieces</a><code> [get]</code></td></tr>
-<tr class="memdesc:ae6eaae49d5f73c24e01c49d17394efbd"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the pieces specified in the FEN  <a href="#ae6eaae49d5f73c24e01c49d17394efbd">More...</a><br /></td></tr>
-<tr class="separator:ae6eaae49d5f73c24e01c49d17394efbd"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:afebdb42d074e0fb97bee6b93f4186bb6"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespace_all_pawns_must_die.html#a9060f5c8425e9b5768de0c7de20c77cf">BoardSide</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_all_pawns_must_die_1_1_fen_parser.html#afebdb42d074e0fb97bee6b93f4186bb6">WhiteCastlingRights</a><code> [get]</code></td></tr>
-<tr class="memdesc:afebdb42d074e0fb97bee6b93f4186bb6"><td class="mdescLeft">&#160;</td><td class="mdescRight">Castling rights if any for white  <a href="#afebdb42d074e0fb97bee6b93f4186bb6">More...</a><br /></td></tr>
-<tr class="separator:afebdb42d074e0fb97bee6b93f4186bb6"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a59e0d3810103de8f5a1807f1126de0b6"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespace_all_pawns_must_die.html#a9060f5c8425e9b5768de0c7de20c77cf">BoardSide</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_all_pawns_must_die_1_1_fen_parser.html#a59e0d3810103de8f5a1807f1126de0b6">BlackCastlingRights</a><code> [get]</code></td></tr>
-<tr class="memdesc:a59e0d3810103de8f5a1807f1126de0b6"><td class="mdescLeft">&#160;</td><td class="mdescRight">Castling rights if any for black  <a href="#a59e0d3810103de8f5a1807f1126de0b6">More...</a><br /></td></tr>
-<tr class="separator:a59e0d3810103de8f5a1807f1126de0b6"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ab584b5e0994d9211ff927824ce2bb3fc"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_all_pawns_must_die_1_1_fen_parser.html#ab584b5e0994d9211ff927824ce2bb3fc">IsEnPassantTargetValid</a><code> [get]</code></td></tr>
-<tr class="memdesc:ab584b5e0994d9211ff927824ce2bb3fc"><td class="mdescLeft">&#160;</td><td class="mdescRight">If true, the EnPassantTarget should be looked at  <a href="#ab584b5e0994d9211ff927824ce2bb3fc">More...</a><br /></td></tr>
-<tr class="separator:ab584b5e0994d9211ff927824ce2bb3fc"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ac7057f3044802b9328230ec42839eefa"><td class="memItemLeft" align="right" valign="top"><a class="el" href="struct_all_pawns_must_die_1_1_chess_board_1_1_board_square.html">ChessBoard.BoardSquare</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_all_pawns_must_die_1_1_fen_parser.html#ac7057f3044802b9328230ec42839eefa">EnPassantTarget</a><code> [get]</code></td></tr>
-<tr class="memdesc:ac7057f3044802b9328230ec42839eefa"><td class="mdescLeft">&#160;</td><td class="mdescRight">Target for EnPassant, if IsEnPassantTargetValid is true  <a href="#ac7057f3044802b9328230ec42839eefa">More...</a><br /></td></tr>
-<tr class="separator:ac7057f3044802b9328230ec42839eefa"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a94df844aded14e0ba14b96bc867e380f"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_all_pawns_must_die_1_1_fen_parser.html#a94df844aded14e0ba14b96bc867e380f">HalfMoves</a><code> [get]</code></td></tr>
-<tr class="memdesc:a94df844aded14e0ba14b96bc867e380f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Number of half moves, or moves since any capture or pawn advance  <a href="#a94df844aded14e0ba14b96bc867e380f">More...</a><br /></td></tr>
-<tr class="separator:a94df844aded14e0ba14b96bc867e380f"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a158cb7676e8aa4bcc77ad6287572231c"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_all_pawns_must_die_1_1_fen_parser.html#a158cb7676e8aa4bcc77ad6287572231c">FullMoves</a><code> [get]</code></td></tr>
-<tr class="memdesc:a158cb7676e8aa4bcc77ad6287572231c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Number of total full moves so far (each player has moved is 1 full turn)  <a href="#a158cb7676e8aa4bcc77ad6287572231c">More...</a><br /></td></tr>
-<tr class="separator:a158cb7676e8aa4bcc77ad6287572231c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-static-methods"></a>
+Static Public Member Functions</h2></td></tr>
+<tr class="memitem:ac36579ca55e0a5634d1ff3b218aced3c"><td class="memItemLeft" align="right" valign="top">static List&lt; <a class="el" href="class_all_pawns_must_die_1_1_chess_piece.html">ChessPiece</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_all_pawns_must_die_1_1_fen_parser.html#ac36579ca55e0a5634d1ff3b218aced3c">ExtractPieces</a> (string fen)</td></tr>
+<tr class="memdesc:ac36579ca55e0a5634d1ff3b218aced3c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Given a FEN, return a list of <a class="el" href="class_all_pawns_must_die_1_1_chess_piece.html" title="Encapsulates a chess piece ">ChessPiece</a> objects descibed by the FEN  <a href="#ac36579ca55e0a5634d1ff3b218aced3c">More...</a><br /></td></tr>
+<tr class="separator:ac36579ca55e0a5634d1ff3b218aced3c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a3bae52a509db9550d7d856d4398b3b57"><td class="memItemLeft" align="right" valign="top">static <a class="el" href="namespace_all_pawns_must_die.html#a85861edb29de64dca36dafa5084cb252">PieceColor</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_all_pawns_must_die_1_1_fen_parser.html#a3bae52a509db9550d7d856d4398b3b57">ExtractActivePlayer</a> (string fen)</td></tr>
+<tr class="memdesc:a3bae52a509db9550d7d856d4398b3b57"><td class="mdescLeft">&#160;</td><td class="mdescRight">Extracts the active player from the FEN  <a href="#a3bae52a509db9550d7d856d4398b3b57">More...</a><br /></td></tr>
+<tr class="separator:a3bae52a509db9550d7d856d4398b3b57"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a7b33494bb996593c6043a0a6ba2ec5e6"><td class="memItemLeft" align="right" valign="top">static bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_all_pawns_must_die_1_1_fen_parser.html#a7b33494bb996593c6043a0a6ba2ec5e6">ExtractEnPassantTarget</a> (string fen, out <a class="el" href="struct_all_pawns_must_die_1_1_chess_board_1_1_board_square.html">ChessBoard.BoardSquare</a> enPassantSquare)</td></tr>
+<tr class="memdesc:a7b33494bb996593c6043a0a6ba2ec5e6"><td class="mdescLeft">&#160;</td><td class="mdescRight">Extracts just the enpassant target if any from the FEN  <a href="#a7b33494bb996593c6043a0a6ba2ec5e6">More...</a><br /></td></tr>
+<tr class="separator:a7b33494bb996593c6043a0a6ba2ec5e6"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a6d9856eabd010c25c0a937949f0a2377"><td class="memItemLeft" align="right" valign="top">static void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_all_pawns_must_die_1_1_fen_parser.html#a6d9856eabd010c25c0a937949f0a2377">ExtractCastlingRights</a> (string fen, ref <a class="el" href="namespace_all_pawns_must_die.html#a9060f5c8425e9b5768de0c7de20c77cf">BoardSide</a> whiteCastlingRights, ref <a class="el" href="namespace_all_pawns_must_die.html#a9060f5c8425e9b5768de0c7de20c77cf">BoardSide</a> blackCastlingRights)</td></tr>
+<tr class="memdesc:a6d9856eabd010c25c0a937949f0a2377"><td class="mdescLeft">&#160;</td><td class="mdescRight">Extracts the castling rights from a given FEN  <a href="#a6d9856eabd010c25c0a937949f0a2377">More...</a><br /></td></tr>
+<tr class="separator:a6d9856eabd010c25c0a937949f0a2377"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a65c7d3502e73c29db927e451af9df052"><td class="memItemLeft" align="right" valign="top">static void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_all_pawns_must_die_1_1_fen_parser.html#a65c7d3502e73c29db927e451af9df052">ExtractMoveCounts</a> (string fen, ref int halfMoves, ref int fullMoves)</td></tr>
+<tr class="memdesc:a65c7d3502e73c29db927e451af9df052"><td class="mdescLeft">&#160;</td><td class="mdescRight">Extract the halfmove and fullmove counts from the given FEN  <a href="#a65c7d3502e73c29db927e451af9df052">More...</a><br /></td></tr>
+<tr class="separator:a65c7d3502e73c29db927e451af9df052"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a36bf864f52f7c7904d4d5493cb2528b1"><td class="memItemLeft" align="right" valign="top">static string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_all_pawns_must_die_1_1_fen_parser.html#a36bf864f52f7c7904d4d5493cb2528b1">ApplyMoveToFEN</a> (String fen, string sanMove)</td></tr>
+<tr class="memdesc:a36bf864f52f7c7904d4d5493cb2528b1"><td class="mdescLeft">&#160;</td><td class="mdescRight">Produces a new FEN given a FEN and a move string  <a href="#a36bf864f52f7c7904d4d5493cb2528b1">More...</a><br /></td></tr>
+<tr class="separator:a36bf864f52f7c7904d4d5493cb2528b1"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa4ccd8158842c8672ee3fd9a02fc8d01"><td class="memItemLeft" align="right" valign="top">static string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_all_pawns_must_die_1_1_fen_parser.html#aa4ccd8158842c8672ee3fd9a02fc8d01">ExpandRank</a> (String fen, int rank)</td></tr>
+<tr class="memdesc:aa4ccd8158842c8672ee3fd9a02fc8d01"><td class="mdescLeft">&#160;</td><td class="mdescRight">Expands a given rank inside a FEN string to 8 characters. Any numeric counts are expanded to all 1s. E.g. /8/ =&gt; /11111111/  <a href="#aa4ccd8158842c8672ee3fd9a02fc8d01">More...</a><br /></td></tr>
+<tr class="separator:aa4ccd8158842c8672ee3fd9a02fc8d01"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a22cceb187c3c4a2a3b10de7723740080"><td class="memItemLeft" align="right" valign="top">static string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_all_pawns_must_die_1_1_fen_parser.html#a22cceb187c3c4a2a3b10de7723740080">CollapseRank</a> (String fen, int rank)</td></tr>
+<tr class="memdesc:a22cceb187c3c4a2a3b10de7723740080"><td class="mdescLeft">&#160;</td><td class="mdescRight">Opposite of ExpandRank, it will take adjacent 1s and combine them e.g. /111P11PP/ =&gt; /3P2PP/  <a href="#a22cceb187c3c4a2a3b10de7723740080">More...</a><br /></td></tr>
+<tr class="separator:a22cceb187c3c4a2a3b10de7723740080"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a0741a6209f10ec505a577a22f90d0f6e"><td class="memItemLeft" align="right" valign="top">static string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_all_pawns_must_die_1_1_fen_parser.html#a0741a6209f10ec505a577a22f90d0f6e">InsertPiece</a> (String fen, char fenChar, int file, int rank)</td></tr>
+<tr class="memdesc:a0741a6209f10ec505a577a22f90d0f6e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Insert a piece into the FEN string at the specified location  <a href="#a0741a6209f10ec505a577a22f90d0f6e">More...</a><br /></td></tr>
+<tr class="separator:a0741a6209f10ec505a577a22f90d0f6e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab611a643e1afc9d6d556f7f7e95d7b0e"><td class="memItemLeft" align="right" valign="top">static string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_all_pawns_must_die_1_1_fen_parser.html#ab611a643e1afc9d6d556f7f7e95d7b0e">RemovePiece</a> (String fen, int file, int rank, out char fenChar)</td></tr>
+<tr class="memdesc:ab611a643e1afc9d6d556f7f7e95d7b0e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Removes a piece at a given location on the board  <a href="#ab611a643e1afc9d6d556f7f7e95d7b0e">More...</a><br /></td></tr>
+<tr class="separator:ab611a643e1afc9d6d556f7f7e95d7b0e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a300c5319a0e10a172b08292657a81392"><td class="memItemLeft" align="right" valign="top">static char&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_all_pawns_must_die_1_1_fen_parser.html#a300c5319a0e10a172b08292657a81392">PieceAtBoardPosition</a> (String fen, int file, int rank)</td></tr>
+<tr class="memdesc:a300c5319a0e10a172b08292657a81392"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the FEN character for the piece at a given location. This method assumes the proper rank has already been expanded  <a href="#a300c5319a0e10a172b08292657a81392">More...</a><br /></td></tr>
+<tr class="separator:a300c5319a0e10a172b08292657a81392"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a968398bbe927ab268f37a48f6a4cb811"><td class="memItemLeft" align="right" valign="top">static <a class="el" href="namespace_all_pawns_must_die.html#a85861edb29de64dca36dafa5084cb252">PieceColor</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_all_pawns_must_die_1_1_fen_parser.html#a968398bbe927ab268f37a48f6a4cb811">ColorFromFen</a> (char fenPiece)</td></tr>
+<tr class="memdesc:a968398bbe927ab268f37a48f6a4cb811"><td class="mdescLeft">&#160;</td><td class="mdescRight">Color check (a case check for FEN, white is UPPERCASE, black lowercase)  <a href="#a968398bbe927ab268f37a48f6a4cb811">More...</a><br /></td></tr>
+<tr class="separator:a968398bbe927ab268f37a48f6a4cb811"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a7da951e8b96b23e28498c82597dc2e45"><td class="memItemLeft" align="right" valign="top">static string []&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_all_pawns_must_die_1_1_fen_parser.html#a7da951e8b96b23e28498c82597dc2e45">FENToStrings</a> (string fen)</td></tr>
+<tr class="memdesc:a7da951e8b96b23e28498c82597dc2e45"><td class="mdescLeft">&#160;</td><td class="mdescRight">Convert state FEN to a text board a la StockFish's "d" command.  <a href="#a7da951e8b96b23e28498c82597dc2e45">More...</a><br /></td></tr>
+<tr class="separator:a7da951e8b96b23e28498c82597dc2e45"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a2de494875e264b0341330d46f97645b5"><td class="memItemLeft" align="right" valign="top">static void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_all_pawns_must_die_1_1_fen_parser.html#a2de494875e264b0341330d46f97645b5">DebugFENPosition</a> (string fen)</td></tr>
+<tr class="memdesc:a2de494875e264b0341330d46f97645b5"><td class="mdescLeft">&#160;</td><td class="mdescRight">DEBUG only method to dump the state of the board given a FEN a la StockFish's "d" command. Does nothing in Release  <a href="#a2de494875e264b0341330d46f97645b5">More...</a><br /></td></tr>
+<tr class="separator:a2de494875e264b0341330d46f97645b5"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
-<div class="textblock"><p>Helper class to parse and extract information from a FEN string </p>
-</div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
-<a id="ac21fb51162d9c83465107439263c8270"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ac21fb51162d9c83465107439263c8270">&#9670;&nbsp;</a></span>FenParser() <span class="overload">[1/2]</span></h2>
+<div class="textblock"><p>Stateles FEN Parser Helper Methods </p>
+</div><h2 class="groupheader">Member Function Documentation</h2>
+<a id="a36bf864f52f7c7904d4d5493cb2528b1"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a36bf864f52f7c7904d4d5493cb2528b1">&#9670;&nbsp;</a></span>ApplyMoveToFEN()</h2>
 
 <div class="memitem">
 <div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">AllPawnsMustDie.FenParser.FenParser </td>
+          <td class="memname">static string AllPawnsMustDie.FenParser.ApplyMoveToFEN </td>
+          <td>(</td>
+          <td class="paramtype">String&#160;</td>
+          <td class="paramname"><em>fen</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">string&#160;</td>
+          <td class="paramname"><em>sanMove</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Produces a new FEN given a FEN and a move string </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">fen</td><td>Starting FEN</td></tr>
+    <tr><td class="paramname">sanMove</td><td>move e.g. e2e4 or d7c8q</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>Updated FEN for new position</dd></dl>
+
+</div>
+</div>
+<a id="a22cceb187c3c4a2a3b10de7723740080"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a22cceb187c3c4a2a3b10de7723740080">&#9670;&nbsp;</a></span>CollapseRank()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">static string AllPawnsMustDie.FenParser.CollapseRank </td>
+          <td>(</td>
+          <td class="paramtype">String&#160;</td>
+          <td class="paramname"><em>fen</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>rank</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Opposite of ExpandRank, it will take adjacent 1s and combine them e.g. /111P11PP/ =&gt; /3P2PP/ </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">fen</td><td>FEN input</td></tr>
+    <tr><td class="paramname">rank</td><td>Rank to collapse</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>Updated FEN</dd></dl>
+
+</div>
+</div>
+<a id="a968398bbe927ab268f37a48f6a4cb811"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a968398bbe927ab268f37a48f6a4cb811">&#9670;&nbsp;</a></span>ColorFromFen()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">static <a class="el" href="namespace_all_pawns_must_die.html#a85861edb29de64dca36dafa5084cb252">PieceColor</a> AllPawnsMustDie.FenParser.ColorFromFen </td>
+          <td>(</td>
+          <td class="paramtype">char&#160;</td>
+          <td class="paramname"><em>fenPiece</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Color check (a case check for FEN, white is UPPERCASE, black lowercase) </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">fenPiece</td><td>'p' 'P' 'q', 'Q', etc</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>White or Black</dd></dl>
+
+</div>
+</div>
+<a id="a2de494875e264b0341330d46f97645b5"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a2de494875e264b0341330d46f97645b5">&#9670;&nbsp;</a></span>DebugFENPosition()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">static void AllPawnsMustDie.FenParser.DebugFENPosition </td>
           <td>(</td>
           <td class="paramtype">string&#160;</td>
-          <td class="paramname"><em>fenInputString</em></td><td>)</td>
+          <td class="paramname"><em>fen</em></td><td>)</td>
           <td></td>
         </tr>
       </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
 </div><div class="memdoc">
 
-<p>Construct and parse the given string </p>
+<p>DEBUG only method to dump the state of the board given a FEN a la StockFish's "d" command. Does nothing in Release </p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramname">fenInputString</td><td>FEN input</td></tr>
+    <tr><td class="paramname">fen</td><td>A valid FEN string</td></tr>
   </table>
   </dd>
 </dl>
 
 </div>
 </div>
-<a id="a90fbb610ab0487869cef0ae1df0abcd4"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a90fbb610ab0487869cef0ae1df0abcd4">&#9670;&nbsp;</a></span>FenParser() <span class="overload">[2/2]</span></h2>
+<a id="aa4ccd8158842c8672ee3fd9a02fc8d01"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aa4ccd8158842c8672ee3fd9a02fc8d01">&#9670;&nbsp;</a></span>ExpandRank()</h2>
 
 <div class="memitem">
 <div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">AllPawnsMustDie.FenParser.FenParser </td>
+          <td class="memname">static string AllPawnsMustDie.FenParser.ExpandRank </td>
           <td>(</td>
-          <td class="paramtype"><a class="el" href="class_all_pawns_must_die_1_1_chess_board.html">ChessBoard</a>&#160;</td>
-          <td class="paramname"><em>chessBoard</em></td><td>)</td>
+          <td class="paramtype">String&#160;</td>
+          <td class="paramname"><em>fen</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>rank</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Expands a given rank inside a FEN string to 8 characters. Any numeric counts are expanded to all 1s. E.g. /8/ =&gt; /11111111/ </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">fen</td><td>FEN input</td></tr>
+    <tr><td class="paramname">rank</td><td>Rank to expand</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>Updated FEN</dd></dl>
+
+</div>
+</div>
+<a id="a3bae52a509db9550d7d856d4398b3b57"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a3bae52a509db9550d7d856d4398b3b57">&#9670;&nbsp;</a></span>ExtractActivePlayer()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">static <a class="el" href="namespace_all_pawns_must_die.html#a85861edb29de64dca36dafa5084cb252">PieceColor</a> AllPawnsMustDie.FenParser.ExtractActivePlayer </td>
+          <td>(</td>
+          <td class="paramtype">string&#160;</td>
+          <td class="paramname"><em>fen</em></td><td>)</td>
           <td></td>
         </tr>
       </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
 </div><div class="memdoc">
 
-<p>Construct a FEN string given an input <a class="el" href="class_all_pawns_must_die_1_1_chess_board.html" title="Encapsulates a chess board. The board owns the pieces and the history ">ChessBoard</a> </p>
+<p>Extracts the active player from the FEN </p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramname">chessBoard</td><td><a class="el" href="class_all_pawns_must_die_1_1_chess_board.html" title="Encapsulates a chess board. The board owns the pieces and the history ">ChessBoard</a> to parse</td></tr>
+    <tr><td class="paramname">fen</td><td>FEN input</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>PieceColor of the active player (white or black)</dd></dl>
+
+</div>
+</div>
+<a id="a6d9856eabd010c25c0a937949f0a2377"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a6d9856eabd010c25c0a937949f0a2377">&#9670;&nbsp;</a></span>ExtractCastlingRights()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">static void AllPawnsMustDie.FenParser.ExtractCastlingRights </td>
+          <td>(</td>
+          <td class="paramtype">string&#160;</td>
+          <td class="paramname"><em>fen</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">ref <a class="el" href="namespace_all_pawns_must_die.html#a9060f5c8425e9b5768de0c7de20c77cf">BoardSide</a>&#160;</td>
+          <td class="paramname"><em>whiteCastlingRights</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">ref <a class="el" href="namespace_all_pawns_must_die.html#a9060f5c8425e9b5768de0c7de20c77cf">BoardSide</a>&#160;</td>
+          <td class="paramname"><em>blackCastlingRights</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Extracts the castling rights from a given FEN </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">fen</td><td>FEN input</td></tr>
+    <tr><td class="paramname">whiteCastlingRights</td><td>White player's castling rights in enum form</td></tr>
+    <tr><td class="paramname">blackCastlingRights</td><td>Black player's castling rights in enum form</td></tr>
   </table>
   </dd>
 </dl>
 
 </div>
 </div>
-<h2 class="groupheader">Property Documentation</h2>
-<a id="ad806f4d5d1e5c13f430fef413ed647df"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ad806f4d5d1e5c13f430fef413ed647df">&#9670;&nbsp;</a></span>ActivePlayer</h2>
+<a id="a7b33494bb996593c6043a0a6ba2ec5e6"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a7b33494bb996593c6043a0a6ba2ec5e6">&#9670;&nbsp;</a></span>ExtractEnPassantTarget()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -197,22 +443,44 @@ Properties</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="namespace_all_pawns_must_die.html#a85861edb29de64dca36dafa5084cb252">PieceColor</a> AllPawnsMustDie.FenParser.ActivePlayer</td>
+          <td class="memname">static bool AllPawnsMustDie.FenParser.ExtractEnPassantTarget </td>
+          <td>(</td>
+          <td class="paramtype">string&#160;</td>
+          <td class="paramname"><em>fen</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">out <a class="el" href="struct_all_pawns_must_die_1_1_chess_board_1_1_board_square.html">ChessBoard.BoardSquare</a>&#160;</td>
+          <td class="paramname"><em>enPassantSquare</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
         </tr>
       </table>
   </td>
   <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">get</span></span>  </td>
+<span class="mlabels"><span class="mlabel">static</span></span>  </td>
   </tr>
 </table>
 </div><div class="memdoc">
 
-<p>Active player specified in the FEN </p>
+<p>Extracts just the enpassant target if any from the FEN </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">fen</td><td>FEN string to parse</td></tr>
+    <tr><td class="paramname">enPassantSquare</td><td>BoardSquare with the target if return is true</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>If true, enPassantSquare holds the target, otherwise it will be a1(never valid)</dd></dl>
 
 </div>
 </div>
-<a id="a59e0d3810103de8f5a1807f1126de0b6"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a59e0d3810103de8f5a1807f1126de0b6">&#9670;&nbsp;</a></span>BlackCastlingRights</h2>
+<a id="a65c7d3502e73c29db927e451af9df052"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a65c7d3502e73c29db927e451af9df052">&#9670;&nbsp;</a></span>ExtractMoveCounts()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -221,22 +489,50 @@ Properties</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="namespace_all_pawns_must_die.html#a9060f5c8425e9b5768de0c7de20c77cf">BoardSide</a> AllPawnsMustDie.FenParser.BlackCastlingRights</td>
+          <td class="memname">static void AllPawnsMustDie.FenParser.ExtractMoveCounts </td>
+          <td>(</td>
+          <td class="paramtype">string&#160;</td>
+          <td class="paramname"><em>fen</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">ref int&#160;</td>
+          <td class="paramname"><em>halfMoves</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">ref int&#160;</td>
+          <td class="paramname"><em>fullMoves</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
         </tr>
       </table>
   </td>
   <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">get</span></span>  </td>
+<span class="mlabels"><span class="mlabel">static</span></span>  </td>
   </tr>
 </table>
 </div><div class="memdoc">
 
-<p>Castling rights if any for black </p>
+<p>Extract the halfmove and fullmove counts from the given FEN </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">fen</td><td>FEN input</td></tr>
+    <tr><td class="paramname">halfMoves</td><td>On return will hold halfmoves from the FEN</td></tr>
+    <tr><td class="paramname">fullMoves</td><td>On return will hold fullmoves from the FEN</td></tr>
+  </table>
+  </dd>
+</dl>
 
 </div>
 </div>
-<a id="ac7057f3044802b9328230ec42839eefa"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ac7057f3044802b9328230ec42839eefa">&#9670;&nbsp;</a></span>EnPassantTarget</h2>
+<a id="ac36579ca55e0a5634d1ff3b218aced3c"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ac36579ca55e0a5634d1ff3b218aced3c">&#9670;&nbsp;</a></span>ExtractPieces()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -245,22 +541,33 @@ Properties</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="struct_all_pawns_must_die_1_1_chess_board_1_1_board_square.html">ChessBoard.BoardSquare</a> AllPawnsMustDie.FenParser.EnPassantTarget</td>
+          <td class="memname">static List&lt;<a class="el" href="class_all_pawns_must_die_1_1_chess_piece.html">ChessPiece</a>&gt; AllPawnsMustDie.FenParser.ExtractPieces </td>
+          <td>(</td>
+          <td class="paramtype">string&#160;</td>
+          <td class="paramname"><em>fen</em></td><td>)</td>
+          <td></td>
         </tr>
       </table>
   </td>
   <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">get</span></span>  </td>
+<span class="mlabels"><span class="mlabel">static</span></span>  </td>
   </tr>
 </table>
 </div><div class="memdoc">
 
-<p>Target for EnPassant, if IsEnPassantTargetValid is true </p>
+<p>Given a FEN, return a list of <a class="el" href="class_all_pawns_must_die_1_1_chess_piece.html" title="Encapsulates a chess piece ">ChessPiece</a> objects descibed by the FEN </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">fen</td><td>FEN input</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>ChessPieces contained in the FEN description</dd></dl>
 
 </div>
 </div>
-<a id="a29af0ffedc5c6c4b90796d04032350f6"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a29af0ffedc5c6c4b90796d04032350f6">&#9670;&nbsp;</a></span>FEN</h2>
+<a id="a7da951e8b96b23e28498c82597dc2e45"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a7da951e8b96b23e28498c82597dc2e45">&#9670;&nbsp;</a></span>FENToStrings()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -269,22 +576,32 @@ Properties</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">string AllPawnsMustDie.FenParser.FEN</td>
+          <td class="memname">static string [] AllPawnsMustDie.FenParser.FENToStrings </td>
+          <td>(</td>
+          <td class="paramtype">string&#160;</td>
+          <td class="paramname"><em>fen</em></td><td>)</td>
+          <td></td>
         </tr>
       </table>
   </td>
   <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">get</span></span>  </td>
+<span class="mlabels"><span class="mlabel">static</span></span>  </td>
   </tr>
 </table>
 </div><div class="memdoc">
 
-<p>FEN string from a board construction, or just the echoed input </p>
+<p>Convert state FEN to a text board a la StockFish's "d" command. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">fen</td><td>A valid FEN string</td></tr>
+  </table>
+  </dd>
+</dl>
 
 </div>
 </div>
-<a id="a158cb7676e8aa4bcc77ad6287572231c"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a158cb7676e8aa4bcc77ad6287572231c">&#9670;&nbsp;</a></span>FullMoves</h2>
+<a id="a0741a6209f10ec505a577a22f90d0f6e"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a0741a6209f10ec505a577a22f90d0f6e">&#9670;&nbsp;</a></span>InsertPiece()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -293,22 +610,59 @@ Properties</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">int AllPawnsMustDie.FenParser.FullMoves</td>
+          <td class="memname">static string AllPawnsMustDie.FenParser.InsertPiece </td>
+          <td>(</td>
+          <td class="paramtype">String&#160;</td>
+          <td class="paramname"><em>fen</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">char&#160;</td>
+          <td class="paramname"><em>fenChar</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>file</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>rank</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
         </tr>
       </table>
   </td>
   <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">get</span></span>  </td>
+<span class="mlabels"><span class="mlabel">static</span></span>  </td>
   </tr>
 </table>
 </div><div class="memdoc">
 
-<p>Number of total full moves so far (each player has moved is 1 full turn) </p>
+<p>Insert a piece into the FEN string at the specified location </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">fen</td><td>FEN input</td></tr>
+    <tr><td class="paramname">fenChar</td><td>FEN character to insert e.g. 'P' or 'q'</td></tr>
+    <tr><td class="paramname">file</td><td>File to insert [1-8]==[a-h]</td></tr>
+    <tr><td class="paramname">rank</td><td>Rank to insert [1-8]</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>Updated FEN string</dd></dl>
+<p>Assumes target rank is already expaded</p>
 
 </div>
 </div>
-<a id="a94df844aded14e0ba14b96bc867e380f"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a94df844aded14e0ba14b96bc867e380f">&#9670;&nbsp;</a></span>HalfMoves</h2>
+<a id="a300c5319a0e10a172b08292657a81392"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a300c5319a0e10a172b08292657a81392">&#9670;&nbsp;</a></span>PieceAtBoardPosition()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -317,22 +671,52 @@ Properties</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">int AllPawnsMustDie.FenParser.HalfMoves</td>
+          <td class="memname">static char AllPawnsMustDie.FenParser.PieceAtBoardPosition </td>
+          <td>(</td>
+          <td class="paramtype">String&#160;</td>
+          <td class="paramname"><em>fen</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>file</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>rank</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
         </tr>
       </table>
   </td>
   <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">get</span></span>  </td>
+<span class="mlabels"><span class="mlabel">static</span></span>  </td>
   </tr>
 </table>
 </div><div class="memdoc">
 
-<p>Number of half moves, or moves since any capture or pawn advance </p>
+<p>Returns the FEN character for the piece at a given location. This method assumes the proper rank has already been expanded </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">fen</td><td>FEN string input</td></tr>
+    <tr><td class="paramname">file</td><td>[1-8] =&gt; [a-h]</td></tr>
+    <tr><td class="paramname">rank</td><td>[1-8]</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>The FEN char for the piece or '1' if no piece</dd></dl>
+<p>Assumes target rank is already expaded</p>
 
 </div>
 </div>
-<a id="ab584b5e0994d9211ff927824ce2bb3fc"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ab584b5e0994d9211ff927824ce2bb3fc">&#9670;&nbsp;</a></span>IsEnPassantTargetValid</h2>
+<a id="ab611a643e1afc9d6d556f7f7e95d7b0e"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ab611a643e1afc9d6d556f7f7e95d7b0e">&#9670;&nbsp;</a></span>RemovePiece()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -341,70 +725,59 @@ Properties</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">bool AllPawnsMustDie.FenParser.IsEnPassantTargetValid</td>
+          <td class="memname">static string AllPawnsMustDie.FenParser.RemovePiece </td>
+          <td>(</td>
+          <td class="paramtype">String&#160;</td>
+          <td class="paramname"><em>fen</em>, </td>
         </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">get</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-<p>If true, the EnPassantTarget should be looked at </p>
-
-</div>
-</div>
-<a id="ae6eaae49d5f73c24e01c49d17394efbd"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ae6eaae49d5f73c24e01c49d17394efbd">&#9670;&nbsp;</a></span>Pieces</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
         <tr>
-          <td class="memname">List&lt;<a class="el" href="class_all_pawns_must_die_1_1_chess_piece.html">ChessPiece</a>&gt; AllPawnsMustDie.FenParser.Pieces</td>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>file</em>, </td>
         </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">get</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-<p>Returns the pieces specified in the FEN </p>
-
-</div>
-</div>
-<a id="afebdb42d074e0fb97bee6b93f4186bb6"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#afebdb42d074e0fb97bee6b93f4186bb6">&#9670;&nbsp;</a></span>WhiteCastlingRights</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="namespace_all_pawns_must_die.html#a9060f5c8425e9b5768de0c7de20c77cf">BoardSide</a> AllPawnsMustDie.FenParser.WhiteCastlingRights</td>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>rank</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">out char&#160;</td>
+          <td class="paramname"><em>fenChar</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
         </tr>
       </table>
   </td>
   <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">get</span></span>  </td>
+<span class="mlabels"><span class="mlabel">static</span></span>  </td>
   </tr>
 </table>
 </div><div class="memdoc">
 
-<p>Castling rights if any for white </p>
+<p>Removes a piece at a given location on the board </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">fen</td><td>FEN string input</td></tr>
+    <tr><td class="paramname">file</td><td>[1-8] =&gt; [a-h]</td></tr>
+    <tr><td class="paramname">rank</td><td>[1-8]</td></tr>
+    <tr><td class="paramname">fenChar</td><td>piece removed(e.g. 'q' or 'Q')</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>Updated FEN</dd></dl>
+<p>Assumes target rank is already expaded</p>
 
 </div>
 </div>
 <hr/>The documentation for this class was generated from the following file:<ul>
-<li>AllPawnsMustDie/FenParser.cs</li>
+<li>AllPawnsMustDie/core/FenParser.cs</li>
 </ul>
 </div><!-- contents -->
 </div><!-- doc-content -->

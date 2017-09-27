@@ -2,6 +2,7 @@
 <area shape="rect" id="node2" href="$class_all_pawns_must_die_1_1_about_dialog.html" title="Simple about dialog " alt="" coords="123,5,321,32"/>
 <area shape="rect" id="node3" href="$class_all_pawns_must_die_1_1_a_p_m_d___form.html" title="This is the main Window (Form) for the Application. A minimal amount of work should be done here..." alt="" coords="121,56,323,83"/>
 <area shape="rect" id="node4" href="$class_all_pawns_must_die_1_1_display_f_e_n_dialog.html" title="Dialog to show the current FEN. Better than a messagebox, since the textbox can be selected and copie..." alt="" coords="105,107,339,133"/>
-<area shape="rect" id="node5" href="$class_all_pawns_must_die_1_1_new_game_dialog.html" title="New game dialog class. This is the Form UI " alt="" coords="110,157,334,184"/>
-<area shape="rect" id="node6" href="$class_all_pawns_must_die_1_1_promotion_dialog.html" title="Simple dialog for selecting promotion of a piece. It is dead simple right now, with a simple radio li..." alt="" coords="129,209,315,250"/>
+<area shape="rect" id="node5" href="$class_all_pawns_must_die_1_1_engine_options_dialog.html" title="Options Dialog for the chess engines loaded " alt="" coords="115,158,329,199"/>
+<area shape="rect" id="node6" href="$class_all_pawns_must_die_1_1_new_game_dialog.html" title="New game dialog class. This is the Form UI " alt="" coords="110,224,334,251"/>
+<area shape="rect" id="node7" href="$class_all_pawns_must_die_1_1_promotion_dialog.html" title="Simple dialog for selecting promotion of a piece. It is dead simple right now, with a simple radio li..." alt="" coords="129,275,315,317"/>
 </map>

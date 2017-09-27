@@ -12,6 +12,7 @@ var hierarchy =
       [ "AllPawnsMustDie.AboutDialog", "class_all_pawns_must_die_1_1_about_dialog.html", null ],
       [ "AllPawnsMustDie.APMD_Form", "class_all_pawns_must_die_1_1_a_p_m_d___form.html", null ],
       [ "AllPawnsMustDie.DisplayFENDialog", "class_all_pawns_must_die_1_1_display_f_e_n_dialog.html", null ],
+      [ "AllPawnsMustDie.EngineOptionsDialog", "class_all_pawns_must_die_1_1_engine_options_dialog.html", null ],
       [ "AllPawnsMustDie.NewGameDialog", "class_all_pawns_must_die_1_1_new_game_dialog.html", null ],
       [ "AllPawnsMustDie.PromotionDialog", "class_all_pawns_must_die_1_1_promotion_dialog.html", null ]
     ] ],
@@ -23,7 +24,6 @@ var hierarchy =
     ] ],
     [ "IDisposable", null, [
       [ "AllPawnsMustDie.ChessBoardView", "class_all_pawns_must_die_1_1_chess_board_view.html", null ],
-      [ "AllPawnsMustDie.ChessEngineWrapper", "class_all_pawns_must_die_1_1_chess_engine_wrapper.html", null ],
       [ "AllPawnsMustDie.ChessGame", "class_all_pawns_must_die_1_1_chess_game.html", null ],
       [ "AllPawnsMustDie.UCIChessEngine", "class_all_pawns_must_die_1_1_u_c_i_chess_engine.html", null ]
     ] ],

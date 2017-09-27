@@ -1,6 +1,6 @@
 var struct_all_pawns_must_die_1_1_chess_board_1_1_move_information =
 [
-    [ "MoveInformation", "struct_all_pawns_must_die_1_1_chess_board_1_1_move_information.html#a8f957b9c24b3c342e3946fa718693ab3", null ],
+    [ "MoveInformation", "struct_all_pawns_must_die_1_1_chess_board_1_1_move_information.html#a7f5c4481582291c22e9e12214f35b5e1", null ],
     [ "ToString", "struct_all_pawns_must_die_1_1_chess_board_1_1_move_information.html#a9ad43b43e6fc62bf26eb5f927672950b", null ],
     [ "ancillaryPiece", "struct_all_pawns_must_die_1_1_chess_board_1_1_move_information.html#a9f6c6097582aa57e58950d5b1fbfb598", null ],
     [ "castlingRights", "struct_all_pawns_must_die_1_1_chess_board_1_1_move_information.html#ad09d90c2b64d16ca640842a26a45c1f1", null ],
@@ -9,6 +9,7 @@ var struct_all_pawns_must_die_1_1_chess_board_1_1_move_information =
     [ "firstMove", "struct_all_pawns_must_die_1_1_chess_board_1_1_move_information.html#ae0c0c92a5635ab80bcff6295635ae3a3", null ],
     [ "isCapture", "struct_all_pawns_must_die_1_1_chess_board_1_1_move_information.html#aaf644b1ea7ad3b4c1faf7901965ad046", null ],
     [ "isCastle", "struct_all_pawns_must_die_1_1_chess_board_1_1_move_information.html#ad7015daf1098bfdf0e8e42eeb50488f7", null ],
+    [ "prevFEN", "struct_all_pawns_must_die_1_1_chess_board_1_1_move_information.html#a59584fda0d93ba099be8f6c94b284b3a", null ],
     [ "promotionClass", "struct_all_pawns_must_die_1_1_chess_board_1_1_move_information.html#ac2fa8c5220da97766b87789a135c4295", null ],
     [ "startSquare", "struct_all_pawns_must_die_1_1_chess_board_1_1_move_information.html#a7c1219ba204e91d14be1aed6b60d6a57", null ],
     [ "CapturedPiece", "struct_all_pawns_must_die_1_1_chess_board_1_1_move_information.html#ad18394db1e9fb5e934abcbcc500b7049", null ],
@@ -20,6 +21,7 @@ var struct_all_pawns_must_die_1_1_chess_board_1_1_move_information =
     [ "IsCapture", "struct_all_pawns_must_die_1_1_chess_board_1_1_move_information.html#a83c3141bf4063d687a55a9e38867c220", null ],
     [ "IsCastle", "struct_all_pawns_must_die_1_1_chess_board_1_1_move_information.html#a30f3a43236f78fb96e980e255ae01912", null ],
     [ "IsPromotion", "struct_all_pawns_must_die_1_1_chess_board_1_1_move_information.html#a7711a9fcee59704468f165f91ff09c1d", null ],
+    [ "PreviousFEN", "struct_all_pawns_must_die_1_1_chess_board_1_1_move_information.html#ad70a2873f02b2d28528a6a504eaecd40", null ],
     [ "PromotionJob", "struct_all_pawns_must_die_1_1_chess_board_1_1_move_information.html#aea4d91e2eb723e3fb7a32e894348da8c", null ],
     [ "Start", "struct_all_pawns_must_die_1_1_chess_board_1_1_move_information.html#a891cd93c2d0cdb33c9aca561c6de82c0", null ]
 ];

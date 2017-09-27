@@ -18,6 +18,7 @@ var class_all_pawns_must_die_1_1_chess_board =
     [ "AllPieces", "class_all_pawns_must_die_1_1_chess_board.html#a4c8350fd7b9a5281eb863c4c8e044004", null ],
     [ "BlackCastlingRights", "class_all_pawns_must_die_1_1_chess_board.html#aa959814fd86ad30cacacf2615cdec54e", null ],
     [ "BlackPieces", "class_all_pawns_must_die_1_1_chess_board.html#abde346ad92b7348fc005afa466ebe9c1", null ],
+    [ "CurrentFEN", "class_all_pawns_must_die_1_1_chess_board.html#a3592652f7f68edad90bdc45c59c46c5b", null ],
     [ "FullMoveCount", "class_all_pawns_must_die_1_1_chess_board.html#a69e62bc5105259386c16205c51cf2e04", null ],
     [ "HalfMoveCount", "class_all_pawns_must_die_1_1_chess_board.html#ab7f011730834a4ce426e51bfb925a229", null ],
     [ "InitialFEN", "class_all_pawns_must_die_1_1_chess_board.html#ab4a5d447c46cd163f00ed41378e5418e", null ],

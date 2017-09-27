@@ -109,9 +109,6 @@ Classes</h2></td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_all_pawns_must_die_1_1_chess_engine_response_received_event_args.html">ChessEngineResponseReceivedEventArgs</a></td></tr>
 <tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">EventArgs for the engine response (external process response)  <a href="class_all_pawns_must_die_1_1_chess_engine_response_received_event_args.html#details">More...</a><br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_all_pawns_must_die_1_1_chess_engine_wrapper.html">ChessEngineWrapper</a></td></tr>
-<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Wrapper for the chess engine. This is here to allow for the expansion of other protocols, but none are planned at the moment. It's provides far more logic than just the chese engine though (which really at its heart just evaluates a given position)  <a href="class_all_pawns_must_die_1_1_chess_engine_wrapper.html#details">More...</a><br /></td></tr>
-<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_all_pawns_must_die_1_1_chess_game.html">ChessGame</a></td></tr>
 <tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight"><a class="el" href="class_all_pawns_must_die_1_1_chess_game.html" title="ChessGame encapsulates a game &quot;session&quot;. It can either start from scratch or from a given starting po...">ChessGame</a> encapsulates a game "session". It can either start from scratch or from a given starting position. It is responsible for tracking all aspects of the game. A non-exhasutive list: The board (owns the pieces, and moves, and more), time controls, all UI components like a move history or captured list, and of course the chess engine.  <a href="class_all_pawns_must_die_1_1_chess_game.html#details">More...</a><br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -121,8 +118,11 @@ Classes</h2></td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_all_pawns_must_die_1_1_display_f_e_n_dialog.html">DisplayFENDialog</a></td></tr>
 <tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Dialog to show the current FEN. Better than a messagebox, since the textbox can be selected and copied  <a href="class_all_pawns_must_die_1_1_display_f_e_n_dialog.html#details">More...</a><br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_all_pawns_must_die_1_1_engine_options_dialog.html">EngineOptionsDialog</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Options Dialog for the chess engines loaded  <a href="class_all_pawns_must_die_1_1_engine_options_dialog.html#details">More...</a><br /></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_all_pawns_must_die_1_1_fen_parser.html">FenParser</a></td></tr>
-<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Helper class to parse and extract information from a FEN string  <a href="class_all_pawns_must_die_1_1_fen_parser.html#details">More...</a><br /></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Stateles FEN Parser Helper Methods  <a href="class_all_pawns_must_die_1_1_fen_parser.html#details">More...</a><br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">interface &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="interface_all_pawns_must_die_1_1_i_chess_board_view.html">IChessBoardView</a></td></tr>
 <tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Interface for drawing the chessboard  <a href="interface_all_pawns_must_die_1_1_i_chess_board_view.html#details">More...</a><br /></td></tr>
@@ -182,10 +182,14 @@ Enumerations</h2></td></tr>
  }<tr class="memdesc:a9060f5c8425e9b5768de0c7de20c77cf"><td class="mdescLeft">&#160;</td><td class="mdescRight">The Chess Board is split into two sides, King and Queen (left or right) depending on which color you are.  <a href="namespace_all_pawns_must_die.html#a9060f5c8425e9b5768de0c7de20c77cf">More...</a><br /></td></tr>
 </td></tr>
 <tr class="separator:a9060f5c8425e9b5768de0c7de20c77cf"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aefaee6faa86299aac4d3e9f00ca71315"><td class="memItemLeft" align="right" valign="top">enum &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespace_all_pawns_must_die.html#aefaee6faa86299aac4d3e9f00ca71315">GameResult</a> { <a class="el" href="namespace_all_pawns_must_die.html#aefaee6faa86299aac4d3e9f00ca71315ab41e48f7ace77405b5240648288b1998">GameResult.WhiteWins</a>, 
+<tr class="memitem:aefaee6faa86299aac4d3e9f00ca71315"><td class="memItemLeft" align="right" valign="top">enum &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespace_all_pawns_must_die.html#aefaee6faa86299aac4d3e9f00ca71315">GameResult</a> { <br />
+&#160;&#160;<a class="el" href="namespace_all_pawns_must_die.html#aefaee6faa86299aac4d3e9f00ca71315ab41e48f7ace77405b5240648288b1998">GameResult.WhiteWins</a>, 
 <a class="el" href="namespace_all_pawns_must_die.html#aefaee6faa86299aac4d3e9f00ca71315a709826f9a0b38ed23672336c7d8f2b8f">GameResult.BlackWins</a>, 
 <a class="el" href="namespace_all_pawns_must_die.html#aefaee6faa86299aac4d3e9f00ca71315acf707b8fe61c9f34bbb3750574420a41">GameResult.Stalemate</a>, 
-<a class="el" href="namespace_all_pawns_must_die.html#aefaee6faa86299aac4d3e9f00ca71315a2d03c2d5a7ec65ef4619e0582c272ec2">GameResult.Draw</a>
+<a class="el" href="namespace_all_pawns_must_die.html#aefaee6faa86299aac4d3e9f00ca71315a2d03c2d5a7ec65ef4619e0582c272ec2">GameResult.Draw</a>, 
+<br />
+&#160;&#160;<a class="el" href="namespace_all_pawns_must_die.html#aefaee6faa86299aac4d3e9f00ca71315aa48d8d496b0d2191a227a4915777d16d">GameResult.Contested</a>
+<br />
  }<tr class="memdesc:aefaee6faa86299aac4d3e9f00ca71315"><td class="mdescLeft">&#160;</td><td class="mdescRight">Possible game results  <a href="namespace_all_pawns_must_die.html#aefaee6faa86299aac4d3e9f00ca71315">More...</a><br /></td></tr>
 </td></tr>
 <tr class="separator:aefaee6faa86299aac4d3e9f00ca71315"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -282,6 +286,8 @@ Enumerations</h2></td></tr>
 <tr><td class="fieldname"><a id="aefaee6faa86299aac4d3e9f00ca71315acf707b8fe61c9f34bbb3750574420a41"></a>Stalemate&#160;</td><td class="fielddoc"><p>No one wins!</p>
 </td></tr>
 <tr><td class="fieldname"><a id="aefaee6faa86299aac4d3e9f00ca71315a2d03c2d5a7ec65ef4619e0582c272ec2"></a>Draw&#160;</td><td class="fielddoc"><p>No one wins by move count or mutual decision!</p>
+</td></tr>
+<tr><td class="fieldname"><a id="aefaee6faa86299aac4d3e9f00ca71315aa48d8d496b0d2191a227a4915777d16d"></a>Contested&#160;</td><td class="fielddoc"><p>No winner or loser yet</p>
 </td></tr>
 </table>
 
