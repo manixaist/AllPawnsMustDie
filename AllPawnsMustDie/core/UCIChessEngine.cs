@@ -97,6 +97,9 @@ namespace AllPawnsMustDie
             {
                 // Stop listening to stdout of engine process
                 engineProcess.OutputDataReceived -= OnDataReceived;
+                // Send the UCI quit if we haven't
+                ((IChessEngine)this).Quit();
+
                 // Dispose of the process
                 engineProcess.Dispose();
                 disposed = true;
@@ -357,8 +360,13 @@ namespace AllPawnsMustDie
                             engineProcess.StandardInput.WriteLine(IsReady);
                         }
 
-                        // Wait for the response
-                        uciCommandFinished.WaitOne();
+                        // Wait on the exit event as well, so we can bail as fast as needed
+                        AutoResetEvent[] commandEvents = { uciCommandFinished, shutdownCommandQueue };
+                        int commandWait = WaitHandle.WaitAny(commandEvents);
+                        if (commandWait == 1)
+                        {
+                            exitThread = true;
+                        }
                     }
                 }
             }
@@ -373,10 +381,7 @@ namespace AllPawnsMustDie
             // engine will exit ASAP, so assume it's gone after this
             if (engineProcess != null && !(Disposed))
             {
-                // Unsubscribe from the handler as this will close the process
-                //engineProcess.OutputDataReceived -= OnDataReceived;
                 engineProcess.StandardInput.WriteLine(UciQuit);
-                Dispose();
             }
         }
         #endregion
