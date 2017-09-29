@@ -11,6 +11,9 @@
 ### Released Versions
 [v1.0](https://github.com/manixaist/AllPawnsMustDie/releases/tag/v1.0)
 
+### Blog Entries
+[01: All Pawns Must Die](http://manixaist.com/coding/csharp/game/chess/uci/2017/09/29/APMD-01.html)
+
 ### Gameplay (v1.0)
 The interface is simple by design.  When it's your turn, click on one of your pieces for a set of legal moves to choose from (highlighted in yellow).  If you then click on one of those legal squares, the move is applied and the engine makes the next move, repeat until mate, draw or you quit.  The last move is always highlighted in blue with an arrow to show from->to.
 
