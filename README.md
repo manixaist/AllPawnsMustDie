@@ -37,6 +37,7 @@ It's C# and Windows Forms, which means you will need Windows and the .NET Framew
 * [03: UCI Chess Engine Wrapper](http://manixaist.com/coding/csharp/game/chess/uci/2017/09/29/APMD-03.html)
 * [04: ChessGame, The Data...Sorta](http://manixaist.com/coding/csharp/game/chess/uci/2017/09/30/APMD-04.html)
 * [05: ChessBoard & ChessPiece](http://manixaist.com/coding/csharp/game/chess/uci/2017/09/30/APMD-05.html)
+* [06: FEN & The FenParser](http://manixaist.com/coding/csharp/game/chess/uci/2017/10/01/APMD-06.html)
 
 ### Documentation
 [Code Documentation (generated with doxygen)](https://manixaist.github.io/AllPawnsMustDie/)
