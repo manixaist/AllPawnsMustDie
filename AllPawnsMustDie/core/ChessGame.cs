@@ -12,205 +12,6 @@ using System.Windows.Forms;
 
 namespace AllPawnsMustDie
 {
-    #region Public Enums
-    /// <summary>
-    /// Chess piece color, only two options, pretty well known....
-    /// </summary>
-    public enum PieceColor
-    {
-        /// <summary>White pieces</summary>
-        White,
-        /// <summary>Black pieces</summary>
-        Black
-    };
-
-    /// <summary>
-    /// Filthy peasant or member of the nobility?
-    /// </summary>
-    public enum PieceClass
-    {
-        /// <summary>King - it's good to be him, but movement is limited</summary>
-        King,
-        /// <summary>Queen - Combines the powers of the Rook and Bishops </summary>
-        Queen,
-        /// <summary>Rook - Long operator along vert and horz lines</summary>
-        Rook,
-        /// <summary>Bishop - Long operator along diagonal lines.</summary>
-        Bishop,
-        /// <summary>Knight - Only piece that can jump in normal play.  Moves like an 'L'</summary>
-        Knight,
-        /// <summary>Pawn - Peasant class, moves forward only, captures on the diagonal, can be promoted</summary>
-        Pawn,
-        /// <summary>Not a true piece, but rather a temporary target for Pawns exposed to en-passant capture</summary>
-        EnPassantTarget
-    };
-
-    /// <summary>
-    /// Which way should the board be drawn?
-    /// </summary>
-    public enum BoardOrientation
-    {
-        /// <summary>Board is drawn with the White pieces on the bottom</summary>
-        WhiteOnBottom,
-        /// <summary>Board is drawn with the Black pieces on the bottom</summary>
-        BlackOnBottom
-    };
-
-    /// <summary>
-    /// The Chess Board is split into two sides, King and Queen (left or right)
-    /// depending on which color you are.
-    /// </summary>
-    [Flags] public enum BoardSide
-    {
-        /// <summary>No side specified</summary>
-        None = 0,
-        /// <summary>Kingside of the board; Files [e-h]</summary>
-        King = 1,
-        /// <summary>Kingside of the board; Files [a-d]</summary>
-        Queen = 2
-    };
-
-    /// <summary>
-    /// Possible game results
-    /// </summary>
-    public enum GameResult
-    {
-        /// <summary>White wins! (black mated)</summary>
-        WhiteWins,
-        /// <summary>Black wins! (white mated)</summary>
-        BlackWins,
-        /// <summary>No one wins!</summary>
-        Stalemate,
-        /// <summary>No one wins by move count or mutual decision!</summary>
-        Draw,
-        /// <summary>No winner or loser yet</summary>
-        Contested,
-    };
-    #endregion
-
-    #region Public Structs
-    /// <summary>
-    /// Encapsulates a file on the Chess Board.  files are [a-h] and are basically
-    /// "columns" on the board.
-    /// </summary>
-    public struct PieceFile
-    {
-        /// <summary>
-        /// Initialize the file.  If the char is not in [a-h], ArgumentOutOfRangeException
-        /// is thrown. 
-        /// </summary>
-        /// <param name="file">name of the file [a-h]. This is case-insensitive</param>
-        public PieceFile(char file)
-        {
-            char f = Char.ToLower(file);
-            if (f < 'a' || f > 'h')
-            {
-                throw new ArgumentOutOfRangeException();
-            }
-            pieceFile = f;
-        }
-
-        /// <summary>
-        /// Initialize the file.  If the int is not in [1-8], ArgumentOutOfRangeException
-        /// </summary>
-        /// <param name="file">int version of the file [1-8]</param>
-        public PieceFile(int file)
-        {
-            if (file < 1 || file > 8)
-            {
-                throw new ArgumentOutOfRangeException();
-            }
-            pieceFile = Convert.ToChar(Convert.ToInt16('a') + file - 1);
-        }
-
-        /// <summary>
-        /// Copy constructor
-        /// </summary>
-        /// <param name="oldFile"></param>
-        public PieceFile(PieceFile oldFile)
-        {
-            pieceFile = oldFile.pieceFile;
-        }
-
-        /// <summary>
-        /// Override for equality tests
-        /// </summary>
-        /// <param name="obj">object testing</param>
-        /// <returns>true if obj is the same as this instance</returns>
-        public override bool Equals(System.Object obj)
-        {
-            return (obj is PieceFile) && (this == (PieceFile)obj);
-        }
-
-        /// <summary>
-        /// Override for equality tests
-        /// </summary>
-        /// <returns>hashcode for the object</returns>
-        public override int GetHashCode()
-        {
-            return pieceFile.GetHashCode();
-        }
-
-        /// <summary>
-        /// Override for equality tests
-        /// </summary>
-        /// <param name="p1">object1</param>
-        /// <param name="p2">object2</param>
-        /// <returns>true if the value of object1 and object2 are the same</returns>
-        public static bool operator ==(PieceFile p1, PieceFile p2)
-        {
-            // If both are null, or both are same instance, return true.
-            if (System.Object.ReferenceEquals(p1, p2))
-            {
-                return true;
-            }
-            return p1.File == p2.File;
-        }
-
-        /// <summary>
-        /// Override for equality tests
-        /// </summary>
-        /// <param name="p1">Object1</param>
-        /// <param name="p2">Onject2</param>
-        /// <returns>True if the values of Object1 and Object2 are NOT the same</returns>
-        public static bool operator !=(PieceFile p1, PieceFile p2)
-        {
-            return !(p1 == p2);
-        }
-
-        /// <summary>
-        /// Returns the numeric version of the file.  Files are mapped [a-h]->[1-8]
-        /// and align with the rank.  This makes the board a conceptual 2D array
-        /// with 1-based offsets
-        /// </summary>
-        /// <returns>An integer between 1 and 8 inclusive.</returns>
-        public int ToInt()
-        {
-            return (Convert.ToInt16(pieceFile) - Convert.ToInt16('a')) + 1;
-        }
-
-        /// <summary>
-        /// Override to return the string version of the file e.g. "a", "b"..."h"
-        /// </summary>
-        /// <returns></returns>
-        public override string ToString()
-        {
-            return Convert.ToString(pieceFile);
-        }
-
-        /// <summary>
-        /// Returns the stored file.  It must have been valid on creation, so this
-        /// is ensured to return a char [a-h] and it will always be lowercase
-        /// </summary>
-        public char File { get { return pieceFile; } }
-
-        /// <summary>
-        /// The stored file (verified as valid)
-        /// </summary>
-        private char pieceFile;
-    }
-    #endregion
-
     /// <summary>
     /// ChessGame encapsulates a game "session".  It can either start from scratch
     /// or from a given starting position.  It is responsible for tracking all 
@@ -268,7 +69,7 @@ namespace AllPawnsMustDie
             ThinkingLocalized = Properties.Resources.Thinking;
 
             // Create legal move list
-            legalMoves = new List<ChessBoard.BoardSquare>();
+            legalMoves = new List<BoardSquare>();
             selectedPiece = null;
 
             // Create the board, the view, and the engine
@@ -646,14 +447,14 @@ namespace AllPawnsMustDie
         /// <param name="y">y coordinate in form</param>
         private void OnWaitingForMoveSelection(int x, int y)
         {
-            ChessBoard.BoardSquare square = ((IChessBoardView)view).GetSquare(x, y);
-            foreach (ChessBoard.BoardSquare move in legalMoves)
+            BoardSquare square = ((IChessBoardView)view).GetSquare(x, y);
+            foreach (BoardSquare move in legalMoves)
             {
                 if (move == square)
                 {
                     // Done - this is the move
-                    ChessBoard.MoveInformation moveInfo = new ChessBoard.MoveInformation(
-                        new ChessBoard.BoardSquare(selectedPiece.File, selectedPiece.Rank), move, selectedPiece.Deployed, board.CurrentFEN);
+                    MoveInformation moveInfo = new MoveInformation(
+                        new BoardSquare(selectedPiece.File, selectedPiece.Rank), move, selectedPiece.Deployed, board.CurrentFEN);
 
                     moveInfo.Color = selectedPiece.Color;
                     moveInfo.CastlingRights = board.ActivePlayerCastlingRights;
@@ -721,9 +522,9 @@ namespace AllPawnsMustDie
                 int destRank = Convert.ToInt16(bestMove[3]) - Convert.ToInt16('0');
 
                 ChessPiece foundPiece = board.FindPieceAt(startFile, startRank);
-                ChessBoard.MoveInformation moveInfo = new ChessBoard.MoveInformation(
-                        new ChessBoard.BoardSquare(startFile, startRank),
-                        new ChessBoard.BoardSquare(destFile, destRank),
+                MoveInformation moveInfo = new MoveInformation(
+                        new BoardSquare(startFile, startRank),
+                        new BoardSquare(destFile, destRank),
                         foundPiece.Deployed, board.CurrentFEN);
 
                 moveInfo.Color = foundPiece.Color;
@@ -963,8 +764,8 @@ namespace AllPawnsMustDie
                 return false;
             }
 
-            ChessBoard.BoardSquare targetSquare = new ChessBoard.BoardSquare(targetFile, targetRank);
-            List<ChessBoard.BoardSquare> moves = new List<ChessBoard.BoardSquare>();
+            BoardSquare targetSquare = new BoardSquare(targetFile, targetRank);
+            List<BoardSquare> moves = new List<BoardSquare>();
             switch (piece.Job)
             {
                 case PieceClass.Pawn:
@@ -1002,10 +803,10 @@ namespace AllPawnsMustDie
                         int fileOffset = offsets[index * 2];
                         int rankOffset = offsets[(index * 2) + 1];
                         // Test the validity of the square offset
-                        if (ChessBoard.BoardSquare.IsValid(piece.File.ToInt() + fileOffset, piece.Rank + rankOffset))
+                        if (BoardSquare.IsValid(piece.File.ToInt() + fileOffset, piece.Rank + rankOffset))
                         {
-                            ChessBoard.BoardSquare testSquare =
-                                new ChessBoard.BoardSquare(new PieceFile(piece.File.ToInt() + fileOffset), piece.Rank + rankOffset);
+                            BoardSquare testSquare =
+                                new BoardSquare(new PieceFile(piece.File.ToInt() + fileOffset), piece.Rank + rankOffset);
                             if (testSquare == targetSquare)
                             {
                                 result = true;
@@ -1022,7 +823,7 @@ namespace AllPawnsMustDie
             if (piece.Job != PieceClass.King)
             {
                 // Check moves for the target square
-                foreach (ChessBoard.BoardSquare square in moves)
+                foreach (BoardSquare square in moves)
                 {
                     if (square == targetSquare)
                     {
@@ -1048,7 +849,7 @@ namespace AllPawnsMustDie
         {
             bool result = false;
             occupied = false;
-            if (ChessBoard.BoardSquare.IsValid(col, row))
+            if (BoardSquare.IsValid(col, row))
             {
                 // Get the piece at the square if any
                 ChessPiece tPiece = board.FindPieceAt(new PieceFile(col), row);
@@ -1077,9 +878,9 @@ namespace AllPawnsMustDie
         /// <param name="piece">piece to check, assumed to be valid</param>
         /// <param name="board">board to check agains, also assumed valid</param>
         /// <returns>List of squares the piece can legally move to</returns>
-        private static List<ChessBoard.BoardSquare> GetLegalMoves(ChessPiece piece, ChessBoard board)
+        private static List<BoardSquare> GetLegalMoves(ChessPiece piece, ChessBoard board)
         {
-            List<ChessBoard.BoardSquare> preCheckMoves = new List<ChessBoard.BoardSquare>();
+            List<BoardSquare> preCheckMoves = new List<BoardSquare>();
 
             // Get a list of legal moves ignoring check violations
             switch (piece.Job)
@@ -1107,9 +908,9 @@ namespace AllPawnsMustDie
             }
 
             // Eliminate any move found that would place the King in check
-            List<ChessBoard.BoardSquare> legalMoves = new List<ChessBoard.BoardSquare>();
+            List<BoardSquare> legalMoves = new List<BoardSquare>();
             ChessPiece playerKing = board.GetKing(piece.Color);
-            foreach (ChessBoard.BoardSquare square in preCheckMoves)
+            foreach (BoardSquare square in preCheckMoves)
             {
                 // Move the piece for the check - also remove any capture for the test
                 ChessPiece tempCapture = board.FindPieceAt(square.File, square.Rank);
@@ -1137,7 +938,7 @@ namespace AllPawnsMustDie
 
         // Helper delegate to check targets (lambdas in each specific method)
         private delegate void CheckPieceTargets(ChessPiece p, int fileOffset,
-            int rankOffset, ChessBoard board, List<ChessBoard.BoardSquare> validMoves);
+            int rankOffset, ChessBoard board, List<BoardSquare> validMoves);
 
         /// <summary>
         /// Checks for valid moves along a linear path.  The path starts at the piece
@@ -1152,12 +953,12 @@ namespace AllPawnsMustDie
             int endRow = startRow + rankDelta;
 
             // As long as we're still on the board...
-            while (ChessBoard.BoardSquare.IsValid(endCol, endRow))
+            while (BoardSquare.IsValid(endCol, endRow))
             {
                 bool occupied;
                 if (SquareIsFreeOrContainsOpponent(endCol, endRow, b, p.Color, out occupied))
                 {
-                    m.Add(new ChessBoard.BoardSquare(new PieceFile(endCol), endRow));
+                    m.Add(new BoardSquare(new PieceFile(endCol), endRow));
                     if (occupied) // Must be an opponent, so this move is valid
                     {
                         break;  // stop though, no more can be valid along this path
@@ -1178,9 +979,9 @@ namespace AllPawnsMustDie
         /// <param name="piece">ChessPiece to examine</param>
         /// <param name="board">ChessBoard the piece exists within</param>
         /// <returns>List of valid squares, or empty list</returns>
-        private static List<ChessBoard.BoardSquare> GetLegalMoves_Pawn(ChessPiece piece, ChessBoard board)
+        private static List<BoardSquare> GetLegalMoves_Pawn(ChessPiece piece, ChessBoard board)
         {
-            List<ChessBoard.BoardSquare> moves = new List<ChessBoard.BoardSquare>();
+            List<BoardSquare> moves = new List<BoardSquare>();
             /* Pawns can move one space forward on any move provided the square is empty
             * and 2 squares if it's the first move the pawn has ever made.
             * A pawn may move diagonally if the square is occupied by an opponent piece (capture)
@@ -1206,7 +1007,7 @@ namespace AllPawnsMustDie
             int rank = (piece.Color == PieceColor.White) ? piece.Rank + 1 : piece.Rank - 1;
             if (null == board.FindPieceAt(piece.File, rank))
             {
-                moves.Add(new ChessBoard.BoardSquare(piece.File, rank));
+                moves.Add(new BoardSquare(piece.File, rank));
 
                 // The 2nd move is only valid of the 1st one was (i.e. you can't move through
                 // another piece on your first pawn move)
@@ -1215,7 +1016,7 @@ namespace AllPawnsMustDie
                     rank += (piece.Color == PieceColor.White) ? 1 : -1;
                     if (null == board.FindPieceAt(piece.File, rank))
                     {
-                        moves.Add(new ChessBoard.BoardSquare(piece.File, rank));
+                        moves.Add(new BoardSquare(piece.File, rank));
                     }
                 }
             }
@@ -1223,7 +1024,7 @@ namespace AllPawnsMustDie
             // Get the en-passant target if it exists, most of the time it will not
             // it only exists the move after an enemy pawn has jumped 2 spaces on
             // its initial move.
-            ChessBoard.BoardSquare enPassantTarget;
+            BoardSquare enPassantTarget;
             bool enPassantValid = board.GetEnPassantTarget(out enPassantTarget);
 
             // Targets will ALWAYS be 1 rank away (enPassant target is behind piece captured)
@@ -1239,7 +1040,7 @@ namespace AllPawnsMustDie
                 if (!ChessPiece.IsOnBackRank(piece) && (newFileIndex > 0) && (newFileIndex <= 8))
                 {
                     PieceFile tFile = new PieceFile(p.File.ToInt() + fileOffset);
-                    ChessBoard.BoardSquare targetSquare = new ChessBoard.BoardSquare(tFile, rank);
+                    BoardSquare targetSquare = new BoardSquare(tFile, rank);
                     ChessPiece tPiece = b.FindPieceAt(tFile, rank);
 
                     // Either there is a piece of the opposing color on this square
@@ -1247,7 +1048,7 @@ namespace AllPawnsMustDie
                     if (((tPiece != null) && (tPiece.Color != p.Color)) ||
                         ((targetSquare == enPassantTarget) && enPassantValid))
                     {
-                        m.Add(new ChessBoard.BoardSquare(tFile, rank));
+                        m.Add(new BoardSquare(tFile, rank));
                     }
                 }
             };
@@ -1266,9 +1067,9 @@ namespace AllPawnsMustDie
         /// <param name="piece">ChessPiece to examine</param>
         /// <param name="board">ChessBoard the piece exists within</param>
         /// <returns>List of valid squares, or empty list</returns>
-        private static List<ChessBoard.BoardSquare> GetLegalMoves_Knight(ChessPiece piece, ChessBoard board)
+        private static List<BoardSquare> GetLegalMoves_Knight(ChessPiece piece, ChessBoard board)
         {
-            List<ChessBoard.BoardSquare> moves = new List<ChessBoard.BoardSquare>();
+            List<BoardSquare> moves = new List<BoardSquare>();
             /* Knights are the only piece that can jump over other pieces, and move
              * in an L-shape (2:1) or (1:2) with a maximum of 8 valid squares.
              * Because they can jump, the only requirement is the target square
@@ -1306,7 +1107,7 @@ namespace AllPawnsMustDie
                 bool occupied; // ignored here
                 if (SquareIsFreeOrContainsOpponent(endCol, endRow, b, p.Color, out occupied))
                 {
-                    m.Add(new ChessBoard.BoardSquare(new PieceFile(endCol), endRow));
+                    m.Add(new BoardSquare(new PieceFile(endCol), endRow));
                 }
 
                 // #2
@@ -1314,7 +1115,7 @@ namespace AllPawnsMustDie
                 endRow = startRow + (rankDelta * 1);
                 if (SquareIsFreeOrContainsOpponent(endCol, endRow, b, p.Color, out occupied))
                 {
-                    m.Add(new ChessBoard.BoardSquare(new PieceFile(endCol), endRow));
+                    m.Add(new BoardSquare(new PieceFile(endCol), endRow));
                 }
             };
 
@@ -1332,9 +1133,9 @@ namespace AllPawnsMustDie
         /// <param name="piece">ChessPiece to examine</param>
         /// <param name="board">ChessBoard the piece exists within</param>
         /// <returns>List of valid squares, or empty list</returns>
-        private static List<ChessBoard.BoardSquare> GetLegalMoves_Bishop(ChessPiece piece, ChessBoard board)
+        private static List<BoardSquare> GetLegalMoves_Bishop(ChessPiece piece, ChessBoard board)
         {
-            List<ChessBoard.BoardSquare> moves = new List<ChessBoard.BoardSquare>();
+            List<BoardSquare> moves = new List<BoardSquare>();
             /* Bishops are long operators that move diagonaly only.  They cannot
              * move over or through a friendly piece, but may take the spot of
              * an opposing piece along its path as a capture.  Just as in the case
@@ -1372,9 +1173,9 @@ namespace AllPawnsMustDie
         /// <param name="piece">ChessPiece to examine</param>
         /// <param name="board">ChessBoard the piece exists within</param>
         /// <returns>List of valid squares, or empty list</returns>
-        private static List<ChessBoard.BoardSquare> GetLegalMoves_Rook(ChessPiece piece, ChessBoard board)
+        private static List<BoardSquare> GetLegalMoves_Rook(ChessPiece piece, ChessBoard board)
         {
-            List<ChessBoard.BoardSquare> moves = new List<ChessBoard.BoardSquare>();
+            List<BoardSquare> moves = new List<BoardSquare>();
             /* Rooks are long operators that move horizontaly only.  They cannot
              * move over or through a friendly piece, but may take the spot of
              * an opposing piece along its path as a capture. 
@@ -1411,9 +1212,9 @@ namespace AllPawnsMustDie
         /// <param name="piece">ChessPiece to examine</param>
         /// <param name="board">ChessBoard the piece exists within</param>
         /// <returns>List of valid squares, or empty list</returns>
-        private static List<ChessBoard.BoardSquare> GetLegalMoves_Queen(ChessPiece piece, ChessBoard board)
+        private static List<BoardSquare> GetLegalMoves_Queen(ChessPiece piece, ChessBoard board)
         {
-            List<ChessBoard.BoardSquare> moves = new List<ChessBoard.BoardSquare>();
+            List<BoardSquare> moves = new List<BoardSquare>();
             /* Queens are long operators that combine the bishop and rook.  They cannot
              * move over or through a friendly piece, but may take the spot of
              * an opposing piece along its path as a capture. 
@@ -1455,9 +1256,9 @@ namespace AllPawnsMustDie
         /// <param name="piece">ChessPiece to examine</param>
         /// <param name="board">ChessBoard the piece exists within</param>
         /// <returns>List of valid squares, or empty list</returns>
-        private static List<ChessBoard.BoardSquare> GetLegalMoves_King(ChessPiece piece, ChessBoard board)
+        private static List<BoardSquare> GetLegalMoves_King(ChessPiece piece, ChessBoard board)
         {
-            List<ChessBoard.BoardSquare> moves = new List<ChessBoard.BoardSquare>();
+            List<BoardSquare> moves = new List<BoardSquare>();
             /* The King is special.  He can move one square in any direction 
              * (provided it is on the board) so long as the square is empty or
              * it has an opponent piece on it.  However, the King can never
@@ -1503,23 +1304,23 @@ namespace AllPawnsMustDie
                 {
                     // Backrank depends on color
                     int kingRank = (piece.Color == PieceColor.White) ? 1 : 8;
-                    ChessBoard.BoardSquare[] squares = null;
+                    BoardSquare[] squares = null;
 
                     // First check if we still have the right, if not, no need to persue it
                     if (castlingRights.HasFlag(sideToCheck))
                     {
-                        squares = new ChessBoard.BoardSquare[2];
+                        squares = new BoardSquare[2];
                         // The target Files depend on the side of the board we're checking
                         // put the final target in [0]
                         if (sideToCheck == BoardSide.King)
                         {
-                            squares[0] = new ChessBoard.BoardSquare(new PieceFile(7), kingRank);
-                            squares[1] = new ChessBoard.BoardSquare(new PieceFile(6), kingRank);
+                            squares[0] = new BoardSquare(new PieceFile(7), kingRank);
+                            squares[1] = new BoardSquare(new PieceFile(6), kingRank);
                         }
                         else // Queenside
                         {
-                            squares[0] = new ChessBoard.BoardSquare(new PieceFile(3), kingRank);
-                            squares[1] = new ChessBoard.BoardSquare(new PieceFile(4), kingRank);
+                            squares[0] = new BoardSquare(new PieceFile(3), kingRank);
+                            squares[1] = new BoardSquare(new PieceFile(4), kingRank);
                         }
                     }
 
@@ -1556,7 +1357,7 @@ namespace AllPawnsMustDie
                 bool occupied; // ignored here
                 if (SquareIsFreeOrContainsOpponent(endCol, endRow, b, p.Color, out occupied))
                 {
-                    m.Add(new ChessBoard.BoardSquare(new PieceFile(endCol), endRow));
+                    m.Add(new BoardSquare(new PieceFile(endCol), endRow));
                 }
             };
 
@@ -1649,7 +1450,7 @@ namespace AllPawnsMustDie
         private IChessEngine engine;
         private Form form;
         private ChessPiece selectedPiece;
-        private List<ChessBoard.BoardSquare> legalMoves;
+        private List<BoardSquare> legalMoves;
         private static int HalfMovesUntilDraw = 50;
         private int thinkTime = 250;
         private static string MoveCommand = "go movetime";

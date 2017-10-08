@@ -71,7 +71,7 @@ namespace AllPawnsMustDie
         /// <param name="x"></param>
         /// <param name="y"></param>
         /// <returns></returns>
-        ChessBoard.BoardSquare GetSquare(int x, int y);
+        BoardSquare GetSquare(int x, int y);
 
         /// <summary>
         /// Highlight a single square
@@ -84,7 +84,7 @@ namespace AllPawnsMustDie
         /// Highlight a set of squares
         /// </summary>
         /// <param name="squares">List of BoardSquares to highlight</param>
-        void HighlightSquares(ref List<ChessBoard.BoardSquare> squares);
+        void HighlightSquares(ref List<BoardSquare> squares);
 
         /// <summary>
         /// Removes all squares marked for highlighting
@@ -138,7 +138,7 @@ namespace AllPawnsMustDie
             stringFormat.Alignment = StringAlignment.Center;
             stringFont = new Font(ChessFont, ChessFontSize);
 
-            highlightedSquares = new List<ChessBoard.BoardSquare>();
+            highlightedSquares = new List<BoardSquare>();
 
             Control moveHistoryControl = viewForm.Controls[APMD_Form.MoveHistoryControlName];
             moveHistoryControl.Invoke((MethodInvoker)delegate
@@ -326,7 +326,7 @@ namespace AllPawnsMustDie
         /// <param name="x"></param>
         /// <param name="y"></param>
         /// <returns></returns>
-        ChessBoard.BoardSquare IChessBoardView.GetSquare(int x, int y)
+        BoardSquare IChessBoardView.GetSquare(int x, int y)
         {
             Rectangle boardRect = ((IChessBoardView)this).BoardRect;
             if (!boardRect.Contains(x, y))
@@ -339,7 +339,7 @@ namespace AllPawnsMustDie
             int col;
             int row;
             ConvertXYToRowCol(x, y, out row, out col);
-            return new ChessBoard.BoardSquare(new PieceFile(col), row);
+            return new BoardSquare(new PieceFile(col), row);
         }
 
         /// <summary>
@@ -349,14 +349,14 @@ namespace AllPawnsMustDie
         /// <param name="rank">[1-8] rank</param>
         void IChessBoardView.HighlightSquare(PieceFile file, int rank)
         {
-            highlightedSquares.Add(new ChessBoard.BoardSquare(file, rank));
+            highlightedSquares.Add(new BoardSquare(file, rank));
         }
 
         /// <summary>
         /// Highlight a set of squares
         /// </summary>
         /// <param name="squares">List of BoardSquares to highlight</param>
-        void IChessBoardView.HighlightSquares(ref List<ChessBoard.BoardSquare> squares)
+        void IChessBoardView.HighlightSquares(ref List<BoardSquare> squares)
         {
             highlightedSquares.AddRange(squares);
         }
@@ -559,7 +559,7 @@ namespace AllPawnsMustDie
         /// <param name="g">Graphics object for the form</param>
         private void DrawHighlightedSquares(Graphics g)
         {
-            foreach(ChessBoard.BoardSquare square in highlightedSquares)
+            foreach(BoardSquare square in highlightedSquares)
             {
                 Rectangle squareRect = GetRect(square.File, square.Rank);
                 g.FillRectangle(Brushes.Yellow, squareRect);
@@ -606,11 +606,11 @@ namespace AllPawnsMustDie
             // Only needs updates when the move count has changed
             if (data.Moves.Count() != moveCount)
             {
-                List<ChessBoard.MoveInformation> moves = data.Moves;
+                List<MoveInformation> moves = data.Moves;
                 int newlineIndex = 0;
                 int moveIndex = 1;
                 string text = "---------------------\r\n";
-                foreach (ChessBoard.MoveInformation move in moves)
+                foreach (MoveInformation move in moves)
                 {
                     if (newlineIndex == 0)
                     {
@@ -858,7 +858,7 @@ namespace AllPawnsMustDie
         private Dictionary<string, Bitmap> chessPieceImageMap;
 
         // Holds list of squares to highlight
-        private List<ChessBoard.BoardSquare> highlightedSquares;
+        private List<BoardSquare> highlightedSquares;
 
         // Counter to update scroll of textbox
         private int moveCount;

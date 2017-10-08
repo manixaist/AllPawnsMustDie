@@ -93,18 +93,18 @@ namespace AllPawnsMustDie
         /// <param name="fen">FEN string to parse</param>
         /// <param name="enPassantSquare">BoardSquare with the target if return is true</param>
         /// <returns>If true, enPassantSquare holds the target, otherwise it will be a1(never valid)</returns>
-        public static bool ExtractEnPassantTarget(string fen, out ChessBoard.BoardSquare enPassantSquare)
+        public static bool ExtractEnPassantTarget(string fen, out BoardSquare enPassantSquare)
         {
             string[] fenTokens = TokenizeFEN(fen);
             bool result = false;
             string enpassant = fenTokens[3];
-            enPassantSquare = new ChessBoard.BoardSquare(new PieceFile('a'), 1);
+            enPassantSquare = new BoardSquare(new PieceFile('a'), 1);
 
             // '-' or a square like e5
             if (String.Compare(enpassant, "-") != 0)
             {
                 result = true;
-                enPassantSquare = new ChessBoard.BoardSquare(new PieceFile(enpassant[0]), 
+                enPassantSquare = new BoardSquare(new PieceFile(enpassant[0]), 
                     Convert.ToInt16(enpassant[1]) - Convert.ToUInt16('0'));
             }
             return result;
@@ -147,9 +147,9 @@ namespace AllPawnsMustDie
             string[] fenTokens = TokenizeFEN(fen);
 
             // Extract start and end squares and promotion info
-            ChessBoard.BoardSquare startSquare = new ChessBoard.BoardSquare(
+            BoardSquare startSquare = new BoardSquare(
                 new PieceFile(sanMove[0]), (Convert.ToInt16(sanMove[1]) - Convert.ToInt16('0')));
-            ChessBoard.BoardSquare endSquare = new ChessBoard.BoardSquare(
+            BoardSquare endSquare = new BoardSquare(
                 new PieceFile(sanMove[2]), (Convert.ToInt16(sanMove[3]) - Convert.ToInt16('0')));
             bool isPromotion = (sanMove.Length == 5);
 
@@ -243,7 +243,7 @@ namespace AllPawnsMustDie
                 if (String.Compare(fenTokens[3], "-") != 0)
                 {
                     // There is an en-passant square
-                    ChessBoard.BoardSquare enPassantSquare = new ChessBoard.BoardSquare(
+                    BoardSquare enPassantSquare = new BoardSquare(
                         new PieceFile(fenTokens[3][0]), (Convert.ToInt16(fenTokens[3][1]) - Convert.ToInt16('0')));
 
                     // If the en-passant target is the move target, this is a capture
@@ -367,7 +367,7 @@ namespace AllPawnsMustDie
             {
                 // Target is behind pawn
                 int enpassantTargetRank = (activePlayer == PieceColor.White) ? endSquare.Rank - 1 : endSquare.Rank + 1;
-                ChessBoard.BoardSquare ept = new ChessBoard.BoardSquare(endSquare.File, enpassantTargetRank);
+                BoardSquare ept = new BoardSquare(endSquare.File, enpassantTargetRank);
                 fenTokens[3] = ept.ToString();
             }
             else
@@ -767,7 +767,7 @@ namespace AllPawnsMustDie
             return tokens;
         }
 
-        private delegate void UpdateCastlingRightsOnEqualRank(int rankA, int rankB, ChessBoard.BoardSquare targetSquare, PieceColor color);
+        private delegate void UpdateCastlingRightsOnEqualRank(int rankA, int rankB, BoardSquare targetSquare, PieceColor color);
 #endregion
     }
 }

@@ -58,27 +58,27 @@ namespace AllPawnsMustDieUnitTests
             {
                 // Tuple tops out at 7 items so we're pushing it
                 // <startSquare, endSquare, Deployed, Color, Promotion Class, ExpectedToString>
-                Tuple<CB.BoardSquare, CB.BoardSquare, bool, PieceColor, PieceClass, string>[] testData =
+                Tuple<BoardSquare, BoardSquare, bool, PieceColor, PieceClass, string>[] testData =
                 {
                     // PieceClass.EnPassantTarget is invalid, so use when not promoting
-                    new Tuple<CB.BoardSquare, CB.BoardSquare, bool, PieceColor, PieceClass, string>
-                        (new CB.BoardSquare(new PieceFile(5), 2), new CB.BoardSquare(new PieceFile(5), 4),
+                    new Tuple<BoardSquare, BoardSquare, bool, PieceColor, PieceClass, string>
+                        (new BoardSquare(new PieceFile(5), 2), new BoardSquare(new PieceFile(5), 4),
                         false, PieceColor.White, PieceClass.EnPassantTarget, "e2e4"),
-                    new Tuple<CB.BoardSquare, CB.BoardSquare, bool, PieceColor, PieceClass, string>
-                        (new CB.BoardSquare(new PieceFile(4), 4), new CB.BoardSquare(new PieceFile(4), 5),
+                    new Tuple<BoardSquare, BoardSquare, bool, PieceColor, PieceClass, string>
+                        (new BoardSquare(new PieceFile(4), 4), new BoardSquare(new PieceFile(4), 5),
                         false, PieceColor.Black, PieceClass.EnPassantTarget, "d4d5"),
-                    new Tuple<CB.BoardSquare, CB.BoardSquare, bool, PieceColor, PieceClass, string>
-                        (new CB.BoardSquare(new PieceFile(5), 7), new CB.BoardSquare(new PieceFile(5), 8),
+                    new Tuple<BoardSquare, BoardSquare, bool, PieceColor, PieceClass, string>
+                        (new BoardSquare(new PieceFile(5), 7), new BoardSquare(new PieceFile(5), 8),
                         true, PieceColor.White, PieceClass.Queen, "e7e8q"),
                 };
 
                 // Verify each entry in the testData array
-                foreach (Tuple<CB.BoardSquare, CB.BoardSquare, bool, PieceColor, PieceClass, string> tuple in testData)
+                foreach (Tuple<BoardSquare, BoardSquare, bool, PieceColor, PieceClass, string> tuple in testData)
                 {
                     Trace.WriteLine(String.Format("Constucting MoveInformation[{0}:{1}->{2}:{3}] Color: {4} Deployed: {5} Promotion: {6}",
                         tuple.Item1.File.ToString(), tuple.Item1.Rank, tuple.Item2.File.ToString(), tuple.Item2.Rank,
                         tuple.Item4.ToString(), tuple.Item3.ToString(), tuple.Item5.ToString()));
-                    CB.MoveInformation testMove = new CB.MoveInformation(tuple.Item1, tuple.Item2, tuple.Item3, ChessBoard.InitialFENPosition);
+                    MoveInformation testMove = new MoveInformation(tuple.Item1, tuple.Item2, tuple.Item3, ChessBoard.InitialFENPosition);
                     testMove.Color = tuple.Item4;
                     if (tuple.Item5 != PieceClass.EnPassantTarget)
                     {
@@ -103,13 +103,13 @@ namespace AllPawnsMustDieUnitTests
             [TestMethod]
             public void BasicPropertiesTests()
             {
-                CB.BoardSquare startSquare = new CB.BoardSquare(new PieceFile('b'), 6);
-                CB.BoardSquare endSquare = new CB.BoardSquare(new PieceFile('e'), 3);
+                BoardSquare startSquare = new BoardSquare(new PieceFile('b'), 6);
+                BoardSquare endSquare = new BoardSquare(new PieceFile('e'), 3);
                 bool previouslyDeployed = true;
 
                 Trace.WriteLine(String.Format("Constucting default MoveInformation[{0}:{1}->{2}:{3}] Deployed: {4}",
                         startSquare.File.ToString(), startSquare.Rank, endSquare.File.ToString(), endSquare.Rank, previouslyDeployed));
-                CB.MoveInformation testMove = new CB.MoveInformation(startSquare, endSquare, previouslyDeployed, ChessBoard.InitialFENPosition);
+                MoveInformation testMove = new MoveInformation(startSquare, endSquare, previouslyDeployed, ChessBoard.InitialFENPosition);
 
                 // First verify the basic properties set on creation
                 Trace.WriteLine(String.Format("Verifying start and end squares..."));
@@ -164,7 +164,7 @@ namespace AllPawnsMustDieUnitTests
                 }
 
                 // Recreate the test move to clear the captured piece
-                testMove = new CB.MoveInformation(startSquare, endSquare, previouslyDeployed, ChessBoard.InitialFENPosition);
+                testMove = new MoveInformation(startSquare, endSquare, previouslyDeployed, ChessBoard.InitialFENPosition);
 
                 Trace.WriteLine(String.Format("Set a castling rook and verify IsCastle and CsatlingRook..."));
                 ChessPiece testRook = new ChessPiece(PieceColor.White, PieceClass.Rook, new PieceFile('a'), 1);
@@ -183,7 +183,7 @@ namespace AllPawnsMustDieUnitTests
                 }
 
                 // Setting a non-Rook to a castling rook will throw
-                testMove = new CB.MoveInformation(startSquare, endSquare, previouslyDeployed, ChessBoard.InitialFENPosition);
+                testMove = new MoveInformation(startSquare, endSquare, previouslyDeployed, ChessBoard.InitialFENPosition);
 
                 try
                 {
