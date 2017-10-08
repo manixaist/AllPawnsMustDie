@@ -179,26 +179,19 @@ namespace AllPawnsMustDieUnitTests
                 Trace.WriteLine("Verifying Deployed is false after creation");
                 Assert.IsFalse(testPiece.Deployed);
 
-                Trace.WriteLine("Verifying Visible is true after creation");
-                Assert.IsTrue(testPiece.Visible);
-
-                Trace.WriteLine("Verifying Highlight is false after creation");
-                Assert.IsFalse(testPiece.Highlight);
+                Trace.WriteLine("Verifying Captured is false after creation");
+                Assert.IsFalse(testPiece.Captured);
 
                 // Now change them
                 testPiece.Deployed = true;
-                testPiece.Visible = false;
-                testPiece.Highlight = true;
-
+                testPiece.Captured = true;
+                
                 // And re-verify
                 Trace.WriteLine("Verifying Deployed is true after update");
                 Assert.IsTrue(testPiece.Deployed);
 
-                Trace.WriteLine("Verifying Visible is false after update");
-                Assert.IsFalse(testPiece.Visible);
-
-                Trace.WriteLine("Verifying Highlight is true after update");
-                Assert.IsTrue(testPiece.Highlight);
+                Trace.WriteLine("Verifying Captured is true after update");
+                Assert.IsTrue(testPiece.Captured);
             }
 
             /// <summary>

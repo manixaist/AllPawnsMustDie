@@ -574,14 +574,9 @@ namespace AllPawnsMustDie
         /// <param name="piece">ChessPiece to draw</param>
         private void DrawPiece(Graphics g, ChessPiece piece)
         {
-            if (piece.Visible)
+            if (!piece.Captured)
             {
                 Rectangle pieceRect = GetRect(piece.File, piece.Rank);
-                if (piece.Highlight)
-                {
-                    g.FillRectangle(Brushes.Yellow, pieceRect);
-                }
-
                 if (chessPieceImageMap == null)
                 {
                     // Find the screen rect for the piece and 'draw' it

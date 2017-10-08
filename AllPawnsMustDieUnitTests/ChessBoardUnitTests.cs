@@ -79,7 +79,7 @@ namespace AllPawnsMustDieUnitTests
                 Trace.WriteLine(String.Format("...found it, checking Color({0}) and Job({1})", color.ToString(), job.ToString()));
                 Assert.AreEqual(piece.Color, color);
                 Assert.AreEqual(piece.Job, job);
-                Assert.IsTrue(piece.Visible);
+                Assert.IsFalse(piece.Captured);
             }
             catch (NullReferenceException)
             {

@@ -434,7 +434,7 @@ namespace AllPawnsMustDie
                 {
                     legalMoves = GetLegalMoves(foundPiece, board);
                     ((IChessBoardView)view).HighlightSquares(ref legalMoves);
-                    foundPiece.Highlight = true;
+                    ((IChessBoardView)view).HighlightSquare(foundPiece.File, foundPiece.Rank);
                     selectedPiece = foundPiece;
                 }
             }
@@ -489,7 +489,6 @@ namespace AllPawnsMustDie
             // Either way this gets cleared
             legalMoves.Clear();
             ((IChessBoardView)view).ClearHiglightedSquares();
-            selectedPiece.Highlight = false;
             selectedPiece = null;
         }
 
@@ -759,7 +758,7 @@ namespace AllPawnsMustDie
         {
             bool result = false;
 
-            if (piece.Visible == false)
+            if (piece.Captured == true)
             {
                 return false;
             }
@@ -917,7 +916,7 @@ namespace AllPawnsMustDie
                 piece.TempMove(square.File, square.Rank);
                 if (tempCapture != null)
                 {
-                    tempCapture.Visible = false;
+                    tempCapture.Captured = true;
                 }                
 
                 if (!IsSquareInCheck(board, playerKing.File, playerKing.Rank, playerKing.Color))
@@ -927,7 +926,7 @@ namespace AllPawnsMustDie
 
                 if (tempCapture != null)
                 {
-                    tempCapture.Visible = true;
+                    tempCapture.Captured = false;
                 }
 
                 // reset the piece (this bypasses the ChessBoard class)
@@ -1388,7 +1387,7 @@ namespace AllPawnsMustDie
             List<ChessPiece> pieces = (color == PieceColor.White) ? board.WhitePieces : board.BlackPieces;
             foreach (ChessPiece piece in pieces)
             {
-                if (piece.Visible && GetLegalMoves(piece, board).Count() > 0)
+                if (!piece.Captured && GetLegalMoves(piece, board).Count() > 0)
                 {
                     result = false;
                     break;

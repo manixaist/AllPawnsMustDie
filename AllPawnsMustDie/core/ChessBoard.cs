@@ -188,9 +188,9 @@ namespace AllPawnsMustDie
             {
                 if ((enemyPiece.Rank == targetRank) &&  // Enemy piece is located in
                     (enemyPiece.File == targetFile) &&  // the square we just moved to
-                    enemyPiece.Visible)                 // and it's not already captured
+                    !enemyPiece.Captured)               // and it's not already captured
                 {
-                    enemyPiece.Visible      = false;        // Stop drawing it (capture)
+                    enemyPiece.Captured     = true;         // Stop drawing it (capture)
                     moveInfo.CapturedPiece  = enemyPiece;   // Record the capture
                     break;                                  // exit the search loop
                 }
@@ -328,7 +328,7 @@ namespace AllPawnsMustDie
             lastMoveWasCapture = false;
             if (lastMove.IsCapture)
             {
-                lastMove.CapturedPiece.Visible = true;
+                lastMove.CapturedPiece.Captured = false;
                 lastMoveWasCapture = true;
             }
 
@@ -475,7 +475,7 @@ namespace AllPawnsMustDie
         /// <returns>true if piece is found</returns>
         private bool IsPieceAtLocation(ChessPiece piece, PieceFile file, int rank)
         {
-            return (piece.Visible && (piece.Rank == rank) && (piece.File == file));
+            return (!piece.Captured && (piece.Rank == rank) && (piece.File == file));
         }
 
         /// <summary>
@@ -528,7 +528,7 @@ namespace AllPawnsMustDie
                 enPassantVictim = FindPieceAt(targetFile, enPassantTargetRank);
 
                 // Capture the piece
-                enPassantVictim.Visible = false;
+                enPassantVictim.Captured = true;
             }
             return enPassantVictim;
         }

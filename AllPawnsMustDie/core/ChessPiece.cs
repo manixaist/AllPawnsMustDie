@@ -43,9 +43,8 @@ namespace AllPawnsMustDie
             rank = pieceRank;
             file = pieceFile;
             deployed = false;
-            visible = true;
+            captured = false;
             isReadyForPromotion = false;
-            highlight = false;
         }
 
         /// <summary>
@@ -60,9 +59,8 @@ namespace AllPawnsMustDie
             rank = oldPiece.Rank;
             file = new PieceFile(oldPiece.File);
             deployed = oldPiece.Deployed;
-            visible = oldPiece.Visible;
+            captured = oldPiece.Captured;
             isReadyForPromotion = oldPiece.isReadyForPromotion;
-            highlight = oldPiece.Highlight;
         }
 
         /// <summary>
@@ -161,22 +159,12 @@ namespace AllPawnsMustDie
         public bool Deployed { get { return deployed; } set { deployed = value; } }
 
         /// <summary>
-        /// Is the piece visible?  False after being captured
+        /// Is the piece captured?
         /// </summary>
-        public bool Visible
+        public bool Captured
         {
-            get { return visible; }
-            set { visible = value; }
-        }
-
-        /// <summary>
-        /// Gets or sets the Highlight attribute which can be used to indicate
-        /// selection for example
-        /// </summary>
-        public bool Highlight
-        {
-            get { return highlight; }
-            set { highlight = value; }
+            get { return captured; }
+            set { captured  = value; }
         }
         #endregion
 
@@ -190,8 +178,7 @@ namespace AllPawnsMustDie
         private int tempRank;
         private PieceFile tempFile;
         private bool deployed;
-        private bool visible;
-        private bool highlight;
+        private bool captured;
         #endregion
     }
 }
