@@ -29,90 +29,7 @@ namespace AllPawnsMustDie
         }
     }
     #endregion
-
-    #region Interfaces
-    /// <summary>
-    /// Interface for drawing the chessboard
-    /// </summary>
-    interface IChessBoardView
-    {
-        /// <summary>
-        /// Load piece images from a bitmap sheet.  This overrides the unicode
-        /// text drawing for the pieces
-        /// </summary>
-        /// <param name="pieceImages">Bitmap image that contains the piece data.
-        /// It is assumed the pieces are arranged in 2 rows, with white on top
-        /// and black on bottom.  The piece order should be K Q R B N P</param>
-        /// <param name="pieceSize">The size of a single piece</param>
-        void SetBitmapImages(Bitmap pieceImages, Size pieceSize);
-
-        /// <summary>
-        /// Invalidate the view, this should force a redraw
-        /// </summary>
-        void Invalidate();
-
-        /// <summary>
-        /// Render the board at its location
-        /// </summary>
-        /// <param name="g">Graphics object for the form</param>
-        void Render(Graphics g);
-
-        /// <summary>
-        /// Returns a piece given an X,Y in relation to the board+offset
-        /// </summary>
-        /// <param name="x"></param>
-        /// <param name="y"></param>
-        /// <returns>ChessPiece found or null if none</returns>
-        ChessPiece GetPiece(int x, int y);
-
-        /// <summary>
-        /// Returns the BoardSquare at the given x, y
-        /// </summary>
-        /// <param name="x"></param>
-        /// <param name="y"></param>
-        /// <returns></returns>
-        BoardSquare GetSquare(int x, int y);
-
-        /// <summary>
-        /// Highlight a single square
-        /// </summary>
-        /// <param name="file">[a-h] file</param>
-        /// <param name="rank">[1-8] rank</param>
-        void HighlightSquare(PieceFile file, int rank);
-
-        /// <summary>
-        /// Highlight a set of squares
-        /// </summary>
-        /// <param name="squares">List of BoardSquares to highlight</param>
-        void HighlightSquares(ref List<BoardSquare> squares);
-
-        /// <summary>
-        /// Removes all squares marked for highlighting
-        /// </summary>
-        void ClearHiglightedSquares();
-
-        /// <summary>
-        /// Property for the data that drives the view
-        /// </summary>
-        ChessBoard ViewData { get; set; }
-
-        /// <summary>
-        /// TopLeft corner of the board
-        /// </summary>
-        Point Offset { get; set; }
-
-        /// <summary>
-        /// Property to set the size of the view
-        /// </summary>
-        Size Dimensions { get; set; }
-
-        /// <summary>
-        /// Returns a rect (including the offset) for the board
-        /// </summary>
-        Rectangle BoardRect { get; }
-    }
-    #endregion
-
+    
     /// <summary>
     /// Encapsulates the view for the chess board.  This is the drawing code
     /// </summary>
@@ -232,22 +149,16 @@ namespace AllPawnsMustDie
         }
 
         /// <summary>
-        /// Redraw the view on the form
-        /// </summary>
-        void IChessBoardView.Invalidate()
-        {
-            // Only need to invalidate the board portion of the form
-            viewForm.Invalidate();
-        }
-
-        /// <summary>
         /// Draw the chess board
         /// </summary>
-        /// <param name="g">Graphics object for the form</param>
-        void IChessBoardView.Render(Graphics g)
+        /// <param name="o">Rendering object</param>
+        void IChessBoardView.Render(object o)
         {
             // Dimensions and ViewData should be set before this call
             IChessBoardView view = (IChessBoardView)this;
+
+            // Convert to the type we need for this implementation
+            Graphics g = o as Graphics;
 
             // Draw the board (orientation does not matter)
             DrawBoard(g);
