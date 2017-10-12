@@ -74,17 +74,18 @@ namespace AllPawnsMustDie
 
             // Create the board, the view, and the engine
             // Create new UCI engine object
-            UCIChessEngine uciEngine = new UCIChessEngine();
-            engine = (IChessEngine)uciEngine;
-
+            engine = new UCIChessEngine();
+            
             // Subscribe to events from the engine (commands and verbose)
             engine.OnChessEngineResponseReceived += ChessEngineResponseReceivedEventHandler;
             engine.OnChessEngineVerboseOutputReceived += ChessEngineVerboseOutputReceivedEventHandler;
 
             // This will launch the process
             engine.LoadEngine(fullPathToEngine);
-            engine.SendCommandAsync(UCIChessEngine.Uci, UCIChessEngine.UciOk);
-
+            
+            // Start UCI
+            engine.InitializeUciProtocol();
+            
             // Initialize the chess engine with optional parameters
             // Note this is engine dependent and this version only works with stockfish (to my knowledge)
             // Other UCI engines use different options, several a combination of UCI_LimitStrength and UCI_ELO
@@ -105,7 +106,8 @@ namespace AllPawnsMustDie
 
                 if (exeName.StartsWith("stockfish_8"))
                 {
-                    engine.SendCommandAsync("setoption name Skill Level value 0", String.Empty);
+                    UciSetOptionCommand command = new UciSetOptionCommand("Skill Level", "0");
+                    command.Execute(engine);
                 }
                 else if (exeName.StartsWith("rybkav2.3.2a"))
                 {
@@ -124,8 +126,11 @@ namespace AllPawnsMustDie
 
                 if (gimpedElo != String.Empty)
                 {
-                    engine.SendCommandAsync("setoption name UCI_LimitStrength value true", String.Empty);
-                    engine.SendCommandAsync(String.Format("setoption name UCI_Elo value {0}", gimpedElo), String.Empty);
+                    UciSetOptionCommand reduceEloCommand = new UciSetOptionCommand("UCI_LimitStrength", "true");
+                    reduceEloCommand.Execute(engine);
+
+                    UciSetOptionCommand setEloRating = new UciSetOptionCommand("UCI_Elo", gimpedElo);
+                    setEloRating.Execute(engine);
                 }
             }
         }
@@ -148,7 +153,7 @@ namespace AllPawnsMustDie
                 engine.OnChessEngineResponseReceived -= ChessEngineResponseReceivedEventHandler;
                 engine.OnChessEngineVerboseOutputReceived -= ChessEngineVerboseOutputReceivedEventHandler;
                 ((IDisposable)view).Dispose();
-                ((UCIChessEngine)engine).Dispose();
+                engine.Dispose();
                 GC.SuppressFinalize(this);
                 disposed = true;
             }
@@ -168,7 +173,7 @@ namespace AllPawnsMustDie
             board.NewGame();
 
             // Initialize the engine
-            engine.Reset();
+            engine.ResetBoard();
 
             // Start the game if the computer goes first
             if (playerColor != PieceColor.White)
@@ -202,8 +207,8 @@ namespace AllPawnsMustDie
         /// </summary>
         public void GetBestMoveAsync()
         {
-            string moveCommand = String.Format("{0} {1}", MoveCommand, thinkTime);
-            engine.SendCommandAsync(moveCommand, UCIChessEngine.BestMoveResponse);
+            UciGoCommand command = new UciGoCommand(thinkTime.ToString());
+            command.Execute(engine);
         }
 
         /// <summary>
@@ -282,7 +287,7 @@ namespace AllPawnsMustDie
         public void Quit()
         {
             // Close the engine (external process)
-            engine.Quit();
+            engine.QuitEngine();
         }
 
         /// <summary>
@@ -501,7 +506,7 @@ namespace AllPawnsMustDie
             thinkingIndex = 0;  // reset index counter for simple progress text
 
             // Get the best move from the engine
-            string bestMove = ((UCIChessEngine)engine).BestMove;
+            string bestMove = engine.BestMove;
             if ((String.Compare(bestMove, "(none)") == 0) || // Stockfish (and converted ones)
                 (String.Compare(bestMove, "a1a1") == 0)   || // Rybka
                 (board.HalfMoveCount >= HalfMovesUntilDraw)) // Propably spinning on self play or just a draw
@@ -718,8 +723,8 @@ namespace AllPawnsMustDie
             // puts the burden on the board to keep it constantly updated
             // See FenParser class for those details
             updatingPosition = true;
-            string position = String.Format("position fen {0}", board.CurrentFEN);
-            engine.SendCommandAsync(position, "");
+            UciPositionCommand command = new UciPositionCommand(board.CurrentFEN);
+            command.Execute(engine);
         }
 
         /// <summary>
@@ -1446,13 +1451,12 @@ namespace AllPawnsMustDie
         private PieceColor playerColor;
         private ChessBoard board;
         private ChessBoardView view;
-        private IChessEngine engine;
+        private UCIChessEngine engine;
         private Form form;
         private ChessPiece selectedPiece;
         private List<BoardSquare> legalMoves;
         private static int HalfMovesUntilDraw = 50;
         private int thinkTime = 250;
-        private static string MoveCommand = "go movetime";
         private CultureInfo currentCultureInfo;
         private readonly string ThinkingLocalized;
         #endregion

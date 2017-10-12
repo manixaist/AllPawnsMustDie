@@ -229,12 +229,14 @@ namespace AllPawnsMustDie
                 OnChessEngineResponseReceived(this, new ChessEngineResponseReceivedEventArgs(s));
             }
         }
-        
+
         /// <summary>
-        /// Loads the chess engine process
+        /// Loads the chess engine process.  It's fine to call this directly,
+        /// but there is a command for it 'UciLoadEngineCommand' for consistency
+        /// with the other commands.  That command ultimately invokes this method
         /// </summary>
         /// <param name="fullPathToExe">full path to chess engine</param>
-        void IChessEngine.LoadEngine(string fullPathToExe)
+        void IChessEngine.LoadEngineProcess(string fullPathToExe)
         {
             // Startup the process, we should only do this once per class instance
             if (processInited)
@@ -258,9 +260,8 @@ namespace AllPawnsMustDie
         void IChessEngine.Reset()
         {
             string fen = (initialFEN != null) ? initialFEN : ChessBoard.InitialFENPosition;
-            // Set a default position with the engine
-            ((IChessEngine)this).SendCommandAsync(UCIChessEngine.UciNewGame, String.Empty);
-            ((IChessEngine)this).SendCommandAsync(String.Format("position fen {0}", fen), String.Empty);
+            UciPositionCommand command = new UciPositionCommand(fen);
+            command.Execute(this);
         }
 
         /// <summary>
@@ -356,8 +357,9 @@ namespace AllPawnsMustDie
                         // If this is true, the above command has no response, and we'd wait here forever
                         if (cep.NeedsIsReadySync)
                         {
-                            // So instead, send it an "IsReady" and wait on the reply
-                            engineProcess.StandardInput.WriteLine(IsReady);
+                            StreamWriter writer = engineProcess.StandardInput;
+                            UciIsReadyCommand isReadyCommand = new UciIsReadyCommand(ref writer);
+                            isReadyCommand.Execute(this);
                         }
 
                         // Wait on the exit event as well, so we can bail as fast as needed
@@ -383,6 +385,75 @@ namespace AllPawnsMustDie
             {
                 engineProcess.StandardInput.WriteLine(UciQuit);
             }
+        }
+
+        /// <summary>
+        /// Start the UCI session with the engine.  This is required before all
+        /// other commands will function
+        /// </summary>
+        public void InitializeUciProtocol()
+        {
+            UciInitCommand command = new UciInitCommand();
+            command.Execute(this);
+        }
+
+        /// <summary>
+        /// Calls the underlying Quit implementation
+        /// </summary>
+        public void QuitEngine()
+        {
+            ((IChessEngine)this).Quit();
+        }
+
+        /// <summary>
+        /// Sets a new position with the chess engine
+        /// </summary>
+        /// <param name="positionAsFEN">FEN for the new position</param>
+        public void SetPosition(string positionAsFEN)
+        {
+            UciPositionCommand command = new UciPositionCommand(positionAsFEN);
+            command.Execute(this);
+        }
+
+        /// <summary>
+        /// Wraps the internal reset state.  This will either reset to a standard
+        /// starting position, or the initial position provided
+        /// </summary>
+        public void ResetBoard()
+        {
+            ((IChessEngine)this).Reset();
+        }
+
+        /// <summary>
+        /// Start analyzing the current position for the best move
+        /// </summary>
+        /// <param name="timeInMilliseconds">Time in milliseconds to think at
+        /// a maximum as a string, e.g. "2000" is 2 seconds</param>
+        public void GetMoveForCurrentPosition(string timeInMilliseconds)
+        {
+            UciGoCommand command = new UciGoCommand(timeInMilliseconds);
+            command.Execute(this);
+        }
+
+        /// <summary>
+        /// Sets a given option name with a value (if provided)
+        /// </summary>
+        /// <param name="optionName">engine dependent option name</param>
+        /// <param name="optionValue">option dependent value</param>
+        public void SetOption(string optionName, string optionValue = null)
+        {
+            UciSetOptionCommand command = new UciSetOptionCommand(optionName, optionValue);
+            command.Execute(this);
+        }
+
+        /// <summary>
+        /// Loads the engine process
+        /// </summary>
+        /// <param name="pathToEngine">Path to the engine process</param>
+        public void LoadEngine(string pathToEngine)
+        {
+            UciLoadEngineCommand command = new UciLoadEngineCommand(pathToEngine);
+            command.Execute(this);
         }
         #endregion
 

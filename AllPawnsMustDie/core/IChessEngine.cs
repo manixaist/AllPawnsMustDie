@@ -35,7 +35,7 @@ namespace AllPawnsMustDie
     /// Generic interface for the chess engine (external process).  At a bare
     /// minumum, we need to be able to send a command and wait for a response
     /// </summary>
-    interface IChessEngine
+    public interface IChessEngine
     {
         /// <summary>
         /// Event fired when the engine has finished with a given command
@@ -51,7 +51,7 @@ namespace AllPawnsMustDie
         /// Loads the chess engine process
         /// </summary>
         /// <param name="fullPathToExe">full path to chess engine</param>
-        void LoadEngine(string fullPathToExe);
+        void LoadEngineProcess(string fullPathToExe);
 
         /// <summary>
         /// Resets the engine, only valid after a succesful load

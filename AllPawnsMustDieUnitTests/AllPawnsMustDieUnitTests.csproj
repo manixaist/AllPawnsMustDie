@@ -55,6 +55,7 @@
     <Compile Include="FenParserUnitTests.cs" />
     <Compile Include="MoveInformationUnitTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="UciChessEngineCommandTests.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
