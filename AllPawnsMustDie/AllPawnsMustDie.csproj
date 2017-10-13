@@ -46,8 +46,11 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="core\ChessEngineProcessContainer.cs" />
+    <Compile Include="core\ChessEngineProcessLoader.cs" />
     <Compile Include="core\ChessTypes.cs" />
     <Compile Include="core\IChessBoardView.cs" />
+    <Compile Include="core\IChessEngineProcess.cs" />
     <Compile Include="core\UCIChessEngineCommands.cs" />
     <Compile Include="UI\AboutDialog.cs">
       <SubType>Form</SubType>

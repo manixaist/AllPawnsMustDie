@@ -271,7 +271,8 @@ namespace AllPawnsMustDie
                 chessGame?.Dispose();
 
                 // Now we have the engine path, so create an instance of the game class
-                chessGame = new ChessGame(this, fullPathToChessExe, reduceEngineStrength, Thread.CurrentThread.CurrentCulture);
+                ChessEngineProcessLoader loader = new ChessEngineProcessLoader();
+                chessGame = new ChessGame(this, fullPathToChessExe, loader, reduceEngineStrength, Thread.CurrentThread.CurrentCulture);
                 chessGame.OnChessGameSelfPlayGameOver += ChessGameSelfPlayGameOverEventHandler;
                 chessGame.OnChessGameNormalPlayGameOver += ChessGameNormalPlayGameOverEventHandler;
 

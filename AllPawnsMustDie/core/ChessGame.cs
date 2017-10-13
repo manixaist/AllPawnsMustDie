@@ -54,9 +54,10 @@ namespace AllPawnsMustDie
         /// </summary>
         /// <param name="clientForm">Windows Form the game will draw to</param>
         /// <param name="fullPathToEngine">Full path the chess engine exe</param>
+        /// <param name="engineLoader">object to load engine given path</param>
         /// <param name="reduceEngineStrength">true to make the engine weaker</param>
         /// <param name="cultureInfo">CultureInfo for main form</param>
-        public ChessGame(Form clientForm, string fullPathToEngine, bool reduceEngineStrength, CultureInfo cultureInfo)
+        public ChessGame(Form clientForm, string fullPathToEngine, IChessEngineProcessLoader engineLoader, bool reduceEngineStrength, CultureInfo cultureInfo)
         {
             // Save the form
             form = clientForm;
@@ -74,7 +75,7 @@ namespace AllPawnsMustDie
 
             // Create the board, the view, and the engine
             // Create new UCI engine object
-            engine = new UCIChessEngine();
+            engine = new UCIChessEngine(engineLoader);
             
             // Subscribe to events from the engine (commands and verbose)
             engine.OnChessEngineResponseReceived += ChessEngineResponseReceivedEventHandler;

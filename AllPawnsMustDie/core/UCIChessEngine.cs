@@ -68,8 +68,9 @@ namespace AllPawnsMustDie
         /// <summary>
         /// Create a new UCI engine object
         /// </summary>
-        public UCIChessEngine()
+        public UCIChessEngine(IChessEngineProcessLoader engineLoader)
         {
+            engineProcessLoader = engineLoader;
             initialFEN = null;
             queueThread = null;
             bestMove = String.Empty;
@@ -96,12 +97,12 @@ namespace AllPawnsMustDie
             if (!Disposed)
             {
                 // Stop listening to stdout of engine process
-                engineProcess.OutputDataReceived -= OnDataReceived;
+                engineProcess.OnDataReceived -= this.OnDataReceived;
                 // Send the UCI quit if we haven't
                 ((IChessEngine)this).Quit();
 
                 // Dispose of the process
-                engineProcess.Dispose();
+                ((IDisposable)engineProcess).Dispose();
                 disposed = true;
                 GC.SuppressFinalize(this);
 
@@ -244,9 +245,12 @@ namespace AllPawnsMustDie
                 throw new InvalidOperationException();
             }
 
+            // The IChessEngineProcessLoader implementation will do the actual load
+            // but we need to cache the path to the exe for it (and so we have it)
             fullPathToEngine = fullPathToExe;
 
-            // Create the worker thread the first time
+            // Create the worker thread the first time, at the start of this thread
+            // execution is the actual loading...finally but on a non-UI thread.
             if (queueThread == null)
             {
                 queueThread = new Thread(() => CommandQueueExecutionMethod());
@@ -302,8 +306,9 @@ namespace AllPawnsMustDie
         /// </summary>
         public void CommandQueueExecutionMethod()
         {
-            // Load the process
-            LoadEngineProcess();
+            // The loader and path are injected, so the UCIChessEngine object doesn't
+            // need to care how the interface was created/obtained/loaded from disk
+            engineProcess = engineProcessLoader.Start(fullPathToEngine, OnDataReceived);
 
             AutoResetEvent[] workerEvents = { newCommandAddedToQueue, shutdownCommandQueue };
             int waitResult = WaitHandle.WaitTimeout;
@@ -347,17 +352,17 @@ namespace AllPawnsMustDie
                         }
                     }
 
-                    if ((String.Compare(cep.Command, dummyCommand) != 0) && (engineProcess.StandardInput != null))
+                    if ((String.Compare(cep.Command, dummyCommand) != 0) && (engineProcess.InputStream != null))
                     {
                         // Found something - write it to the process, 
 
                         Debug.WriteLine(String.Concat("=>Engine: ", cep.Command));
-                        engineProcess.StandardInput.WriteLine(cep.Command);
+                        engineProcess.InputStream.WriteLine(cep.Command);
 
                         // If this is true, the above command has no response, and we'd wait here forever
                         if (cep.NeedsIsReadySync)
                         {
-                            StreamWriter writer = engineProcess.StandardInput;
+                            StreamWriter writer = engineProcess.InputStream;
                             UciIsReadyCommand isReadyCommand = new UciIsReadyCommand(ref writer);
                             isReadyCommand.Execute(this);
                         }
@@ -381,9 +386,9 @@ namespace AllPawnsMustDie
         {
             // Write directly to the stream. There is no response to this and the
             // engine will exit ASAP, so assume it's gone after this
-            if (engineProcess != null && !(Disposed))
+            if (engineProcess.InputStream != null && !(Disposed))
             {
-                engineProcess.StandardInput.WriteLine(UciQuit);
+                engineProcess.InputStream.WriteLine(UciQuit);
             }
         }
 
@@ -457,41 +462,6 @@ namespace AllPawnsMustDie
         }
         #endregion
 
-        #region Private Methods
-        private void LoadEngineProcess()
-        {
-            if (!processInited)
-            {
-                // Set process and startup variables
-                // and launch process
-                engineProcess = new Process();
-                engineProcess.EnableRaisingEvents = true;
-                engineProcess.StartInfo.CreateNoWindow = true;
-                engineProcess.StartInfo.RedirectStandardOutput = true;
-                engineProcess.StartInfo.RedirectStandardInput = true;
-                engineProcess.StartInfo.RedirectStandardError = true;
-                engineProcess.StartInfo.UseShellExecute = false;
-                engineProcess.StartInfo.FileName = fullPathToEngine;
-
-                // Subscribe to data arriving on the output stream
-                engineProcess.OutputDataReceived += OnDataReceived;
-
-                // Start the process up
-                if (!engineProcess.Start())
-                {
-                    // Bad path? Invalid exe file? For now just throw
-                    throw new ArgumentException();
-                }
-
-                // Start async read of that output stream.
-                engineProcess.BeginOutputReadLine();
-
-                // Now we're inited
-                processInited = true;
-            }
-        }
-        #endregion
-
         #region Public Properties
         /// <summary>
         /// Returns true if the object has already been disposed
@@ -539,7 +509,8 @@ namespace AllPawnsMustDie
         private string bestMove;
         private string fullPathToEngine;
         private string initialFEN;
-        private Process engineProcess;
+        private IChessEngineProcess engineProcess;
+        private IChessEngineProcessLoader engineProcessLoader;
         private Queue<CommandExecutionParameters> commandQueue;
         private AutoResetEvent newCommandAddedToQueue;
         private AutoResetEvent shutdownCommandQueue;
