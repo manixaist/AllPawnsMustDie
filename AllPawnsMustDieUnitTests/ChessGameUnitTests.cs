@@ -66,7 +66,6 @@ namespace AllPawnsMustDieUnitTests
                 // crash/compiles
                 Trace.WriteLine("Creating ChessGame object with mocks injected");
                 ChessGame chessGame = new ChessGame(
-                    null,       // Form (not used in the constructor, just saved)
                     mockView,   // View
                     mockPath,   // Path
                     mockLoader, // Loader

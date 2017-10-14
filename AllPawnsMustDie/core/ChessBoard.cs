@@ -730,6 +730,11 @@ namespace AllPawnsMustDie
         /// Returns the current board FEN (updated every move)
         /// </summary>
         public string CurrentFEN { get { return currentFEN; } }
+
+        /// <summary>
+        /// Sets the data for the text during engine thinking time
+        /// </summary>
+        public string ThinkingText { get { return thinkingText;} set { thinkingText = value;} }
         #endregion
 
         #region Private Properties
@@ -806,6 +811,7 @@ namespace AllPawnsMustDie
         private BoardSquare enPassantTarget;
         private string initialFEN;
         private string currentFEN;
+        private string thinkingText;
         #endregion
     }
 }

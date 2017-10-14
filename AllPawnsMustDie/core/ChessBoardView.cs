@@ -190,6 +190,10 @@ namespace AllPawnsMustDie
 
             // Render the move history - updates the text control
             DrawMoveHistory();
+
+            // Get the control name w're using to output verbose for now (it's a label)
+            Control verboseControl = viewForm.Controls[APMD_Form.EngineUpdateControlName];
+            verboseControl.Text = data.ThinkingText;
         }
 
         /// <summary>
@@ -271,6 +275,25 @@ namespace AllPawnsMustDie
         void IChessBoardView.ClearHiglightedSquares()
         {
             highlightedSquares.Clear();
+        }
+
+        /// <summary>
+        /// Tell the view it needs to redraw
+        /// </summary>
+        void IChessBoardView.Invalidate()
+        {
+            viewForm.Invalidate();
+        }
+
+        /// <summary>
+        /// Abstracts the UI of selecting a promotion type (e.g. Queen 99.999%)
+        /// </summary>
+        /// <returns>New PieceClass to promote to</returns>
+        PieceClass IChessBoardView.ChoosePromotionJob()
+        {
+            PromotionDialog pd = new PromotionDialog();
+            pd.ShowDialog(viewForm);
+            return pd.PromotionJob;
         }
         #endregion
 

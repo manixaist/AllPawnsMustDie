@@ -30,6 +30,8 @@ namespace AllPawnsMustDieUnitTests
 
         void IChessBoardView.HighlightSquare(PieceFile file, int rank) { }
         void IChessBoardView.HighlightSquares(ref List<BoardSquare> squares) { }
+        void IChessBoardView.Invalidate() { }
+        PieceClass IChessBoardView.ChoosePromotionJob() { return PieceClass.EnPassantTarget; }
         void IChessBoardView.ClearHiglightedSquares() { }
         ChessBoard IChessBoardView.ViewData { get { return null;} set { ; } }
         Point IChessBoardView.Offset { get { return new Point(0,0); } set { ; } }

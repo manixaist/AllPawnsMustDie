@@ -61,6 +61,17 @@ namespace AllPawnsMustDie
         /// Removes all squares marked for highlighting
         /// </summary>
         void ClearHiglightedSquares();
+
+        /// <summary>
+        /// Tell the view it needs to redraw
+        /// </summary>
+        void Invalidate();
+
+        /// <summary>
+        /// Abstracts the UI of selecting a promotion type (e.g. Queen 99.999%)
+        /// </summary>
+        /// <returns>New PieceClass to promote to</returns>
+        PieceClass ChoosePromotionJob();
         
         /// <summary>
         /// Property for the data that drives the view

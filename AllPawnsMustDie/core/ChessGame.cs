@@ -52,17 +52,14 @@ namespace AllPawnsMustDie
         /// <summary>
         /// Create a new ChessGame object
         /// </summary>
-        /// <param name="clientForm">Windows Form the game will draw to</param>
         /// <param name="engineView">IChessBoardView to use</param>
         /// <param name="fullPathToEngine">Full path the chess engine exe</param>
         /// <param name="engineLoader">object to load engine given path</param>
         /// <param name="reduceEngineStrength">true to make the engine weaker</param>
         /// <param name="cultureInfo">CultureInfo for main form</param>
-        public ChessGame(Form clientForm, IChessBoardView engineView, string fullPathToEngine, 
+        public ChessGame(IChessBoardView engineView, string fullPathToEngine, 
             IChessEngineProcessLoader engineLoader, bool reduceEngineStrength, CultureInfo cultureInfo)
         {
-            // Save the form
-            form = clientForm;
             // Save the view
             view = engineView;
 
@@ -269,7 +266,7 @@ namespace AllPawnsMustDie
             }
 
             // Redraw the form
-            form.Invalidate();
+            view.Invalidate();
         }
 
         /// <summary>
@@ -470,14 +467,13 @@ namespace AllPawnsMustDie
                     bool isPawnMovingToBackRank = (selectedPiece.Color == PieceColor.White) ? (moveInfo.End.Rank == 8) : (moveInfo.End.Rank == 1);
                     if ((selectedPiece.Job == PieceClass.Pawn) && isPawnMovingToBackRank)
                     {
-                        PromotionDialog pd = new PromotionDialog();
-                        pd.ShowDialog(form);
-                        board.PromotePiece(moveInfo.Start.File, moveInfo.Start.Rank, moveInfo.End.File, moveInfo.End.Rank, pd.PromotionJob, ref moveInfo);
+                        PieceClass promotionJob = view.ChoosePromotionJob();
+                        board.PromotePiece(moveInfo.Start.File, moveInfo.Start.Rank, moveInfo.End.File, moveInfo.End.Rank, promotionJob, ref moveInfo);
                     }
                     
                     // Always returns true now
                     board.MovePiece(ref moveInfo);
-                    form.Invalidate();
+                    view.Invalidate();
 
                     Debug.WriteLine(String.Format("Fullmoves: {0}", board.FullMoveCount));
                     Debug.WriteLine(String.Format("Halfmoves: {0}", board.HalfMoveCount));
@@ -545,7 +541,7 @@ namespace AllPawnsMustDie
                 board.MovePiece(ref moveInfo);
                 
                 // trigger a redraw
-                form.Invalidate();
+                view.Invalidate();
 
                 // Apply the move the engine just gave us with the engine (update it's own move)
                 UpdateEnginePosition();
@@ -669,9 +665,6 @@ namespace AllPawnsMustDie
                 Debug.WriteLine(String.Concat("<=Engine: ", e.Response));
             }
 
-            // Get the control name w're using to output verbose for now (it's a label)
-            Control verboseControl = form.Controls[APMD_Form.EngineUpdateControlName];
-
             // Build the progress text bar
             StringBuilder sb = new StringBuilder(": [");
             sb.Insert(0, ThinkingLocalized);
@@ -679,8 +672,8 @@ namespace AllPawnsMustDie
             sb.Append(']');
             // Replace the current spinning index to the marker character
             sb.Replace('\u25AB', '\u25AA', 11, thinkingIndex);
-            thinking = sb.ToString();
-
+            board.ThinkingText = sb.ToString();
+            
             // Wrap the progress counter index.  It moves between the '[' and ']' chars
             if (thinkingIndex < 75)
             {
@@ -689,22 +682,6 @@ namespace AllPawnsMustDie
             else
             {
                 thinkingIndex = 0;
-            }
-
-            // Check if we're on the UI thread, the answer is almostly certainly no
-            if (verboseControl.InvokeRequired)
-            {
-                // Invoke is synchronous - this will block this thread
-                verboseControl.Invoke((MethodInvoker)delegate
-                {
-                    // Running on the UI thread now, so this is safe
-                    verboseControl.Text = thinking;
-                });
-            }
-            else
-            {
-                // If for some reason we are on the UI thread, then we can just update it
-                verboseControl.Text = thinking;
             }
         }
 
@@ -799,7 +776,6 @@ namespace AllPawnsMustDie
         private ChessBoard board;
         private IChessBoardView view;
         private UCIChessEngine engine;
-        private Form form;
         private ChessPiece selectedPiece;
         private List<BoardSquare> legalMoves;
         private static int HalfMovesUntilDraw = 50;
