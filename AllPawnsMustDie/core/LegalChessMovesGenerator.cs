@@ -223,7 +223,14 @@ namespace AllPawnsMustDie
             return legalMoves;
         }
 
-        // Helper delegate to check targets (lambdas in each specific method)
+        /// <summary>
+        /// Helper delegate to check targets (lambdas in each specific method)
+        /// </summary>
+        /// <param name="p">ChessPiece to check</param>
+        /// <param name="fileOffset">file offset from piece</param>
+        /// <param name="rankOffset">rank offset from piece</param>
+        /// <param name="board">ChessBoard piece resides on</param>
+        /// <param name="validMoves">filled in with valid moves</param>
         public delegate void CheckPieceTargets(ChessPiece p, int fileOffset,
             int rankOffset, ChessBoard board, List<BoardSquare> validMoves);
 
