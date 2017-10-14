@@ -56,13 +56,6 @@ namespace AllPawnsMustDie
             stringFont = new Font(ChessFont, ChessFontSize);
 
             highlightedSquares = new List<BoardSquare>();
-
-            Control moveHistoryControl = viewForm.Controls[APMD_Form.MoveHistoryControlName];
-            moveHistoryControl.Invoke((MethodInvoker)delegate
-            {
-                // Running on the UI thread now, so this is safe
-                moveHistoryControl.Visible = true;
-            });
             moveCount = 0;
         }
 
@@ -84,7 +77,7 @@ namespace AllPawnsMustDie
                 stringFormat.Dispose();
                 stringFont.Dispose();
                 disposed = true;
-                chessPieceImageMap.Clear();
+                chessPieceImageMap?.Clear();
                 GC.SuppressFinalize(this);
             }
         }

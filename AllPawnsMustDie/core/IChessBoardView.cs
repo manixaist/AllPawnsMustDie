@@ -10,7 +10,7 @@ namespace AllPawnsMustDie
     /// <summary>
     /// Interface for drawing the chessboard
     /// </summary>
-    interface IChessBoardView
+    public interface IChessBoardView
     {
         /// <summary>
         /// Load piece images from a bitmap sheet.  This overrides the unicode
@@ -61,7 +61,7 @@ namespace AllPawnsMustDie
         /// Removes all squares marked for highlighting
         /// </summary>
         void ClearHiglightedSquares();
-
+        
         /// <summary>
         /// Property for the data that drives the view
         /// </summary>

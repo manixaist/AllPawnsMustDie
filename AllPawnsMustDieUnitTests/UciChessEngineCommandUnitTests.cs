@@ -42,7 +42,7 @@ namespace AllPawnsMustDieUnitTests
     /// Holds tests for the various UciChessEngineCommand objects
     /// </summary>
     [TestClass]
-    public class UciChessEngineCommandTests
+    public class UciChessEngineCommandUnitTests
     {
         /// <summary>
         /// Holds tests for the UciNewGameCommand object
@@ -160,8 +160,9 @@ namespace AllPawnsMustDieUnitTests
             public void ExecuteTest()
             {
                 // Mock stream in memory
-                MemoryStream stream = new MemoryStream();
+                MemoryStream stream = new MockStream();
                 StreamWriter writer = new StreamWriter(stream);
+                writer.AutoFlush = true;
 
                 // Create the mock engine
                 MockChessEngine engine = new MockChessEngine();
@@ -169,8 +170,6 @@ namespace AllPawnsMustDieUnitTests
                 UciIsReadyCommand command = new UciIsReadyCommand(ref writer);
                 // Execute against the mock
                 command.Execute(engine);
-                // Flush the writer so the data shows up in the underlying stream
-                writer.Flush();
 
                 // Now get that string back from the stream
                 stream.Position = 0;
@@ -182,8 +181,8 @@ namespace AllPawnsMustDieUnitTests
                 // The engine does not record the expected in this case so it
                 // should remain empty in the mock
                 Trace.WriteLine(String.Format("Verifying UciIsReadyCommand sends correct command to the engine..."));
-                Assert.AreEqual(streamString, UCIChessEngine.IsReady);
-                Assert.AreEqual(engine.ExpectedResponse, String.Empty);
+                Assert.AreEqual(UCIChessEngine.IsReady, streamString);
+                Assert.AreEqual(String.Empty, engine.ExpectedResponse);
             }
         }
 
@@ -258,74 +257,5 @@ namespace AllPawnsMustDieUnitTests
                 Assert.AreEqual(engine.ExpectedResponse, String.Empty);
             }
         }
-    }
-
-    /// <summary>
-    /// Test implementation to record the last commands send and the expected response
-    /// </summary>
-    internal class MockChessEngine : IChessEngine
-    {
-        /// <summary>
-        /// Initialize the mock object (clear the strings)
-        /// </summary>
-        public MockChessEngine()
-        {
-            CommandString = "";
-            ExpectedResponse = "";
-        }
-
-        // Nothing is done with these, but they are required by the interface
-        // Disable the warning that they are never used or assigned to since
-        // it is 100% intentional
-        #pragma warning disable CS0067
-        public event EventHandler<ChessEngineResponseReceivedEventArgs> OnChessEngineResponseReceived;
-        public event EventHandler<ChessEngineResponseReceivedEventArgs> OnChessEngineVerboseOutputReceived;
-        #pragma warning restore CS0067
-
-        /// <summary>
-        /// Record the path
-        /// </summary>
-        /// <param name="fullPathToExe">path send to us from the command object</param>
-        void IChessEngine.LoadEngineProcess(string fullPathToExe)
-        {
-            ExePath = fullPathToExe;
-        }
-
-        /// <summary>
-        /// NOT IMPLEMENTED
-        /// </summary>
-        void IChessEngine.Reset()
-        {
-            throw new NotImplementedException();
-        }
-
-        /// <summary>
-        /// Record the command sent, and the expected resonse byu whatever
-        /// command object invoked it
-        /// </summary>
-        /// <param name="commandString">command to send to UCI</param>
-        /// <param name="expectedResponse">response if any expected</param>
-        void IChessEngine.SendCommandAsync(string commandString, string expectedResponse)
-        {
-            CommandString = commandString;
-            ExpectedResponse = expectedResponse;
-        }
-
-        /// <summary>
-        /// NOT IMPLEMENTED
-        /// </summary>
-        void IChessEngine.Quit()
-        {
-            throw new NotImplementedException();
-        }
-
-        /// <summary>Command last sent to mock</summary>
-        public string CommandString;
-        
-        /// <summary>Expected response for last command sent to mock</summary>
-        public string ExpectedResponse;
-
-        /// <summary>Path sent to LoadEngine</summary>
-        public string ExePath;
     }
 }

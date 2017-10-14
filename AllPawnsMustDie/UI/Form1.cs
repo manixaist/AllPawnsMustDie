@@ -272,7 +272,7 @@ namespace AllPawnsMustDie
 
                 // Now we have the engine path, so create an instance of the game class
                 ChessEngineProcessLoader loader = new ChessEngineProcessLoader();
-                chessGame = new ChessGame(this, fullPathToChessExe, loader, reduceEngineStrength, Thread.CurrentThread.CurrentCulture);
+                chessGame = new ChessGame(this, view, fullPathToChessExe, loader, reduceEngineStrength, Thread.CurrentThread.CurrentCulture);
                 chessGame.OnChessGameSelfPlayGameOver += ChessGameSelfPlayGameOverEventHandler;
                 chessGame.OnChessGameNormalPlayGameOver += ChessGameNormalPlayGameOverEventHandler;
 
@@ -322,6 +322,7 @@ namespace AllPawnsMustDie
             }
             chessGame?.Quit(); // Quit any current game
             upTime.Stop();
+            ((IDisposable)view).Dispose();
         }
 
         /// <summary>
@@ -373,6 +374,14 @@ namespace AllPawnsMustDie
             optionsDialog.ShowDialog(this);
             reduceEngineStrength = optionsDialog.ReduceEngineStrength;
         }
+
+        private void APMD_Form_Load(object sender, EventArgs e)
+        {
+            // The form is only really needed at this point to get the move history
+            // Textbox control.  The view is Form based, so hiding it won't gain much
+            view = new ChessBoardView(this);
+            this.textBoxMoveHistory.Size = new Size(0, 0);
+        }
         #endregion
 
         #region Public Fields
@@ -394,6 +403,7 @@ namespace AllPawnsMustDie
         private int selfPlayThinkTime;
         private bool reduceEngineStrength;
         private Stopwatch upTime;
+        private ChessBoardView view;
         #endregion
     }
 }

@@ -53,14 +53,18 @@ namespace AllPawnsMustDie
         /// Create a new ChessGame object
         /// </summary>
         /// <param name="clientForm">Windows Form the game will draw to</param>
+        /// <param name="engineView">IChessBoardView to use</param>
         /// <param name="fullPathToEngine">Full path the chess engine exe</param>
         /// <param name="engineLoader">object to load engine given path</param>
         /// <param name="reduceEngineStrength">true to make the engine weaker</param>
         /// <param name="cultureInfo">CultureInfo for main form</param>
-        public ChessGame(Form clientForm, string fullPathToEngine, IChessEngineProcessLoader engineLoader, bool reduceEngineStrength, CultureInfo cultureInfo)
+        public ChessGame(Form clientForm, IChessBoardView engineView, string fullPathToEngine, 
+            IChessEngineProcessLoader engineLoader, bool reduceEngineStrength, CultureInfo cultureInfo)
         {
             // Save the form
             form = clientForm;
+            // Save the view
+            view = engineView;
 
             // Save culture for this thread
             currentCultureInfo = cultureInfo;
@@ -153,7 +157,6 @@ namespace AllPawnsMustDie
             {
                 engine.OnChessEngineResponseReceived -= ChessEngineResponseReceivedEventHandler;
                 engine.OnChessEngineVerboseOutputReceived -= ChessEngineVerboseOutputReceivedEventHandler;
-                ((IDisposable)view).Dispose();
                 engine.Dispose();
                 GC.SuppressFinalize(this);
                 disposed = true;
@@ -245,10 +248,9 @@ namespace AllPawnsMustDie
                 return;
             }
 
-            IChessBoardView viewInterface = ((IChessBoardView)view);
-
+            
             // Only clicks on the board mean anything right now, so get that rect
-            Rectangle boardViewRect = viewInterface.BoardRect;
+            Rectangle boardViewRect = view.BoardRect;
 
             // If the point sent to us is inside that rect, then deal with it
             // otherwise just ignore it
@@ -276,10 +278,7 @@ namespace AllPawnsMustDie
         /// <param name="g">Graphics object for the form</param>
         public void Render(Graphics g)
         {
-            if (view != null)
-            {
-                ((IChessBoardView)view).Render(g);
-            }
+            view?.Render(g);
         }
 
         /// <summary>
@@ -387,16 +386,15 @@ namespace AllPawnsMustDie
 
             // Create the board and view
             board = new ChessBoard();
-            view = new ChessBoardView(form);
 
             // Set the data for the view
-            ((IChessBoardView)view).ViewData = board;
+            view.ViewData = board;
 
             // Set the Offset for the view
-            ((IChessBoardView)view).Offset = new Point(25, 75);
+            view.Offset = new Point(25, 75);
 
             // Create and initialize the board and view
-            ((IChessBoardView)view).ViewData = board;
+            view.ViewData = board;
 
             // Set orientation for black players
             if (playerColor == PieceColor.Black)
@@ -405,7 +403,7 @@ namespace AllPawnsMustDie
             }
 
             // Override the unicode drawing with bmp images
-            ((IChessBoardView)view).SetBitmapImages(new Bitmap(Properties.Resources.chesspieces), new Size(64, 64));
+            view.SetBitmapImages(new Bitmap(Properties.Resources.chesspieces), new Size(64, 64));
         }
 
         /// <summary>
@@ -1451,7 +1449,7 @@ namespace AllPawnsMustDie
         private bool updatingPosition = false;
         private PieceColor playerColor;
         private ChessBoard board;
-        private ChessBoardView view;
+        private IChessBoardView view;
         private UCIChessEngine engine;
         private Form form;
         private ChessPiece selectedPiece;
