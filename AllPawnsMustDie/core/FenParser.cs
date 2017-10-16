@@ -141,7 +141,7 @@ namespace AllPawnsMustDie
         /// <param name="fen">Starting FEN</param>
         /// <param name="sanMove">move e.g. e2e4 or d7c8q</param>
         /// <returns>Updated FEN for new position</returns>
-        public static string ApplyMoveToFEN(String fen, string sanMove)
+        public static string ApplyMoveToFEN(string fen, string sanMove)
         {
             // Extract the original pieces of the FEN
             string[] fenTokens = TokenizeFEN(fen);
@@ -401,7 +401,7 @@ namespace AllPawnsMustDie
         /// <param name="fen">FEN input</param>
         /// <param name="rank">Rank to expand</param>
         /// <returns>Updated FEN</returns>
-        public static string ExpandRank(String fen, int rank)
+        public static string ExpandRank(string fen, int rank)
         {
             // First break FEN into its 6 parts
             string[] fenTokens = TokenizeFEN(fen);
@@ -446,7 +446,7 @@ namespace AllPawnsMustDie
         /// <param name="fen">FEN input</param>
         /// <param name="rank">Rank to collapse</param>
         /// <returns>Updated FEN</returns>
-        public static string CollapseRank(String fen, int rank)
+        public static string CollapseRank(string fen, int rank)
         {
             // First break FEN into its 6 parts
             string[] fenTokens = TokenizeFEN(fen);
@@ -505,7 +505,7 @@ namespace AllPawnsMustDie
         /// <param name="rank">Rank to insert [1-8]</param>
         /// <returns>Updated FEN string</returns>
         /// <remarks>Assumes target rank is already expaded</remarks>
-        public static string InsertPiece(String fen, char fenChar, int file, int rank)
+        public static string InsertPiece(string fen, char fenChar, int file, int rank)
         {
             // Assumes rank is exanded
             if ((file < 1) || (file > 8) || (rank < 1) || (rank > 8))
@@ -532,7 +532,7 @@ namespace AllPawnsMustDie
         /// <param name="fenChar">piece removed(e.g. 'q' or 'Q')</param>
         /// <returns>Updated FEN</returns>
         /// <remarks>Assumes target rank is already expaded</remarks>
-        public static string RemovePiece(String fen, int file, int rank, out char fenChar)
+        public static string RemovePiece(string fen, int file, int rank, out char fenChar)
         {
             fenChar = PieceAtBoardPosition(fen, file, rank);
 
@@ -555,7 +555,7 @@ namespace AllPawnsMustDie
         /// <param name="rank">[1-8]</param>
         /// <returns>The FEN char for the piece or '1' if no piece</returns>
         /// <remarks>Assumes target rank is already expaded</remarks>
-        public static char PieceAtBoardPosition(String fen, int file, int rank)
+        public static char PieceAtBoardPosition(string fen, int file, int rank)
         {
             // Assumes rank is exanded
             if ((file < 1) || (file > 8) || (rank < 1) || (rank > 8))
