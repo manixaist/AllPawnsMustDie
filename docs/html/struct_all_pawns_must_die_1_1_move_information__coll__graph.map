@@ -1,0 +1,4 @@
+<map id="AllPawnsMustDie.MoveInformation" name="AllPawnsMustDie.MoveInformation">
+<area shape="rect" id="node2" href="$struct_all_pawns_must_die_1_1_board_square.html" title="Wraps a board location " alt="" coords="5,5,208,32"/>
+<area shape="rect" id="node3" href="$class_all_pawns_must_die_1_1_chess_piece.html" title="Encapsulates a chess piece " alt="" coords="233,5,431,32"/>
+</map>

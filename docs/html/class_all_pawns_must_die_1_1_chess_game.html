@@ -106,9 +106,9 @@ Collaboration diagram for AllPawnsMustDie.ChessGame:</div>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr class="memitem:a57d532412a1eeb52643c38a3f0198fbe"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_all_pawns_must_die_1_1_chess_game.html#a57d532412a1eeb52643c38a3f0198fbe">ChessGame</a> (Form clientForm, string fullPathToEngine, bool reduceEngineStrength, CultureInfo cultureInfo)</td></tr>
-<tr class="memdesc:a57d532412a1eeb52643c38a3f0198fbe"><td class="mdescLeft">&#160;</td><td class="mdescRight">Create a new <a class="el" href="class_all_pawns_must_die_1_1_chess_game.html" title="ChessGame encapsulates a game &quot;session&quot;. It can either start from scratch or from a given starting po...">ChessGame</a> object  <a href="#a57d532412a1eeb52643c38a3f0198fbe">More...</a><br /></td></tr>
-<tr class="separator:a57d532412a1eeb52643c38a3f0198fbe"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af581d2e68aa898c16e374f86b74c5c20"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_all_pawns_must_die_1_1_chess_game.html#af581d2e68aa898c16e374f86b74c5c20">ChessGame</a> (<a class="el" href="interface_all_pawns_must_die_1_1_i_chess_board_view.html">IChessBoardView</a> engineView, string fullPathToEngine, <a class="el" href="interface_all_pawns_must_die_1_1_i_chess_engine_process_loader.html">IChessEngineProcessLoader</a> engineLoader, bool reduceEngineStrength, CultureInfo cultureInfo)</td></tr>
+<tr class="memdesc:af581d2e68aa898c16e374f86b74c5c20"><td class="mdescLeft">&#160;</td><td class="mdescRight">Create a new <a class="el" href="class_all_pawns_must_die_1_1_chess_game.html" title="ChessGame encapsulates a game &quot;session&quot;. It can either start from scratch or from a given starting po...">ChessGame</a> object  <a href="#af581d2e68aa898c16e374f86b74c5c20">More...</a><br /></td></tr>
+<tr class="separator:af581d2e68aa898c16e374f86b74c5c20"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a469a17541ea711dfde5331c01ec23302"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_all_pawns_must_die_1_1_chess_game.html#a469a17541ea711dfde5331c01ec23302">Dispose</a> ()</td></tr>
 <tr class="memdesc:a469a17541ea711dfde5331c01ec23302"><td class="mdescLeft">&#160;</td><td class="mdescRight">Dispose of disposable objects and unsubscribe from events  <a href="#a469a17541ea711dfde5331c01ec23302">More...</a><br /></td></tr>
 <tr class="separator:a469a17541ea711dfde5331c01ec23302"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -177,8 +177,8 @@ Events</h2></td></tr>
 <div class="textblock"><p><a class="el" href="class_all_pawns_must_die_1_1_chess_game.html" title="ChessGame encapsulates a game &quot;session&quot;. It can either start from scratch or from a given starting po...">ChessGame</a> encapsulates a game "session". It can either start from scratch or from a given starting position. It is responsible for tracking all aspects of the game. A non-exhasutive list: The board (owns the pieces, and moves, and more), time controls, all UI components like a move history or captured list, and of course the chess engine. </p>
 <p><a class="el" href="class_all_pawns_must_die_1_1_chess_game.html" title="ChessGame encapsulates a game &quot;session&quot;. It can either start from scratch or from a given starting po...">ChessGame</a> is also responsible for routing applicable events from the UI to the engine, like when a player clicks on a square. </p>
 </div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
-<a id="a57d532412a1eeb52643c38a3f0198fbe"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a57d532412a1eeb52643c38a3f0198fbe">&#9670;&nbsp;</a></span>ChessGame()</h2>
+<a id="af581d2e68aa898c16e374f86b74c5c20"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#af581d2e68aa898c16e374f86b74c5c20">&#9670;&nbsp;</a></span>ChessGame()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -186,14 +186,20 @@ Events</h2></td></tr>
         <tr>
           <td class="memname">AllPawnsMustDie.ChessGame.ChessGame </td>
           <td>(</td>
-          <td class="paramtype">Form&#160;</td>
-          <td class="paramname"><em>clientForm</em>, </td>
+          <td class="paramtype"><a class="el" href="interface_all_pawns_must_die_1_1_i_chess_board_view.html">IChessBoardView</a>&#160;</td>
+          <td class="paramname"><em>engineView</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
           <td class="paramtype">string&#160;</td>
           <td class="paramname"><em>fullPathToEngine</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="interface_all_pawns_must_die_1_1_i_chess_engine_process_loader.html">IChessEngineProcessLoader</a>&#160;</td>
+          <td class="paramname"><em>engineLoader</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
@@ -218,8 +224,9 @@ Events</h2></td></tr>
 <p>Create a new <a class="el" href="class_all_pawns_must_die_1_1_chess_game.html" title="ChessGame encapsulates a game &quot;session&quot;. It can either start from scratch or from a given starting po...">ChessGame</a> object </p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramname">clientForm</td><td>Windows Form the game will draw to</td></tr>
+    <tr><td class="paramname">engineView</td><td><a class="el" href="interface_all_pawns_must_die_1_1_i_chess_board_view.html" title="Interface for drawing the chessboard ">IChessBoardView</a> to use</td></tr>
     <tr><td class="paramname">fullPathToEngine</td><td>Full path the chess engine exe</td></tr>
+    <tr><td class="paramname">engineLoader</td><td>object to load engine given path</td></tr>
     <tr><td class="paramname">reduceEngineStrength</td><td>true to make the engine weaker</td></tr>
     <tr><td class="paramname">cultureInfo</td><td>CultureInfo for main form</td></tr>
   </table>

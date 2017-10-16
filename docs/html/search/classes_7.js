@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['moveinformation',['MoveInformation',['../struct_all_pawns_must_die_1_1_chess_board_1_1_move_information.html',1,'AllPawnsMustDie::ChessBoard']]]
+  ['legalchessmovesgenerator',['LegalChessMovesGenerator',['../class_all_pawns_must_die_1_1_legal_chess_moves_generator.html',1,'AllPawnsMustDie']]]
 ];

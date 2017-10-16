@@ -1,6 +1,6 @@
 var interface_all_pawns_must_die_1_1_i_chess_engine =
 [
-    [ "LoadEngine", "interface_all_pawns_must_die_1_1_i_chess_engine.html#a558e4ef6e54a908bf355f02fd0927805", null ],
+    [ "LoadEngineProcess", "interface_all_pawns_must_die_1_1_i_chess_engine.html#a248b50219f02a1157f3b00ea3d141693", null ],
     [ "Quit", "interface_all_pawns_must_die_1_1_i_chess_engine.html#a03aa87d7d3e6e624a60107a810f9412a", null ],
     [ "Reset", "interface_all_pawns_must_die_1_1_i_chess_engine.html#acef09e68c82a163d083ce02d619855f6", null ],
     [ "SendCommandAsync", "interface_all_pawns_must_die_1_1_i_chess_engine.html#a4b77bfc7413e12ad0dfb87dde42850ac", null ],

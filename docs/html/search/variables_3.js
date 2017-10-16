@@ -1,5 +1,5 @@
 var searchData=
 [
-  ['movehistorycontrolname',['MoveHistoryControlName',['../class_all_pawns_must_die_1_1_a_p_m_d___form.html#ae1fd65fac7ace9eb3e1620cca43107a2',1,'AllPawnsMustDie::APMD_Form']]],
-  ['movehistorywidthinpixels',['MoveHistoryWidthInPixels',['../class_all_pawns_must_die_1_1_chess_board_view.html#ab5fe1f2c677f6f91ae625974e3644a51',1,'AllPawnsMustDie::ChessBoardView']]]
+  ['initialfenposition',['InitialFENPosition',['../class_all_pawns_must_die_1_1_chess_board.html#aaa98ff1cd82c6660404c7cefee84d142',1,'AllPawnsMustDie::ChessBoard']]],
+  ['isready',['IsReady',['../class_all_pawns_must_die_1_1_u_c_i_chess_engine.html#a829eefd820a34c2fca5c9d3e07b1264c',1,'AllPawnsMustDie::UCIChessEngine']]]
 ];

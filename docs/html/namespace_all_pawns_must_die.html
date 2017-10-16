@@ -100,11 +100,20 @@ Classes</h2></td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_all_pawns_must_die_1_1_a_p_m_d___form.html">APMD_Form</a></td></tr>
 <tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">This is the main Window (Form) for the Application. A minimal amount of work should be done here, routing most UI events to a subclass to deal with. This is (or runs on) the UI thread, so no blocking work.  <a href="class_all_pawns_must_die_1_1_a_p_m_d___form.html#details">More...</a><br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct_all_pawns_must_die_1_1_board_square.html">BoardSquare</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Wraps a board location  <a href="struct_all_pawns_must_die_1_1_board_square.html#details">More...</a><br /></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_all_pawns_must_die_1_1_chess_board.html">ChessBoard</a></td></tr>
 <tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Encapsulates a chess board. The board owns the pieces and the history  <a href="class_all_pawns_must_die_1_1_chess_board.html#details">More...</a><br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_all_pawns_must_die_1_1_chess_board_view.html">ChessBoardView</a></td></tr>
 <tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Encapsulates the view for the chess board. This is the drawing code  <a href="class_all_pawns_must_die_1_1_chess_board_view.html#details">More...</a><br /></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_all_pawns_must_die_1_1_chess_engine_process_container.html">ChessEngineProcessContainer</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Wrapper for the raw process executable  <a href="class_all_pawns_must_die_1_1_chess_engine_process_container.html#details">More...</a><br /></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_all_pawns_must_die_1_1_chess_engine_process_loader.html">ChessEngineProcessLoader</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">The <a class="el" href="class_all_pawns_must_die_1_1_chess_engine_process_loader.html" title="The ChessEngineProcessLoader object is responsible for the actual loading of the chess engine process...">ChessEngineProcessLoader</a> object is responsible for the actual loading of the chess engine process. This decouples knowledge of the Process from the <a class="el" href="class_all_pawns_must_die_1_1_u_c_i_chess_engine.html" title="Encapsulates a UCI protocol chess engine ">UCIChessEngine</a> object, and distills it down to the basics needed; e.g the data event and the input stream  <a href="class_all_pawns_must_die_1_1_chess_engine_process_loader.html#details">More...</a><br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_all_pawns_must_die_1_1_chess_engine_response_received_event_args.html">ChessEngineResponseReceivedEventArgs</a></td></tr>
 <tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">EventArgs for the engine response (external process response)  <a href="class_all_pawns_must_die_1_1_chess_engine_response_received_event_args.html#details">More...</a><br /></td></tr>
@@ -130,6 +139,18 @@ Classes</h2></td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">interface &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="interface_all_pawns_must_die_1_1_i_chess_engine.html">IChessEngine</a></td></tr>
 <tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Generic interface for the chess engine (external process). At a bare minumum, we need to be able to send a command and wait for a response  <a href="interface_all_pawns_must_die_1_1_i_chess_engine.html#details">More...</a><br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">interface &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="interface_all_pawns_must_die_1_1_i_chess_engine_process.html">IChessEngineProcess</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight"><a class="el" href="interface_all_pawns_must_die_1_1_i_chess_engine_process.html" title="IChessEngineProcess is the minimal set of functionality to wrap the binary process for the engine...">IChessEngineProcess</a> is the minimal set of functionality to wrap the binary process for the engine.  <a href="interface_all_pawns_must_die_1_1_i_chess_engine_process.html#details">More...</a><br /></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">interface &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="interface_all_pawns_must_die_1_1_i_chess_engine_process_loader.html">IChessEngineProcessLoader</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Interface to abstract loading of the actual process  <a href="interface_all_pawns_must_die_1_1_i_chess_engine_process_loader.html#details">More...</a><br /></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_all_pawns_must_die_1_1_legal_chess_moves_generator.html">LegalChessMovesGenerator</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Static helpers to generate legal moves for chess pieces  <a href="class_all_pawns_must_die_1_1_legal_chess_moves_generator.html#details">More...</a><br /></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct_all_pawns_must_die_1_1_move_information.html">MoveInformation</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Holds more detailed information on a single move for the GUI.  <a href="struct_all_pawns_must_die_1_1_move_information.html#details">More...</a><br /></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_all_pawns_must_die_1_1_new_game_dialog.html">NewGameDialog</a></td></tr>
 <tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">New game dialog class. This is the Form UI  <a href="class_all_pawns_must_die_1_1_new_game_dialog.html#details">More...</a><br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -149,6 +170,30 @@ Classes</h2></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_all_pawns_must_die_1_1_u_c_i_chess_engine.html">UCIChessEngine</a></td></tr>
 <tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Encapsulates a UCI protocol chess engine  <a href="class_all_pawns_must_die_1_1_u_c_i_chess_engine.html#details">More...</a><br /></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_all_pawns_must_die_1_1_uci_chess_engine_command.html">UciChessEngineCommand</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Base command object for the UciEngine, all commands derive from this  <a href="class_all_pawns_must_die_1_1_uci_chess_engine_command.html#details">More...</a><br /></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_all_pawns_must_die_1_1_uci_go_command.html">UciGoCommand</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Start analyzing the current position for the best move. Only take moveTimeInMilliseconds to make up your mind.  <a href="class_all_pawns_must_die_1_1_uci_go_command.html#details">More...</a><br /></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_all_pawns_must_die_1_1_uci_init_command.html">UciInitCommand</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">This command will initialize the UCI protocol. It should be issued once at the start of the process initialization before other commands are sent (with the exception of <a class="el" href="class_all_pawns_must_die_1_1_uci_load_engine_command.html" title="Not a UCI protocol command, but the client issued command to load the process that implements the UCI...">UciLoadEngineCommand</a> which loads the actual process)  <a href="class_all_pawns_must_die_1_1_uci_init_command.html#details">More...</a><br /></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_all_pawns_must_die_1_1_uci_is_ready_command.html">UciIsReadyCommand</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">This command is really meant for internal use by the engine and should not be called by others. The caller needs the underlying process input stream to use the command, and only the engine has it.  <a href="class_all_pawns_must_die_1_1_uci_is_ready_command.html#details">More...</a><br /></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_all_pawns_must_die_1_1_uci_load_engine_command.html">UciLoadEngineCommand</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Not a UCI protocol command, but the client issued command to load the process that implements the UCI protocol for use  <a href="class_all_pawns_must_die_1_1_uci_load_engine_command.html#details">More...</a><br /></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_all_pawns_must_die_1_1_uci_new_game_command.html">UciNewGameCommand</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Wraps a "new game" with the engine and resets the board to its initial state  <a href="class_all_pawns_must_die_1_1_uci_new_game_command.html#details">More...</a><br /></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_all_pawns_must_die_1_1_uci_position_command.html">UciPositionCommand</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Tells the engine to set a new position with the board based on a FEN  <a href="class_all_pawns_must_die_1_1_uci_position_command.html#details">More...</a><br /></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_all_pawns_must_die_1_1_uci_set_option_command.html">UciSetOptionCommand</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Wraps a 'setoption' UCI command with required name and optional value field(s)  <a href="class_all_pawns_must_die_1_1_uci_set_option_command.html#details">More...</a><br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="enum-members"></a>

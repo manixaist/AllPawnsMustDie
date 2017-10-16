@@ -2,15 +2,20 @@ var searchData=
 [
   ['ichessboardview',['IChessBoardView',['../interface_all_pawns_must_die_1_1_i_chess_board_view.html',1,'AllPawnsMustDie']]],
   ['ichessengine',['IChessEngine',['../interface_all_pawns_must_die_1_1_i_chess_engine.html',1,'AllPawnsMustDie']]],
+  ['ichessengineprocess',['IChessEngineProcess',['../interface_all_pawns_must_die_1_1_i_chess_engine_process.html',1,'AllPawnsMustDie']]],
+  ['ichessengineprocessloader',['IChessEngineProcessLoader',['../interface_all_pawns_must_die_1_1_i_chess_engine_process_loader.html',1,'AllPawnsMustDie']]],
   ['info',['Info',['../class_all_pawns_must_die_1_1_new_game_dialog.html#acb204c9694b0553589a3f46f2f228cc3',1,'AllPawnsMustDie::NewGameDialog']]],
   ['initialfen',['InitialFEN',['../class_all_pawns_must_die_1_1_chess_board.html#ab4a5d447c46cd163f00ed41378e5418e',1,'AllPawnsMustDie::ChessBoard']]],
   ['initialfenposition',['InitialFENPosition',['../class_all_pawns_must_die_1_1_chess_board.html#aaa98ff1cd82c6660404c7cefee84d142',1,'AllPawnsMustDie::ChessBoard']]],
-  ['insertpiece',['InsertPiece',['../class_all_pawns_must_die_1_1_fen_parser.html#a0741a6209f10ec505a577a22f90d0f6e',1,'AllPawnsMustDie::FenParser']]],
+  ['initializeuciprotocol',['InitializeUciProtocol',['../class_all_pawns_must_die_1_1_u_c_i_chess_engine.html#a4e2b0c404015060c4fc86f4325e6b76c',1,'AllPawnsMustDie::UCIChessEngine']]],
+  ['inputstream',['InputStream',['../interface_all_pawns_must_die_1_1_i_chess_engine_process.html#a93649940b9a33fea2b05de1c0a3d5d7f',1,'AllPawnsMustDie::IChessEngineProcess']]],
+  ['insertpiece',['InsertPiece',['../class_all_pawns_must_die_1_1_fen_parser.html#a317a1e6959594da1e4e09d5689b27dd4',1,'AllPawnsMustDie::FenParser']]],
   ['invalidate',['Invalidate',['../interface_all_pawns_must_die_1_1_i_chess_board_view.html#aa5971cc3d54aa25e00aba06410a24e8e',1,'AllPawnsMustDie::IChessBoardView']]],
-  ['iscapture',['IsCapture',['../struct_all_pawns_must_die_1_1_chess_board_1_1_move_information.html#a83c3141bf4063d687a55a9e38867c220',1,'AllPawnsMustDie::ChessBoard::MoveInformation']]],
-  ['iscastle',['IsCastle',['../struct_all_pawns_must_die_1_1_chess_board_1_1_move_information.html#a30f3a43236f78fb96e980e255ae01912',1,'AllPawnsMustDie::ChessBoard::MoveInformation']]],
+  ['iscapture',['IsCapture',['../struct_all_pawns_must_die_1_1_move_information.html#a5521a9385266fd378a8d52cc224d3909',1,'AllPawnsMustDie::MoveInformation']]],
+  ['iscastle',['IsCastle',['../struct_all_pawns_must_die_1_1_move_information.html#a0a6534c068bea64a5d1c1714ec6e3820',1,'AllPawnsMustDie::MoveInformation']]],
   ['isonbackrank',['IsOnBackRank',['../class_all_pawns_must_die_1_1_chess_piece.html#a75f15ca14a884c55231fb4903fae82fa',1,'AllPawnsMustDie::ChessPiece']]],
-  ['ispromotion',['IsPromotion',['../struct_all_pawns_must_die_1_1_chess_board_1_1_move_information.html#a7711a9fcee59704468f165f91ff09c1d',1,'AllPawnsMustDie::ChessBoard::MoveInformation']]],
+  ['ispromotion',['IsPromotion',['../struct_all_pawns_must_die_1_1_move_information.html#a0679c200dcb15ccd9b35bff5df6e55e8',1,'AllPawnsMustDie::MoveInformation']]],
   ['isready',['IsReady',['../class_all_pawns_must_die_1_1_u_c_i_chess_engine.html#a829eefd820a34c2fca5c9d3e07b1264c',1,'AllPawnsMustDie::UCIChessEngine']]],
-  ['isvalid',['IsValid',['../struct_all_pawns_must_die_1_1_chess_board_1_1_board_square.html#af556ca55b0844e24b8804448b0e92383',1,'AllPawnsMustDie::ChessBoard::BoardSquare']]]
+  ['issquareincheck',['IsSquareInCheck',['../class_all_pawns_must_die_1_1_legal_chess_moves_generator.html#ae9df753d083958d5c2bbd0d601612342',1,'AllPawnsMustDie::LegalChessMovesGenerator']]],
+  ['isvalid',['IsValid',['../struct_all_pawns_must_die_1_1_board_square.html#a62f44f9e351125b5b8d0bd3a8e1bdbda',1,'AllPawnsMustDie::BoardSquare']]]
 ];

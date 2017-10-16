@@ -113,9 +113,9 @@ Collaboration diagram for AllPawnsMustDie.UCIChessEngine:</div>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr class="memitem:a3a2e59420a8c2a1dac3ce69264ac2994"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_all_pawns_must_die_1_1_u_c_i_chess_engine.html#a3a2e59420a8c2a1dac3ce69264ac2994">UCIChessEngine</a> ()</td></tr>
-<tr class="memdesc:a3a2e59420a8c2a1dac3ce69264ac2994"><td class="mdescLeft">&#160;</td><td class="mdescRight">Create a new UCI engine object  <a href="#a3a2e59420a8c2a1dac3ce69264ac2994">More...</a><br /></td></tr>
-<tr class="separator:a3a2e59420a8c2a1dac3ce69264ac2994"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad3269eafb6ce5728c25c9e289da2c002"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_all_pawns_must_die_1_1_u_c_i_chess_engine.html#ad3269eafb6ce5728c25c9e289da2c002">UCIChessEngine</a> (<a class="el" href="interface_all_pawns_must_die_1_1_i_chess_engine_process_loader.html">IChessEngineProcessLoader</a> engineLoader)</td></tr>
+<tr class="memdesc:ad3269eafb6ce5728c25c9e289da2c002"><td class="mdescLeft">&#160;</td><td class="mdescRight">Create a new UCI engine object  <a href="#ad3269eafb6ce5728c25c9e289da2c002">More...</a><br /></td></tr>
+<tr class="separator:ad3269eafb6ce5728c25c9e289da2c002"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ae6bb9aa379776cb857d240ff01a6752f"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_all_pawns_must_die_1_1_u_c_i_chess_engine.html#ae6bb9aa379776cb857d240ff01a6752f">Dispose</a> ()</td></tr>
 <tr class="memdesc:ae6bb9aa379776cb857d240ff01a6752f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Dispose of disposable objects  <a href="#ae6bb9aa379776cb857d240ff01a6752f">More...</a><br /></td></tr>
 <tr class="separator:ae6bb9aa379776cb857d240ff01a6752f"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -131,6 +131,27 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a56c7551073f011c103a93ac99060b928"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_all_pawns_must_die_1_1_u_c_i_chess_engine.html#a56c7551073f011c103a93ac99060b928">CommandQueueExecutionMethod</a> ()</td></tr>
 <tr class="memdesc:a56c7551073f011c103a93ac99060b928"><td class="mdescLeft">&#160;</td><td class="mdescRight">Worker Thread Method responsible for processing commands to the chess engine. When first launched, the thread will attempt to launch the engine process, then enter a wait state until work is sent (added to the queue).  <a href="#a56c7551073f011c103a93ac99060b928">More...</a><br /></td></tr>
 <tr class="separator:a56c7551073f011c103a93ac99060b928"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a4e2b0c404015060c4fc86f4325e6b76c"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_all_pawns_must_die_1_1_u_c_i_chess_engine.html#a4e2b0c404015060c4fc86f4325e6b76c">InitializeUciProtocol</a> ()</td></tr>
+<tr class="memdesc:a4e2b0c404015060c4fc86f4325e6b76c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Start the UCI session with the engine. This is required before all other commands will function  <a href="#a4e2b0c404015060c4fc86f4325e6b76c">More...</a><br /></td></tr>
+<tr class="separator:a4e2b0c404015060c4fc86f4325e6b76c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aecd938f283892b4e085384462adf7bf9"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_all_pawns_must_die_1_1_u_c_i_chess_engine.html#aecd938f283892b4e085384462adf7bf9">QuitEngine</a> ()</td></tr>
+<tr class="memdesc:aecd938f283892b4e085384462adf7bf9"><td class="mdescLeft">&#160;</td><td class="mdescRight">Calls the underlying Quit implementation  <a href="#aecd938f283892b4e085384462adf7bf9">More...</a><br /></td></tr>
+<tr class="separator:aecd938f283892b4e085384462adf7bf9"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a3fb0e17cbd454c6178a9f85fabc7da75"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_all_pawns_must_die_1_1_u_c_i_chess_engine.html#a3fb0e17cbd454c6178a9f85fabc7da75">SetPosition</a> (string positionAsFEN)</td></tr>
+<tr class="memdesc:a3fb0e17cbd454c6178a9f85fabc7da75"><td class="mdescLeft">&#160;</td><td class="mdescRight">Sets a new position with the chess engine  <a href="#a3fb0e17cbd454c6178a9f85fabc7da75">More...</a><br /></td></tr>
+<tr class="separator:a3fb0e17cbd454c6178a9f85fabc7da75"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a7d72a47c128c748afa2d022839ae795f"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_all_pawns_must_die_1_1_u_c_i_chess_engine.html#a7d72a47c128c748afa2d022839ae795f">ResetBoard</a> ()</td></tr>
+<tr class="memdesc:a7d72a47c128c748afa2d022839ae795f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Wraps the internal reset state. This will either reset to a standard starting position, or the initial position provided  <a href="#a7d72a47c128c748afa2d022839ae795f">More...</a><br /></td></tr>
+<tr class="separator:a7d72a47c128c748afa2d022839ae795f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a57272e636b59b80a20863d5727ed1bdc"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_all_pawns_must_die_1_1_u_c_i_chess_engine.html#a57272e636b59b80a20863d5727ed1bdc">GetMoveForCurrentPosition</a> (string timeInMilliseconds)</td></tr>
+<tr class="memdesc:a57272e636b59b80a20863d5727ed1bdc"><td class="mdescLeft">&#160;</td><td class="mdescRight">Start analyzing the current position for the best move  <a href="#a57272e636b59b80a20863d5727ed1bdc">More...</a><br /></td></tr>
+<tr class="separator:a57272e636b59b80a20863d5727ed1bdc"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a4dcc1dc088ea89b19436ab058b1f71db"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_all_pawns_must_die_1_1_u_c_i_chess_engine.html#a4dcc1dc088ea89b19436ab058b1f71db">SetOption</a> (string optionName, string optionValue=null)</td></tr>
+<tr class="memdesc:a4dcc1dc088ea89b19436ab058b1f71db"><td class="mdescLeft">&#160;</td><td class="mdescRight">Sets a given option name with a value (if provided)  <a href="#a4dcc1dc088ea89b19436ab058b1f71db">More...</a><br /></td></tr>
+<tr class="separator:a4dcc1dc088ea89b19436ab058b1f71db"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aad494e93f28a149aaac8fc2bb2f584ef"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_all_pawns_must_die_1_1_u_c_i_chess_engine.html#aad494e93f28a149aaac8fc2bb2f584ef">LoadEngine</a> (string pathToEngine)</td></tr>
+<tr class="memdesc:aad494e93f28a149aaac8fc2bb2f584ef"><td class="mdescLeft">&#160;</td><td class="mdescRight">Loads the engine process  <a href="#aad494e93f28a149aaac8fc2bb2f584ef">More...</a><br /></td></tr>
+<tr class="separator:aad494e93f28a149aaac8fc2bb2f584ef"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-static-attribs"></a>
 Static Public Attributes</h2></td></tr>
@@ -187,8 +208,8 @@ Events</h2></td></tr>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>Encapsulates a UCI protocol chess engine </p>
 </div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
-<a id="a3a2e59420a8c2a1dac3ce69264ac2994"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a3a2e59420a8c2a1dac3ce69264ac2994">&#9670;&nbsp;</a></span>UCIChessEngine()</h2>
+<a id="ad3269eafb6ce5728c25c9e289da2c002"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ad3269eafb6ce5728c25c9e289da2c002">&#9670;&nbsp;</a></span>UCIChessEngine()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -196,7 +217,8 @@ Events</h2></td></tr>
         <tr>
           <td class="memname">AllPawnsMustDie.UCIChessEngine.UCIChessEngine </td>
           <td>(</td>
-          <td class="paramname"></td><td>)</td>
+          <td class="paramtype"><a class="el" href="interface_all_pawns_must_die_1_1_i_chess_engine_process_loader.html">IChessEngineProcessLoader</a>&#160;</td>
+          <td class="paramname"><em>engineLoader</em></td><td>)</td>
           <td></td>
         </tr>
       </table>
@@ -248,6 +270,77 @@ Events</h2></td></tr>
 
 </div>
 </div>
+<a id="a57272e636b59b80a20863d5727ed1bdc"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a57272e636b59b80a20863d5727ed1bdc">&#9670;&nbsp;</a></span>GetMoveForCurrentPosition()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void AllPawnsMustDie.UCIChessEngine.GetMoveForCurrentPosition </td>
+          <td>(</td>
+          <td class="paramtype">string&#160;</td>
+          <td class="paramname"><em>timeInMilliseconds</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Start analyzing the current position for the best move </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">timeInMilliseconds</td><td>Time in milliseconds to think at a maximum as a string, e.g. "2000" is 2 seconds</td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="a4e2b0c404015060c4fc86f4325e6b76c"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a4e2b0c404015060c4fc86f4325e6b76c">&#9670;&nbsp;</a></span>InitializeUciProtocol()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void AllPawnsMustDie.UCIChessEngine.InitializeUciProtocol </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Start the UCI session with the engine. This is required before all other commands will function </p>
+
+</div>
+</div>
+<a id="aad494e93f28a149aaac8fc2bb2f584ef"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aad494e93f28a149aaac8fc2bb2f584ef">&#9670;&nbsp;</a></span>LoadEngine()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void AllPawnsMustDie.UCIChessEngine.LoadEngine </td>
+          <td>(</td>
+          <td class="paramtype">string&#160;</td>
+          <td class="paramname"><em>pathToEngine</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Loads the engine process </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">pathToEngine</td><td>Path to the engine process</td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
 <a id="adf51de252519667702ea823b47508b52"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#adf51de252519667702ea823b47508b52">&#9670;&nbsp;</a></span>OnDataReceived()</h2>
 
@@ -282,6 +375,44 @@ Events</h2></td></tr>
   </table>
   </dd>
 </dl>
+
+</div>
+</div>
+<a id="aecd938f283892b4e085384462adf7bf9"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aecd938f283892b4e085384462adf7bf9">&#9670;&nbsp;</a></span>QuitEngine()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void AllPawnsMustDie.UCIChessEngine.QuitEngine </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Calls the underlying Quit implementation </p>
+
+</div>
+</div>
+<a id="a7d72a47c128c748afa2d022839ae795f"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a7d72a47c128c748afa2d022839ae795f">&#9670;&nbsp;</a></span>ResetBoard()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void AllPawnsMustDie.UCIChessEngine.ResetBoard </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Wraps the internal reset state. This will either reset to a standard starting position, or the initial position provided </p>
 
 </div>
 </div>
@@ -331,6 +462,69 @@ Events</h2></td></tr>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">s</td><td>String to send</td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="a4dcc1dc088ea89b19436ab058b1f71db"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a4dcc1dc088ea89b19436ab058b1f71db">&#9670;&nbsp;</a></span>SetOption()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void AllPawnsMustDie.UCIChessEngine.SetOption </td>
+          <td>(</td>
+          <td class="paramtype">string&#160;</td>
+          <td class="paramname"><em>optionName</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">string&#160;</td>
+          <td class="paramname"><em>optionValue</em> = <code>null</code>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Sets a given option name with a value (if provided) </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">optionName</td><td>engine dependent option name</td></tr>
+    <tr><td class="paramname">optionValue</td><td>option dependent value</td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="a3fb0e17cbd454c6178a9f85fabc7da75"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a3fb0e17cbd454c6178a9f85fabc7da75">&#9670;&nbsp;</a></span>SetPosition()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void AllPawnsMustDie.UCIChessEngine.SetPosition </td>
+          <td>(</td>
+          <td class="paramtype">string&#160;</td>
+          <td class="paramname"><em>positionAsFEN</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Sets a new position with the chess engine </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">positionAsFEN</td><td>FEN for the new position</td></tr>
   </table>
   </dd>
 </dl>

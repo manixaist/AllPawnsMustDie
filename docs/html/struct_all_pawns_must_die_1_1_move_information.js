@@ -1,0 +1,27 @@
+var struct_all_pawns_must_die_1_1_move_information =
+[
+    [ "MoveInformation", "struct_all_pawns_must_die_1_1_move_information.html#a82e9476f5b4d328f44b52e7b65444758", null ],
+    [ "ToString", "struct_all_pawns_must_die_1_1_move_information.html#a8cae35f24ee319594d402abcdd83583f", null ],
+    [ "ancillaryPiece", "struct_all_pawns_must_die_1_1_move_information.html#a1425fe95ede7f7758e75c78146b70c9c", null ],
+    [ "castlingRights", "struct_all_pawns_must_die_1_1_move_information.html#a82bb5060c8300a5121ded2f13b706461", null ],
+    [ "color", "struct_all_pawns_must_die_1_1_move_information.html#aebded8ff3ae19f51a1edfcc12c89661e", null ],
+    [ "endSquare", "struct_all_pawns_must_die_1_1_move_information.html#a5906636aff229e2ce2fdb2fae66d65b9", null ],
+    [ "firstMove", "struct_all_pawns_must_die_1_1_move_information.html#a59a9f35aca4f3eb6f29b4ef8de884386", null ],
+    [ "isCapture", "struct_all_pawns_must_die_1_1_move_information.html#a38ad3ef64ccae90efa9660d34ef51637", null ],
+    [ "isCastle", "struct_all_pawns_must_die_1_1_move_information.html#aa85470d050f8364ac593ca31db765bc7", null ],
+    [ "prevFEN", "struct_all_pawns_must_die_1_1_move_information.html#ad8d1aaab334f347aaaf0f3df84fda2e9", null ],
+    [ "promotionClass", "struct_all_pawns_must_die_1_1_move_information.html#ab87784d40151bc81c9bf895e315d5103", null ],
+    [ "startSquare", "struct_all_pawns_must_die_1_1_move_information.html#aa57885126c5ba0c09b87e51c2b6c6b5d", null ],
+    [ "CapturedPiece", "struct_all_pawns_must_die_1_1_move_information.html#ab63eb89cdf8e6c459539e00e4e2158a4", null ],
+    [ "CastlingRights", "struct_all_pawns_must_die_1_1_move_information.html#acacf1b92e87a82560ebcb7dff66ef3f5", null ],
+    [ "CastlingRook", "struct_all_pawns_must_die_1_1_move_information.html#a2e7931c722fe378d88e8b80eb82a368f", null ],
+    [ "Color", "struct_all_pawns_must_die_1_1_move_information.html#ad9bc2bb6b9195f0f2adbf699a7e5008a", null ],
+    [ "End", "struct_all_pawns_must_die_1_1_move_information.html#a7a945b4444238183dca5983d536a3968", null ],
+    [ "FirstMove", "struct_all_pawns_must_die_1_1_move_information.html#aee6aba01dcf8160267184c4371ac0fd1", null ],
+    [ "IsCapture", "struct_all_pawns_must_die_1_1_move_information.html#a5521a9385266fd378a8d52cc224d3909", null ],
+    [ "IsCastle", "struct_all_pawns_must_die_1_1_move_information.html#a0a6534c068bea64a5d1c1714ec6e3820", null ],
+    [ "IsPromotion", "struct_all_pawns_must_die_1_1_move_information.html#a0679c200dcb15ccd9b35bff5df6e55e8", null ],
+    [ "PreviousFEN", "struct_all_pawns_must_die_1_1_move_information.html#aa2899cf7bade15ee6171ccffb3bba4c0", null ],
+    [ "PromotionJob", "struct_all_pawns_must_die_1_1_move_information.html#aef6845567efdeb39d063b0da75a76fd6", null ],
+    [ "Start", "struct_all_pawns_must_die_1_1_move_information.html#abd606ea192ba7547ac4f3d51f79f9455", null ]
+];

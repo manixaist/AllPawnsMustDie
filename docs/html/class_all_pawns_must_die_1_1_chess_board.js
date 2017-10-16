@@ -1,7 +1,5 @@
 var class_all_pawns_must_die_1_1_chess_board =
 [
-    [ "BoardSquare", "struct_all_pawns_must_die_1_1_chess_board_1_1_board_square.html", "struct_all_pawns_must_die_1_1_chess_board_1_1_board_square" ],
-    [ "MoveInformation", "struct_all_pawns_must_die_1_1_chess_board_1_1_move_information.html", "struct_all_pawns_must_die_1_1_chess_board_1_1_move_information" ],
     [ "ChessBoard", "class_all_pawns_must_die_1_1_chess_board.html#a72312e66ab6c5ee7f637a1ae4d3ee421", null ],
     [ "CanPlayerCastle", "class_all_pawns_must_die_1_1_chess_board.html#ae5ce81081d372a95849e6824316dee9c", null ],
     [ "FindPieceAt", "class_all_pawns_must_die_1_1_chess_board.html#ae449ee4c5fa3b2c39cdc2c05c6c4eb8b", null ],
@@ -27,6 +25,7 @@ var class_all_pawns_must_die_1_1_chess_board =
     [ "OpponentPlayerCastlingRights", "class_all_pawns_must_die_1_1_chess_board.html#a899c6793375f3e566843f203a2637889", null ],
     [ "OpponentPlayerPieces", "class_all_pawns_must_die_1_1_chess_board.html#aa03cc64ae7743fa64e190b14721e97eb", null ],
     [ "Orientation", "class_all_pawns_must_die_1_1_chess_board.html#a9b11fca7bb85b728092961780afdedf2", null ],
+    [ "ThinkingText", "class_all_pawns_must_die_1_1_chess_board.html#a8007605aa2d8dd751089ad314f3bd70a", null ],
     [ "WhiteCastlingRights", "class_all_pawns_must_die_1_1_chess_board.html#a736ecfc1b256dfcfba8b55ad4fe4527c", null ],
     [ "WhitePieces", "class_all_pawns_must_die_1_1_chess_board.html#ae14a8bc10d6c4de15eb08cfcaf44b8bb", null ]
 ];

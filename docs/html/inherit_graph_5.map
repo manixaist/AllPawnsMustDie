@@ -1,7 +1,3 @@
 <map id="Graphical Class Hierarchy" name="Graphical Class Hierarchy">
-<area shape="rect" id="node1" href="$interface_all_pawns_must_die_1_1_i_chess_board_view.html" title="Interface for drawing the chessboard " alt="" coords="5,5,236,32"/>
-<area shape="rect" id="node2" href="$class_all_pawns_must_die_1_1_chess_board_view.html" title="Encapsulates the view for the chess board. This is the drawing code " alt="" coords="284,5,511,32"/>
-<area shape="rect" id="node3" href="$interface_all_pawns_must_die_1_1_i_chess_engine.html" title="Generic interface for the chess engine (external process). At a bare minumum, we need to be able to s..." alt="" coords="17,115,225,141"/>
-<area shape="rect" id="node4" href="$class_all_pawns_must_die_1_1_u_c_i_chess_engine.html" title="Encapsulates a UCI protocol chess engine " alt="" coords="304,107,491,149"/>
-<area shape="rect" id="node6" href="$class_all_pawns_must_die_1_1_chess_game.html" title="ChessGame encapsulates a game &quot;session&quot;. It can either start from scratch or from a given starting po..." alt="" coords="297,56,497,83"/>
+<area shape="rect" id="node1" href="$class_all_pawns_must_die_1_1_chess_piece.html" title="Encapsulates a chess piece " alt="" coords="5,5,204,32"/>
 </map>
