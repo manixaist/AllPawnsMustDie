@@ -63,7 +63,7 @@ namespace AllPawnsMustDieUnitTests
                 BoardSquareChecker callback = (int file, int rank, bool expected) =>
                 {
                     Trace.WriteLine(String.Format("Verifying BoardSquare[{0}:{1}] is {2}", file, rank, expected));
-                    Assert.IsTrue(ChessBoard.BoardSquare.IsValid(file, rank) == expected);
+                    Assert.IsTrue(BoardSquare.IsValid(file, rank) == expected);
                 };
 
                 // ChessBoard.BoardSquare.IsValid is a static helper that takes
@@ -108,7 +108,7 @@ namespace AllPawnsMustDieUnitTests
                 int testRank = 4;
 
                 Trace.WriteLine(String.Format("Creating BoardSquare[{0}:{1}]", testFile.ToString(), testRank));
-                ChessBoard.BoardSquare testSquare = new ChessBoard.BoardSquare(testFile, testRank);
+                BoardSquare testSquare = new BoardSquare(testFile, testRank);
 
                 //testSquare.File
                 Assert.AreEqual(testSquare.File, testFile);

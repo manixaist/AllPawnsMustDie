@@ -207,14 +207,13 @@
             // textBoxMoveHistory
             // 
             this.textBoxMoveHistory.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.textBoxMoveHistory.Location = new System.Drawing.Point(134, 48);
+            this.textBoxMoveHistory.Location = new System.Drawing.Point(328, 27);
             this.textBoxMoveHistory.Multiline = true;
             this.textBoxMoveHistory.Name = "textBoxMoveHistory";
             this.textBoxMoveHistory.ReadOnly = true;
             this.textBoxMoveHistory.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
-            this.textBoxMoveHistory.Size = new System.Drawing.Size(98, 107);
+            this.textBoxMoveHistory.Size = new System.Drawing.Size(10, 10);
             this.textBoxMoveHistory.TabIndex = 2;
-            this.textBoxMoveHistory.Visible = false;
             // 
             // APMD_Form
             // 
@@ -230,6 +229,7 @@
             this.Name = "APMD_Form";
             this.Text = "All Pawns Must Die";
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.APMD_Form_FormClosing);
+            this.Load += new System.EventHandler(this.APMD_Form_Load);
             this.Paint += new System.Windows.Forms.PaintEventHandler(this.APMD_Form_Paint);
             this.MouseUp += new System.Windows.Forms.MouseEventHandler(this.APMD_Form_MouseUp);
             this.menuStrip1.ResumeLayout(false);

@@ -68,8 +68,9 @@ namespace AllPawnsMustDie
         /// <summary>
         /// Create a new UCI engine object
         /// </summary>
-        public UCIChessEngine()
+        public UCIChessEngine(IChessEngineProcessLoader engineLoader)
         {
+            engineProcessLoader = engineLoader;
             initialFEN = null;
             queueThread = null;
             bestMove = String.Empty;
@@ -96,12 +97,12 @@ namespace AllPawnsMustDie
             if (!Disposed)
             {
                 // Stop listening to stdout of engine process
-                engineProcess.OutputDataReceived -= OnDataReceived;
+                engineProcess.OnDataReceived -= this.OnDataReceived;
                 // Send the UCI quit if we haven't
                 ((IChessEngine)this).Quit();
 
                 // Dispose of the process
-                engineProcess.Dispose();
+                ((IDisposable)engineProcess).Dispose();
                 disposed = true;
                 GC.SuppressFinalize(this);
 
@@ -229,12 +230,14 @@ namespace AllPawnsMustDie
                 OnChessEngineResponseReceived(this, new ChessEngineResponseReceivedEventArgs(s));
             }
         }
-        
+
         /// <summary>
-        /// Loads the chess engine process
+        /// Loads the chess engine process.  It's fine to call this directly,
+        /// but there is a command for it 'UciLoadEngineCommand' for consistency
+        /// with the other commands.  That command ultimately invokes this method
         /// </summary>
         /// <param name="fullPathToExe">full path to chess engine</param>
-        void IChessEngine.LoadEngine(string fullPathToExe)
+        void IChessEngine.LoadEngineProcess(string fullPathToExe)
         {
             // Startup the process, we should only do this once per class instance
             if (processInited)
@@ -242,9 +245,12 @@ namespace AllPawnsMustDie
                 throw new InvalidOperationException();
             }
 
+            // The IChessEngineProcessLoader implementation will do the actual load
+            // but we need to cache the path to the exe for it (and so we have it)
             fullPathToEngine = fullPathToExe;
 
-            // Create the worker thread the first time
+            // Create the worker thread the first time, at the start of this thread
+            // execution is the actual loading...finally but on a non-UI thread.
             if (queueThread == null)
             {
                 queueThread = new Thread(() => CommandQueueExecutionMethod());
@@ -258,9 +264,8 @@ namespace AllPawnsMustDie
         void IChessEngine.Reset()
         {
             string fen = (initialFEN != null) ? initialFEN : ChessBoard.InitialFENPosition;
-            // Set a default position with the engine
-            ((IChessEngine)this).SendCommandAsync(UCIChessEngine.UciNewGame, String.Empty);
-            ((IChessEngine)this).SendCommandAsync(String.Format("position fen {0}", fen), String.Empty);
+            UciPositionCommand command = new UciPositionCommand(fen);
+            command.Execute(this);
         }
 
         /// <summary>
@@ -301,8 +306,9 @@ namespace AllPawnsMustDie
         /// </summary>
         public void CommandQueueExecutionMethod()
         {
-            // Load the process
-            LoadEngineProcess();
+            // The loader and path are injected, so the UCIChessEngine object doesn't
+            // need to care how the interface was created/obtained/loaded from disk
+            engineProcess = engineProcessLoader.Start(fullPathToEngine, OnDataReceived);
 
             AutoResetEvent[] workerEvents = { newCommandAddedToQueue, shutdownCommandQueue };
             int waitResult = WaitHandle.WaitTimeout;
@@ -346,18 +352,19 @@ namespace AllPawnsMustDie
                         }
                     }
 
-                    if ((String.Compare(cep.Command, dummyCommand) != 0) && (engineProcess.StandardInput != null))
+                    if ((String.Compare(cep.Command, dummyCommand) != 0) && (engineProcess.InputStream != null))
                     {
                         // Found something - write it to the process, 
 
                         Debug.WriteLine(String.Concat("=>Engine: ", cep.Command));
-                        engineProcess.StandardInput.WriteLine(cep.Command);
+                        engineProcess.InputStream.WriteLine(cep.Command);
 
                         // If this is true, the above command has no response, and we'd wait here forever
                         if (cep.NeedsIsReadySync)
                         {
-                            // So instead, send it an "IsReady" and wait on the reply
-                            engineProcess.StandardInput.WriteLine(IsReady);
+                            StreamWriter writer = engineProcess.InputStream;
+                            UciIsReadyCommand isReadyCommand = new UciIsReadyCommand(ref writer);
+                            isReadyCommand.Execute(this);
                         }
 
                         // Wait on the exit event as well, so we can bail as fast as needed
@@ -379,45 +386,79 @@ namespace AllPawnsMustDie
         {
             // Write directly to the stream. There is no response to this and the
             // engine will exit ASAP, so assume it's gone after this
-            if (engineProcess != null && !(Disposed))
+            if (engineProcess.InputStream != null && !(Disposed))
             {
-                engineProcess.StandardInput.WriteLine(UciQuit);
+                engineProcess.InputStream.WriteLine(UciQuit);
             }
         }
-        #endregion
 
-        #region Private Methods
-        private void LoadEngineProcess()
+        /// <summary>
+        /// Start the UCI session with the engine.  This is required before all
+        /// other commands will function
+        /// </summary>
+        public void InitializeUciProtocol()
         {
-            if (!processInited)
-            {
-                // Set process and startup variables
-                // and launch process
-                engineProcess = new Process();
-                engineProcess.EnableRaisingEvents = true;
-                engineProcess.StartInfo.CreateNoWindow = true;
-                engineProcess.StartInfo.RedirectStandardOutput = true;
-                engineProcess.StartInfo.RedirectStandardInput = true;
-                engineProcess.StartInfo.RedirectStandardError = true;
-                engineProcess.StartInfo.UseShellExecute = false;
-                engineProcess.StartInfo.FileName = fullPathToEngine;
+            UciInitCommand command = new UciInitCommand();
+            command.Execute(this);
+        }
 
-                // Subscribe to data arriving on the output stream
-                engineProcess.OutputDataReceived += OnDataReceived;
+        /// <summary>
+        /// Calls the underlying Quit implementation
+        /// </summary>
+        public void QuitEngine()
+        {
+            ((IChessEngine)this).Quit();
+        }
 
-                // Start the process up
-                if (!engineProcess.Start())
-                {
-                    // Bad path? Invalid exe file? For now just throw
-                    throw new ArgumentException();
-                }
+        /// <summary>
+        /// Sets a new position with the chess engine
+        /// </summary>
+        /// <param name="positionAsFEN">FEN for the new position</param>
+        public void SetPosition(string positionAsFEN)
+        {
+            UciPositionCommand command = new UciPositionCommand(positionAsFEN);
+            command.Execute(this);
+        }
 
-                // Start async read of that output stream.
-                engineProcess.BeginOutputReadLine();
+        /// <summary>
+        /// Wraps the internal reset state.  This will either reset to a standard
+        /// starting position, or the initial position provided
+        /// </summary>
+        public void ResetBoard()
+        {
+            ((IChessEngine)this).Reset();
+        }
 
-                // Now we're inited
-                processInited = true;
-            }
+        /// <summary>
+        /// Start analyzing the current position for the best move
+        /// </summary>
+        /// <param name="timeInMilliseconds">Time in milliseconds to think at
+        /// a maximum as a string, e.g. "2000" is 2 seconds</param>
+        public void GetMoveForCurrentPosition(string timeInMilliseconds)
+        {
+            UciGoCommand command = new UciGoCommand(timeInMilliseconds);
+            command.Execute(this);
+        }
+
+        /// <summary>
+        /// Sets a given option name with a value (if provided)
+        /// </summary>
+        /// <param name="optionName">engine dependent option name</param>
+        /// <param name="optionValue">option dependent value</param>
+        public void SetOption(string optionName, string optionValue = null)
+        {
+            UciSetOptionCommand command = new UciSetOptionCommand(optionName, optionValue);
+            command.Execute(this);
+        }
+
+        /// <summary>
+        /// Loads the engine process
+        /// </summary>
+        /// <param name="pathToEngine">Path to the engine process</param>
+        public void LoadEngine(string pathToEngine)
+        {
+            UciLoadEngineCommand command = new UciLoadEngineCommand(pathToEngine);
+            command.Execute(this);
         }
         #endregion
 
@@ -468,7 +509,8 @@ namespace AllPawnsMustDie
         private string bestMove;
         private string fullPathToEngine;
         private string initialFEN;
-        private Process engineProcess;
+        private IChessEngineProcess engineProcess;
+        private IChessEngineProcessLoader engineProcessLoader;
         private Queue<CommandExecutionParameters> commandQueue;
         private AutoResetEvent newCommandAddedToQueue;
         private AutoResetEvent shutdownCommandQueue;

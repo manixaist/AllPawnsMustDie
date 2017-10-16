@@ -47,14 +47,23 @@
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Windows.Forms" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="BoardSquareUnitTests.cs" />
     <Compile Include="ChessBoardUnitTests.cs" />
+    <Compile Include="ChessGameUnitTests.cs" />
     <Compile Include="ChessPieceTests.cs" />
     <Compile Include="FenParserUnitTests.cs" />
+    <Compile Include="MockChessBoardView.cs" />
+    <Compile Include="MockChessEngine.cs" />
+    <Compile Include="MockEngineProcess.cs" />
+    <Compile Include="MockEngineProcessLoader.cs" />
     <Compile Include="MoveInformationUnitTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="UciChessEngineCommandUnitTests.cs" />
+    <Compile Include="UCIChessEngineUnitTests.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

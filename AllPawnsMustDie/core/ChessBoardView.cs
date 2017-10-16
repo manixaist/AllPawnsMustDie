@@ -29,90 +29,7 @@ namespace AllPawnsMustDie
         }
     }
     #endregion
-
-    #region Interfaces
-    /// <summary>
-    /// Interface for drawing the chessboard
-    /// </summary>
-    interface IChessBoardView
-    {
-        /// <summary>
-        /// Load piece images from a bitmap sheet.  This overrides the unicode
-        /// text drawing for the pieces
-        /// </summary>
-        /// <param name="pieceImages">Bitmap image that contains the piece data.
-        /// It is assumed the pieces are arranged in 2 rows, with white on top
-        /// and black on bottom.  The piece order should be K Q R B N P</param>
-        /// <param name="pieceSize">The size of a single piece</param>
-        void SetBitmapImages(Bitmap pieceImages, Size pieceSize);
-
-        /// <summary>
-        /// Invalidate the view, this should force a redraw
-        /// </summary>
-        void Invalidate();
-
-        /// <summary>
-        /// Render the board at its location
-        /// </summary>
-        /// <param name="g">Graphics object for the form</param>
-        void Render(Graphics g);
-
-        /// <summary>
-        /// Returns a piece given an X,Y in relation to the board+offset
-        /// </summary>
-        /// <param name="x"></param>
-        /// <param name="y"></param>
-        /// <returns>ChessPiece found or null if none</returns>
-        ChessPiece GetPiece(int x, int y);
-
-        /// <summary>
-        /// Returns the BoardSquare at the given x, y
-        /// </summary>
-        /// <param name="x"></param>
-        /// <param name="y"></param>
-        /// <returns></returns>
-        ChessBoard.BoardSquare GetSquare(int x, int y);
-
-        /// <summary>
-        /// Highlight a single square
-        /// </summary>
-        /// <param name="file">[a-h] file</param>
-        /// <param name="rank">[1-8] rank</param>
-        void HighlightSquare(PieceFile file, int rank);
-
-        /// <summary>
-        /// Highlight a set of squares
-        /// </summary>
-        /// <param name="squares">List of BoardSquares to highlight</param>
-        void HighlightSquares(ref List<ChessBoard.BoardSquare> squares);
-
-        /// <summary>
-        /// Removes all squares marked for highlighting
-        /// </summary>
-        void ClearHiglightedSquares();
-
-        /// <summary>
-        /// Property for the data that drives the view
-        /// </summary>
-        ChessBoard ViewData { get; set; }
-
-        /// <summary>
-        /// TopLeft corner of the board
-        /// </summary>
-        Point Offset { get; set; }
-
-        /// <summary>
-        /// Property to set the size of the view
-        /// </summary>
-        Size Dimensions { get; set; }
-
-        /// <summary>
-        /// Returns a rect (including the offset) for the board
-        /// </summary>
-        Rectangle BoardRect { get; }
-    }
-    #endregion
-
+    
     /// <summary>
     /// Encapsulates the view for the chess board.  This is the drawing code
     /// </summary>
@@ -138,14 +55,7 @@ namespace AllPawnsMustDie
             stringFormat.Alignment = StringAlignment.Center;
             stringFont = new Font(ChessFont, ChessFontSize);
 
-            highlightedSquares = new List<ChessBoard.BoardSquare>();
-
-            Control moveHistoryControl = viewForm.Controls[APMD_Form.MoveHistoryControlName];
-            moveHistoryControl.Invoke((MethodInvoker)delegate
-            {
-                // Running on the UI thread now, so this is safe
-                moveHistoryControl.Visible = true;
-            });
+            highlightedSquares = new List<BoardSquare>();
             moveCount = 0;
         }
 
@@ -167,7 +77,7 @@ namespace AllPawnsMustDie
                 stringFormat.Dispose();
                 stringFont.Dispose();
                 disposed = true;
-                chessPieceImageMap.Clear();
+                chessPieceImageMap?.Clear();
                 GC.SuppressFinalize(this);
             }
         }
@@ -232,22 +142,16 @@ namespace AllPawnsMustDie
         }
 
         /// <summary>
-        /// Redraw the view on the form
-        /// </summary>
-        void IChessBoardView.Invalidate()
-        {
-            // Only need to invalidate the board portion of the form
-            viewForm.Invalidate();
-        }
-
-        /// <summary>
         /// Draw the chess board
         /// </summary>
-        /// <param name="g">Graphics object for the form</param>
-        void IChessBoardView.Render(Graphics g)
+        /// <param name="o">Rendering object</param>
+        void IChessBoardView.Render(object o)
         {
             // Dimensions and ViewData should be set before this call
             IChessBoardView view = (IChessBoardView)this;
+
+            // Convert to the type we need for this implementation
+            Graphics g = o as Graphics;
 
             // Draw the board (orientation does not matter)
             DrawBoard(g);
@@ -286,6 +190,10 @@ namespace AllPawnsMustDie
 
             // Render the move history - updates the text control
             DrawMoveHistory();
+
+            // Get the control name w're using to output verbose for now (it's a label)
+            Control verboseControl = viewForm.Controls[APMD_Form.EngineUpdateControlName];
+            verboseControl.Text = data.ThinkingText;
         }
 
         /// <summary>
@@ -326,7 +234,7 @@ namespace AllPawnsMustDie
         /// <param name="x"></param>
         /// <param name="y"></param>
         /// <returns></returns>
-        ChessBoard.BoardSquare IChessBoardView.GetSquare(int x, int y)
+        BoardSquare IChessBoardView.GetSquare(int x, int y)
         {
             Rectangle boardRect = ((IChessBoardView)this).BoardRect;
             if (!boardRect.Contains(x, y))
@@ -339,7 +247,7 @@ namespace AllPawnsMustDie
             int col;
             int row;
             ConvertXYToRowCol(x, y, out row, out col);
-            return new ChessBoard.BoardSquare(new PieceFile(col), row);
+            return new BoardSquare(new PieceFile(col), row);
         }
 
         /// <summary>
@@ -349,14 +257,14 @@ namespace AllPawnsMustDie
         /// <param name="rank">[1-8] rank</param>
         void IChessBoardView.HighlightSquare(PieceFile file, int rank)
         {
-            highlightedSquares.Add(new ChessBoard.BoardSquare(file, rank));
+            highlightedSquares.Add(new BoardSquare(file, rank));
         }
 
         /// <summary>
         /// Highlight a set of squares
         /// </summary>
         /// <param name="squares">List of BoardSquares to highlight</param>
-        void IChessBoardView.HighlightSquares(ref List<ChessBoard.BoardSquare> squares)
+        void IChessBoardView.HighlightSquares(ref List<BoardSquare> squares)
         {
             highlightedSquares.AddRange(squares);
         }
@@ -367,6 +275,25 @@ namespace AllPawnsMustDie
         void IChessBoardView.ClearHiglightedSquares()
         {
             highlightedSquares.Clear();
+        }
+
+        /// <summary>
+        /// Tell the view it needs to redraw
+        /// </summary>
+        void IChessBoardView.Invalidate()
+        {
+            viewForm.Invalidate();
+        }
+
+        /// <summary>
+        /// Abstracts the UI of selecting a promotion type (e.g. Queen 99.999%)
+        /// </summary>
+        /// <returns>New PieceClass to promote to</returns>
+        PieceClass IChessBoardView.ChoosePromotionJob()
+        {
+            PromotionDialog pd = new PromotionDialog();
+            pd.ShowDialog(viewForm);
+            return pd.PromotionJob;
         }
         #endregion
 
@@ -559,7 +486,7 @@ namespace AllPawnsMustDie
         /// <param name="g">Graphics object for the form</param>
         private void DrawHighlightedSquares(Graphics g)
         {
-            foreach(ChessBoard.BoardSquare square in highlightedSquares)
+            foreach(BoardSquare square in highlightedSquares)
             {
                 Rectangle squareRect = GetRect(square.File, square.Rank);
                 g.FillRectangle(Brushes.Yellow, squareRect);
@@ -574,14 +501,9 @@ namespace AllPawnsMustDie
         /// <param name="piece">ChessPiece to draw</param>
         private void DrawPiece(Graphics g, ChessPiece piece)
         {
-            if (piece.Visible)
+            if (!piece.Captured)
             {
                 Rectangle pieceRect = GetRect(piece.File, piece.Rank);
-                if (piece.Highlight)
-                {
-                    g.FillRectangle(Brushes.Yellow, pieceRect);
-                }
-
                 if (chessPieceImageMap == null)
                 {
                     // Find the screen rect for the piece and 'draw' it
@@ -606,11 +528,11 @@ namespace AllPawnsMustDie
             // Only needs updates when the move count has changed
             if (data.Moves.Count() != moveCount)
             {
-                List<ChessBoard.MoveInformation> moves = data.Moves;
+                List<MoveInformation> moves = data.Moves;
                 int newlineIndex = 0;
                 int moveIndex = 1;
                 string text = "---------------------\r\n";
-                foreach (ChessBoard.MoveInformation move in moves)
+                foreach (MoveInformation move in moves)
                 {
                     if (newlineIndex == 0)
                     {
@@ -858,7 +780,7 @@ namespace AllPawnsMustDie
         private Dictionary<string, Bitmap> chessPieceImageMap;
 
         // Holds list of squares to highlight
-        private List<ChessBoard.BoardSquare> highlightedSquares;
+        private List<BoardSquare> highlightedSquares;
 
         // Counter to update scroll of textbox
         private int moveCount;

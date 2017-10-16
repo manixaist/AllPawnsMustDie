@@ -65,7 +65,7 @@ namespace AllPawnsMustDieUnitTests
 
         // The idea is we might need different implementations.  If not, then convert
         // VerifyChessBoardPieces to a normal static method
-        private delegate void BasicBoardCheck(ChessBoard board, CB.BoardSquare square, PieceColor color, PieceClass job);
+        private delegate void BasicBoardCheck(ChessBoard board, BoardSquare square, PieceColor color, PieceClass job);
 
         /// <summary>
         /// Checks if a piece of the given color and job exists on the given board
@@ -79,7 +79,7 @@ namespace AllPawnsMustDieUnitTests
                 Trace.WriteLine(String.Format("...found it, checking Color({0}) and Job({1})", color.ToString(), job.ToString()));
                 Assert.AreEqual(piece.Color, color);
                 Assert.AreEqual(piece.Job, job);
-                Assert.IsTrue(piece.Visible);
+                Assert.IsFalse(piece.Captured);
             }
             catch (NullReferenceException)
             {
@@ -100,42 +100,42 @@ namespace AllPawnsMustDieUnitTests
             public void BasicTests()
             {
                 // Standard board setup
-                Tuple<CB.BoardSquare, PieceColor, PieceClass>[] defaultBoardData =
+                Tuple<BoardSquare, PieceColor, PieceClass>[] defaultBoardData =
                 {
                     // WHITE PIECES
-                    new Tuple<CB.BoardSquare, PieceColor, PieceClass>(new CB.BoardSquare(A_FILE, 1), WH, ROOK),
-                    new Tuple<CB.BoardSquare, PieceColor, PieceClass>(new CB.BoardSquare(B_FILE, 1), WH, KNHT),
-                    new Tuple<CB.BoardSquare, PieceColor, PieceClass>(new CB.BoardSquare(C_FILE, 1), WH, BISH),
-                    new Tuple<CB.BoardSquare, PieceColor, PieceClass>(new CB.BoardSquare(D_FILE, 1), WH, QUEN),
-                    new Tuple<CB.BoardSquare, PieceColor, PieceClass>(new CB.BoardSquare(E_FILE, 1), WH, KING),
-                    new Tuple<CB.BoardSquare, PieceColor, PieceClass>(new CB.BoardSquare(F_FILE, 1), WH, BISH),
-                    new Tuple<CB.BoardSquare, PieceColor, PieceClass>(new CB.BoardSquare(G_FILE, 1), WH, KNHT),
-                    new Tuple<CB.BoardSquare, PieceColor, PieceClass>(new CB.BoardSquare(H_FILE, 1), WH, ROOK),
-                    new Tuple<CB.BoardSquare, PieceColor, PieceClass>(new CB.BoardSquare(A_FILE, 2), WH, PAWN),
-                    new Tuple<CB.BoardSquare, PieceColor, PieceClass>(new CB.BoardSquare(B_FILE, 2), WH, PAWN),
-                    new Tuple<CB.BoardSquare, PieceColor, PieceClass>(new CB.BoardSquare(C_FILE, 2), WH, PAWN),
-                    new Tuple<CB.BoardSquare, PieceColor, PieceClass>(new CB.BoardSquare(D_FILE, 2), WH, PAWN),
-                    new Tuple<CB.BoardSquare, PieceColor, PieceClass>(new CB.BoardSquare(E_FILE, 2), WH, PAWN),
-                    new Tuple<CB.BoardSquare, PieceColor, PieceClass>(new CB.BoardSquare(F_FILE, 2), WH, PAWN),
-                    new Tuple<CB.BoardSquare, PieceColor, PieceClass>(new CB.BoardSquare(G_FILE, 2), WH, PAWN),
-                    new Tuple<CB.BoardSquare, PieceColor, PieceClass>(new CB.BoardSquare(H_FILE, 2), WH, PAWN),
+                    new Tuple<BoardSquare, PieceColor, PieceClass>(new BoardSquare(A_FILE, 1), WH, ROOK),
+                    new Tuple<BoardSquare, PieceColor, PieceClass>(new BoardSquare(B_FILE, 1), WH, KNHT),
+                    new Tuple<BoardSquare, PieceColor, PieceClass>(new BoardSquare(C_FILE, 1), WH, BISH),
+                    new Tuple<BoardSquare, PieceColor, PieceClass>(new BoardSquare(D_FILE, 1), WH, QUEN),
+                    new Tuple<BoardSquare, PieceColor, PieceClass>(new BoardSquare(E_FILE, 1), WH, KING),
+                    new Tuple<BoardSquare, PieceColor, PieceClass>(new BoardSquare(F_FILE, 1), WH, BISH),
+                    new Tuple<BoardSquare, PieceColor, PieceClass>(new BoardSquare(G_FILE, 1), WH, KNHT),
+                    new Tuple<BoardSquare, PieceColor, PieceClass>(new BoardSquare(H_FILE, 1), WH, ROOK),
+                    new Tuple<BoardSquare, PieceColor, PieceClass>(new BoardSquare(A_FILE, 2), WH, PAWN),
+                    new Tuple<BoardSquare, PieceColor, PieceClass>(new BoardSquare(B_FILE, 2), WH, PAWN),
+                    new Tuple<BoardSquare, PieceColor, PieceClass>(new BoardSquare(C_FILE, 2), WH, PAWN),
+                    new Tuple<BoardSquare, PieceColor, PieceClass>(new BoardSquare(D_FILE, 2), WH, PAWN),
+                    new Tuple<BoardSquare, PieceColor, PieceClass>(new BoardSquare(E_FILE, 2), WH, PAWN),
+                    new Tuple<BoardSquare, PieceColor, PieceClass>(new BoardSquare(F_FILE, 2), WH, PAWN),
+                    new Tuple<BoardSquare, PieceColor, PieceClass>(new BoardSquare(G_FILE, 2), WH, PAWN),
+                    new Tuple<BoardSquare, PieceColor, PieceClass>(new BoardSquare(H_FILE, 2), WH, PAWN),
                     // BLACK PIECES
-                    new Tuple<CB.BoardSquare, PieceColor, PieceClass>(new CB.BoardSquare(A_FILE, 8), BL, ROOK),
-                    new Tuple<CB.BoardSquare, PieceColor, PieceClass>(new CB.BoardSquare(B_FILE, 8), BL, KNHT),
-                    new Tuple<CB.BoardSquare, PieceColor, PieceClass>(new CB.BoardSquare(C_FILE, 8), BL, BISH),
-                    new Tuple<CB.BoardSquare, PieceColor, PieceClass>(new CB.BoardSquare(D_FILE, 8), BL, QUEN),
-                    new Tuple<CB.BoardSquare, PieceColor, PieceClass>(new CB.BoardSquare(E_FILE, 8), BL, KING),
-                    new Tuple<CB.BoardSquare, PieceColor, PieceClass>(new CB.BoardSquare(F_FILE, 8), BL, BISH),
-                    new Tuple<CB.BoardSquare, PieceColor, PieceClass>(new CB.BoardSquare(G_FILE, 8), BL, KNHT),
-                    new Tuple<CB.BoardSquare, PieceColor, PieceClass>(new CB.BoardSquare(H_FILE, 8), BL, ROOK),
-                    new Tuple<CB.BoardSquare, PieceColor, PieceClass>(new CB.BoardSquare(A_FILE, 7), BL, PAWN),
-                    new Tuple<CB.BoardSquare, PieceColor, PieceClass>(new CB.BoardSquare(B_FILE, 7), BL, PAWN),
-                    new Tuple<CB.BoardSquare, PieceColor, PieceClass>(new CB.BoardSquare(C_FILE, 7), BL, PAWN),
-                    new Tuple<CB.BoardSquare, PieceColor, PieceClass>(new CB.BoardSquare(D_FILE, 7), BL, PAWN),
-                    new Tuple<CB.BoardSquare, PieceColor, PieceClass>(new CB.BoardSquare(E_FILE, 7), BL, PAWN),
-                    new Tuple<CB.BoardSquare, PieceColor, PieceClass>(new CB.BoardSquare(F_FILE, 7), BL, PAWN),
-                    new Tuple<CB.BoardSquare, PieceColor, PieceClass>(new CB.BoardSquare(G_FILE, 7), BL, PAWN),
-                    new Tuple<CB.BoardSquare, PieceColor, PieceClass>(new CB.BoardSquare(H_FILE, 7), BL, PAWN),
+                    new Tuple<BoardSquare, PieceColor, PieceClass>(new BoardSquare(A_FILE, 8), BL, ROOK),
+                    new Tuple<BoardSquare, PieceColor, PieceClass>(new BoardSquare(B_FILE, 8), BL, KNHT),
+                    new Tuple<BoardSquare, PieceColor, PieceClass>(new BoardSquare(C_FILE, 8), BL, BISH),
+                    new Tuple<BoardSquare, PieceColor, PieceClass>(new BoardSquare(D_FILE, 8), BL, QUEN),
+                    new Tuple<BoardSquare, PieceColor, PieceClass>(new BoardSquare(E_FILE, 8), BL, KING),
+                    new Tuple<BoardSquare, PieceColor, PieceClass>(new BoardSquare(F_FILE, 8), BL, BISH),
+                    new Tuple<BoardSquare, PieceColor, PieceClass>(new BoardSquare(G_FILE, 8), BL, KNHT),
+                    new Tuple<BoardSquare, PieceColor, PieceClass>(new BoardSquare(H_FILE, 8), BL, ROOK),
+                    new Tuple<BoardSquare, PieceColor, PieceClass>(new BoardSquare(A_FILE, 7), BL, PAWN),
+                    new Tuple<BoardSquare, PieceColor, PieceClass>(new BoardSquare(B_FILE, 7), BL, PAWN),
+                    new Tuple<BoardSquare, PieceColor, PieceClass>(new BoardSquare(C_FILE, 7), BL, PAWN),
+                    new Tuple<BoardSquare, PieceColor, PieceClass>(new BoardSquare(D_FILE, 7), BL, PAWN),
+                    new Tuple<BoardSquare, PieceColor, PieceClass>(new BoardSquare(E_FILE, 7), BL, PAWN),
+                    new Tuple<BoardSquare, PieceColor, PieceClass>(new BoardSquare(F_FILE, 7), BL, PAWN),
+                    new Tuple<BoardSquare, PieceColor, PieceClass>(new BoardSquare(G_FILE, 7), BL, PAWN),
+                    new Tuple<BoardSquare, PieceColor, PieceClass>(new BoardSquare(H_FILE, 7), BL, PAWN),
                 };
 
                 // Create a new ChessBoard and call NewGame() to initialize it
@@ -145,7 +145,7 @@ namespace AllPawnsMustDieUnitTests
                 testBoard.NewGame();
 
                 Trace.WriteLine("Verifying contents of default ChessBoard...");
-                foreach (Tuple<CB.BoardSquare, PieceColor, PieceClass> tuple in defaultBoardData)
+                foreach (Tuple<BoardSquare, PieceColor, PieceClass> tuple in defaultBoardData)
                 {
                     VerifyChessBoardPieces(testBoard, tuple.Item1, tuple.Item2, tuple.Item3);
                 }
@@ -184,32 +184,32 @@ namespace AllPawnsMustDieUnitTests
                 // |   |   |   |   |   | R | K |   |
                 // +---+---+---+---+---+---+---+---+
                 string testFEN = "3q2k1/1br2pb1/p5p1/1p2N1Pn/3PpP2/PP2N3/1B3Q2/5RK1 w - - 2 36";
-                Tuple<CB.BoardSquare, PieceColor, PieceClass>[] positionalBoardData =
+                Tuple<BoardSquare, PieceColor, PieceClass>[] positionalBoardData =
                 {
                     // WHITE PIECES
-                    new Tuple<CB.BoardSquare, PieceColor, PieceClass>(new CB.BoardSquare(A_FILE, 3), WH, PAWN),
-                    new Tuple<CB.BoardSquare, PieceColor, PieceClass>(new CB.BoardSquare(B_FILE, 3), WH, PAWN),
-                    new Tuple<CB.BoardSquare, PieceColor, PieceClass>(new CB.BoardSquare(D_FILE, 4), WH, PAWN),
-                    new Tuple<CB.BoardSquare, PieceColor, PieceClass>(new CB.BoardSquare(F_FILE, 4), WH, PAWN),
-                    new Tuple<CB.BoardSquare, PieceColor, PieceClass>(new CB.BoardSquare(G_FILE, 5), WH, PAWN),
-                    new Tuple<CB.BoardSquare, PieceColor, PieceClass>(new CB.BoardSquare(B_FILE, 2), WH, BISH),
-                    new Tuple<CB.BoardSquare, PieceColor, PieceClass>(new CB.BoardSquare(E_FILE, 3), WH, KNHT),
-                    new Tuple<CB.BoardSquare, PieceColor, PieceClass>(new CB.BoardSquare(E_FILE, 5), WH, KNHT),
-                    new Tuple<CB.BoardSquare, PieceColor, PieceClass>(new CB.BoardSquare(F_FILE, 2), WH, QUEN),
-                    new Tuple<CB.BoardSquare, PieceColor, PieceClass>(new CB.BoardSquare(F_FILE, 1), WH, ROOK),
-                    new Tuple<CB.BoardSquare, PieceColor, PieceClass>(new CB.BoardSquare(G_FILE, 1), WH, KING),
+                    new Tuple<BoardSquare, PieceColor, PieceClass>(new BoardSquare(A_FILE, 3), WH, PAWN),
+                    new Tuple<BoardSquare, PieceColor, PieceClass>(new BoardSquare(B_FILE, 3), WH, PAWN),
+                    new Tuple<BoardSquare, PieceColor, PieceClass>(new BoardSquare(D_FILE, 4), WH, PAWN),
+                    new Tuple<BoardSquare, PieceColor, PieceClass>(new BoardSquare(F_FILE, 4), WH, PAWN),
+                    new Tuple<BoardSquare, PieceColor, PieceClass>(new BoardSquare(G_FILE, 5), WH, PAWN),
+                    new Tuple<BoardSquare, PieceColor, PieceClass>(new BoardSquare(B_FILE, 2), WH, BISH),
+                    new Tuple<BoardSquare, PieceColor, PieceClass>(new BoardSquare(E_FILE, 3), WH, KNHT),
+                    new Tuple<BoardSquare, PieceColor, PieceClass>(new BoardSquare(E_FILE, 5), WH, KNHT),
+                    new Tuple<BoardSquare, PieceColor, PieceClass>(new BoardSquare(F_FILE, 2), WH, QUEN),
+                    new Tuple<BoardSquare, PieceColor, PieceClass>(new BoardSquare(F_FILE, 1), WH, ROOK),
+                    new Tuple<BoardSquare, PieceColor, PieceClass>(new BoardSquare(G_FILE, 1), WH, KING),
                     // BLACK PIECES
-                    new Tuple<CB.BoardSquare, PieceColor, PieceClass>(new CB.BoardSquare(A_FILE, 6), BL, PAWN),
-                    new Tuple<CB.BoardSquare, PieceColor, PieceClass>(new CB.BoardSquare(B_FILE, 5), BL, PAWN),
-                    new Tuple<CB.BoardSquare, PieceColor, PieceClass>(new CB.BoardSquare(E_FILE, 4), BL, PAWN),
-                    new Tuple<CB.BoardSquare, PieceColor, PieceClass>(new CB.BoardSquare(F_FILE, 7), BL, PAWN),
-                    new Tuple<CB.BoardSquare, PieceColor, PieceClass>(new CB.BoardSquare(G_FILE, 6), BL, PAWN),
-                    new Tuple<CB.BoardSquare, PieceColor, PieceClass>(new CB.BoardSquare(B_FILE, 7), BL, BISH),
-                    new Tuple<CB.BoardSquare, PieceColor, PieceClass>(new CB.BoardSquare(C_FILE, 7), BL, ROOK),
-                    new Tuple<CB.BoardSquare, PieceColor, PieceClass>(new CB.BoardSquare(H_FILE, 5), BL, KNHT),
-                    new Tuple<CB.BoardSquare, PieceColor, PieceClass>(new CB.BoardSquare(D_FILE, 8), BL, QUEN),
-                    new Tuple<CB.BoardSquare, PieceColor, PieceClass>(new CB.BoardSquare(G_FILE, 7), BL, BISH),
-                    new Tuple<CB.BoardSquare, PieceColor, PieceClass>(new CB.BoardSquare(G_FILE, 8), BL, KING),
+                    new Tuple<BoardSquare, PieceColor, PieceClass>(new BoardSquare(A_FILE, 6), BL, PAWN),
+                    new Tuple<BoardSquare, PieceColor, PieceClass>(new BoardSquare(B_FILE, 5), BL, PAWN),
+                    new Tuple<BoardSquare, PieceColor, PieceClass>(new BoardSquare(E_FILE, 4), BL, PAWN),
+                    new Tuple<BoardSquare, PieceColor, PieceClass>(new BoardSquare(F_FILE, 7), BL, PAWN),
+                    new Tuple<BoardSquare, PieceColor, PieceClass>(new BoardSquare(G_FILE, 6), BL, PAWN),
+                    new Tuple<BoardSquare, PieceColor, PieceClass>(new BoardSquare(B_FILE, 7), BL, BISH),
+                    new Tuple<BoardSquare, PieceColor, PieceClass>(new BoardSquare(C_FILE, 7), BL, ROOK),
+                    new Tuple<BoardSquare, PieceColor, PieceClass>(new BoardSquare(H_FILE, 5), BL, KNHT),
+                    new Tuple<BoardSquare, PieceColor, PieceClass>(new BoardSquare(D_FILE, 8), BL, QUEN),
+                    new Tuple<BoardSquare, PieceColor, PieceClass>(new BoardSquare(G_FILE, 7), BL, BISH),
+                    new Tuple<BoardSquare, PieceColor, PieceClass>(new BoardSquare(G_FILE, 8), BL, KING),
                 };
 
                 // Very similar to NewGame, but we could create many more positions to verify
@@ -219,7 +219,7 @@ namespace AllPawnsMustDieUnitTests
                 testBoard.NewPosition(testFEN);
 
                 Trace.WriteLine("Verifying contents of test ChessBoard...");
-                foreach (Tuple<CB.BoardSquare, PieceColor, PieceClass> tuple in positionalBoardData)
+                foreach (Tuple<BoardSquare, PieceColor, PieceClass> tuple in positionalBoardData)
                 {
                     VerifyChessBoardPieces(testBoard, tuple.Item1, tuple.Item2, tuple.Item3);
                 }
@@ -313,8 +313,8 @@ namespace AllPawnsMustDieUnitTests
 
                 // Basic opening pawn move "e2e4"
                 Trace.WriteLine("Applying a basic pawn move...e2e4");
-                ChessBoard.MoveInformation moveInfo = new CB.MoveInformation(
-                    new ChessBoard.BoardSquare(E_FILE, 2), new ChessBoard.BoardSquare(E_FILE, 4), false, testBoard.CurrentFEN);
+                MoveInformation moveInfo = new MoveInformation(
+                    new BoardSquare(E_FILE, 2), new BoardSquare(E_FILE, 4), false, testBoard.CurrentFEN);
                 testBoard.MovePiece(ref moveInfo);
 
                 Trace.WriteLine("Verify pawn is found at new location...");
@@ -355,8 +355,8 @@ namespace AllPawnsMustDieUnitTests
 
                 // Castle White Kingside
                 Trace.WriteLine("Castle White Kingside - e1g1");
-                ChessBoard.MoveInformation moveInfo = new CB.MoveInformation(
-                    new ChessBoard.BoardSquare(E_FILE, 1), new ChessBoard.BoardSquare(G_FILE, 1), false, testBoard.CurrentFEN);
+                MoveInformation moveInfo = new MoveInformation(
+                    new BoardSquare(E_FILE, 1), new BoardSquare(G_FILE, 1), false, testBoard.CurrentFEN);
                 testBoard.MovePiece(ref moveInfo);
 
                 // Verify the rook moved as well
@@ -372,8 +372,8 @@ namespace AllPawnsMustDieUnitTests
 
                 // Castle White Queenside
                 Trace.WriteLine("Castle White Kingside - e1c1");
-                moveInfo = new CB.MoveInformation(
-                    new ChessBoard.BoardSquare(E_FILE, 1), new ChessBoard.BoardSquare(C_FILE, 1), false, testBoard.CurrentFEN);
+                moveInfo = new MoveInformation(
+                    new BoardSquare(E_FILE, 1), new BoardSquare(C_FILE, 1), false, testBoard.CurrentFEN);
                 testBoard.MovePiece(ref moveInfo);
 
                 // Verify the rook moved as well
@@ -389,8 +389,8 @@ namespace AllPawnsMustDieUnitTests
                 
                 // Castle Black Kingside
                 Trace.WriteLine("Castle White Kingside - e8g8");
-                moveInfo = new CB.MoveInformation(
-                    new ChessBoard.BoardSquare(E_FILE, 8), new ChessBoard.BoardSquare(G_FILE, 8), false, testBoard.CurrentFEN);
+                moveInfo = new MoveInformation(
+                    new BoardSquare(E_FILE, 8), new BoardSquare(G_FILE, 8), false, testBoard.CurrentFEN);
                 testBoard.MovePiece(ref moveInfo);
 
                 // Verify the rook moved as well
@@ -406,8 +406,8 @@ namespace AllPawnsMustDieUnitTests
 
                 // Castle Black Queenside
                 Trace.WriteLine("Castle White Kingside - e8c8");
-                moveInfo = new CB.MoveInformation(
-                    new ChessBoard.BoardSquare(E_FILE, 8), new ChessBoard.BoardSquare(C_FILE, 8), false, testBoard.CurrentFEN);
+                moveInfo = new MoveInformation(
+                    new BoardSquare(E_FILE, 8), new BoardSquare(C_FILE, 8), false, testBoard.CurrentFEN);
                 testBoard.MovePiece(ref moveInfo);
 
                 // Verify the rook moved as well
@@ -448,14 +448,14 @@ namespace AllPawnsMustDieUnitTests
 
                 // Prepare our en-passant target
                 Trace.WriteLine("Preparing en-passant victim d7d5...");
-                ChessBoard.MoveInformation moveInfo = new CB.MoveInformation(
-                    new ChessBoard.BoardSquare(D_FILE, 7), new ChessBoard.BoardSquare(D_FILE, 5), false, testBoard.CurrentFEN);
+                MoveInformation moveInfo = new MoveInformation(
+                    new BoardSquare(D_FILE, 7), new BoardSquare(D_FILE, 5), false, testBoard.CurrentFEN);
                 testBoard.MovePiece(ref moveInfo);
 
                 // Now attempt the en-passant e5d6
                 Trace.WriteLine("Capture the black pawn by en-passant e5d6...");
-                moveInfo = new CB.MoveInformation(
-                    new ChessBoard.BoardSquare(E_FILE, 5), new ChessBoard.BoardSquare(D_FILE, 6), true, testBoard.CurrentFEN);
+                moveInfo = new MoveInformation(
+                    new BoardSquare(E_FILE, 5), new BoardSquare(D_FILE, 6), true, testBoard.CurrentFEN);
                 testBoard.MovePiece(ref moveInfo);
 
                 // Verify the capture
@@ -502,20 +502,20 @@ namespace AllPawnsMustDieUnitTests
 
                 // Prepare our en-passant target
                 Trace.WriteLine("Preparing en-passant victim d7d5...");
-                ChessBoard.MoveInformation moveInfo = new CB.MoveInformation(
-                    new ChessBoard.BoardSquare(D_FILE, 7), new ChessBoard.BoardSquare(D_FILE, 5), false, testBoard.CurrentFEN);
+                MoveInformation moveInfo = new MoveInformation(
+                    new BoardSquare(D_FILE, 7), new BoardSquare(D_FILE, 5), false, testBoard.CurrentFEN);
                 testBoard.MovePiece(ref moveInfo);
 
                 // Verify the target was set
                 Trace.WriteLine("Verifying target is at d7d6 (behind moved pawn)");
-                CB.BoardSquare enPassantTarget;
+                BoardSquare enPassantTarget;
                 Assert.IsTrue(testBoard.GetEnPassantTarget(out enPassantTarget));
-                Assert.AreEqual(enPassantTarget, new CB.BoardSquare(D_FILE, 6));
+                Assert.AreEqual(enPassantTarget, new BoardSquare(D_FILE, 6));
 
                 // Make another mover
                 Trace.WriteLine("ignore capture opportunity a2a3...");
-                moveInfo = new CB.MoveInformation(
-                    new ChessBoard.BoardSquare(A_FILE, 2), new ChessBoard.BoardSquare(A_FILE, 3), false, testBoard.CurrentFEN);
+                moveInfo = new MoveInformation(
+                    new BoardSquare(A_FILE, 2), new BoardSquare(A_FILE, 3), false, testBoard.CurrentFEN);
                 testBoard.MovePiece(ref moveInfo);
 
                 // Verify the target was cleared
@@ -570,8 +570,8 @@ namespace AllPawnsMustDieUnitTests
 
                 // Move the white kingside rook h1g1
                 Trace.WriteLine("Moving kingside rook, h1g1...");
-                ChessBoard.MoveInformation moveInfo = new CB.MoveInformation(
-                    new ChessBoard.BoardSquare(H_FILE, 1), new ChessBoard.BoardSquare(G_FILE, 1), false, testBoard.CurrentFEN);
+                MoveInformation moveInfo = new MoveInformation(
+                    new BoardSquare(H_FILE, 1), new BoardSquare(G_FILE, 1), false, testBoard.CurrentFEN);
                 testBoard.MovePiece(ref moveInfo);
 
                 // Verify white kingside rights are gone
@@ -580,8 +580,8 @@ namespace AllPawnsMustDieUnitTests
 
                 // Move the black kingside rook h8g8
                 Trace.WriteLine("Moving kingside rook, h8g8...");
-                moveInfo = new CB.MoveInformation(
-                    new ChessBoard.BoardSquare(H_FILE, 8), new ChessBoard.BoardSquare(G_FILE, 8), false, testBoard.CurrentFEN);
+                moveInfo = new MoveInformation(
+                    new BoardSquare(H_FILE, 8), new BoardSquare(G_FILE, 8), false, testBoard.CurrentFEN);
                 testBoard.MovePiece(ref moveInfo);
 
                 // Verify black kingside rights are gone
@@ -590,8 +590,8 @@ namespace AllPawnsMustDieUnitTests
 
                 // Move the white queenside rook a1b1
                 Trace.WriteLine("Moving queenside rook, a1b1...");
-                moveInfo = new CB.MoveInformation(
-                    new ChessBoard.BoardSquare(A_FILE, 1), new ChessBoard.BoardSquare(B_FILE, 1), false, testBoard.CurrentFEN);
+                moveInfo = new MoveInformation(
+                    new BoardSquare(A_FILE, 1), new BoardSquare(B_FILE, 1), false, testBoard.CurrentFEN);
                 testBoard.MovePiece(ref moveInfo);
 
                 // Verify white queenside rights are gone
@@ -600,8 +600,8 @@ namespace AllPawnsMustDieUnitTests
 
                 // Move the black queenside rook a8b8
                 Trace.WriteLine("Moving queenside rook, a8b8...");
-                moveInfo = new CB.MoveInformation(
-                    new ChessBoard.BoardSquare(A_FILE, 8), new ChessBoard.BoardSquare(B_FILE, 8), false, testBoard.CurrentFEN);
+                moveInfo = new MoveInformation(
+                    new BoardSquare(A_FILE, 8), new BoardSquare(B_FILE, 8), false, testBoard.CurrentFEN);
                 testBoard.MovePiece(ref moveInfo);
 
                 // Verify black queenside rights are gone
@@ -649,8 +649,8 @@ namespace AllPawnsMustDieUnitTests
                 // setup the promotion move f7g8n
                 // Don't promote to Queen or Rook as the next move will be illegal with Black
                 // King in check
-                ChessBoard.MoveInformation moveInfo = new CB.MoveInformation(
-                    new ChessBoard.BoardSquare(F_FILE, 7), new ChessBoard.BoardSquare(G_FILE, 8), false, testBoard.CurrentFEN);
+                MoveInformation moveInfo = new MoveInformation(
+                    new BoardSquare(F_FILE, 7), new BoardSquare(G_FILE, 8), false, testBoard.CurrentFEN);
                 testBoard.PromotePiece(F_FILE, 7, G_FILE, 8, PieceClass.Knight, ref moveInfo);
                 testBoard.MovePiece(ref moveInfo);
 
@@ -660,8 +660,8 @@ namespace AllPawnsMustDieUnitTests
                 Assert.AreEqual(PieceColor.White, piece.Color);
 
                 // Promote black pawn b2b1q
-                moveInfo = new CB.MoveInformation(
-                    new ChessBoard.BoardSquare(B_FILE, 2), new ChessBoard.BoardSquare(B_FILE, 1), false, testBoard.CurrentFEN);
+                moveInfo = new MoveInformation(
+                    new BoardSquare(B_FILE, 2), new BoardSquare(B_FILE, 1), false, testBoard.CurrentFEN);
                 testBoard.PromotePiece(B_FILE, 2, B_FILE, 1, PieceClass.Queen, ref moveInfo);
                 testBoard.MovePiece(ref moveInfo);
 
@@ -703,31 +703,31 @@ namespace AllPawnsMustDieUnitTests
                 // +---+---+---+---+---+---+---+---+
                 // |   | q |   | R |   |   | K |   |
                 // +---+---+---+---+---+---+---+---+
-                Tuple<CB.BoardSquare, PieceColor, PieceClass>[] positionalBoardData =
+                Tuple<BoardSquare, PieceColor, PieceClass>[] positionalBoardData =
                 {
                     // WHITE PIECES
-                    new Tuple<CB.BoardSquare, PieceColor, PieceClass>(new CB.BoardSquare(A_FILE, 4), WH, PAWN),
-                    new Tuple<CB.BoardSquare, PieceColor, PieceClass>(new CB.BoardSquare(A_FILE, 3), WH, ROOK),
-                    new Tuple<CB.BoardSquare, PieceColor, PieceClass>(new CB.BoardSquare(C_FILE, 5), WH, PAWN),
-                    new Tuple<CB.BoardSquare, PieceColor, PieceClass>(new CB.BoardSquare(C_FILE, 3), WH, KNHT ),
-                    new Tuple<CB.BoardSquare, PieceColor, PieceClass>(new CB.BoardSquare(C_FILE, 2), WH, QUEN ),
-                    new Tuple<CB.BoardSquare, PieceColor, PieceClass>(new CB.BoardSquare(D_FILE, 1), WH, ROOK ),
-                    new Tuple<CB.BoardSquare, PieceColor, PieceClass>(new CB.BoardSquare(F_FILE, 2), WH, PAWN ),
-                    new Tuple<CB.BoardSquare, PieceColor, PieceClass>(new CB.BoardSquare(G_FILE, 8), WH, QUEN ),
-                    new Tuple<CB.BoardSquare, PieceColor, PieceClass>(new CB.BoardSquare(G_FILE, 2), WH, PAWN ),
-                    new Tuple<CB.BoardSquare, PieceColor, PieceClass>(new CB.BoardSquare(G_FILE, 1), WH, KING ),
-                    new Tuple<CB.BoardSquare, PieceColor, PieceClass>(new CB.BoardSquare(H_FILE, 2), WH, PAWN ),
+                    new Tuple<BoardSquare, PieceColor, PieceClass>(new BoardSquare(A_FILE, 4), WH, PAWN),
+                    new Tuple<BoardSquare, PieceColor, PieceClass>(new BoardSquare(A_FILE, 3), WH, ROOK),
+                    new Tuple<BoardSquare, PieceColor, PieceClass>(new BoardSquare(C_FILE, 5), WH, PAWN),
+                    new Tuple<BoardSquare, PieceColor, PieceClass>(new BoardSquare(C_FILE, 3), WH, KNHT ),
+                    new Tuple<BoardSquare, PieceColor, PieceClass>(new BoardSquare(C_FILE, 2), WH, QUEN ),
+                    new Tuple<BoardSquare, PieceColor, PieceClass>(new BoardSquare(D_FILE, 1), WH, ROOK ),
+                    new Tuple<BoardSquare, PieceColor, PieceClass>(new BoardSquare(F_FILE, 2), WH, PAWN ),
+                    new Tuple<BoardSquare, PieceColor, PieceClass>(new BoardSquare(G_FILE, 8), WH, QUEN ),
+                    new Tuple<BoardSquare, PieceColor, PieceClass>(new BoardSquare(G_FILE, 2), WH, PAWN ),
+                    new Tuple<BoardSquare, PieceColor, PieceClass>(new BoardSquare(G_FILE, 1), WH, KING ),
+                    new Tuple<BoardSquare, PieceColor, PieceClass>(new BoardSquare(H_FILE, 2), WH, PAWN ),
                     // BLACK PIECES
-                    new Tuple<CB.BoardSquare, PieceColor, PieceClass>(new CB.BoardSquare(A_FILE, 8), BL, ROOK),
-                    new Tuple<CB.BoardSquare, PieceColor, PieceClass>(new CB.BoardSquare(A_FILE, 7), BL, PAWN),
-                    new Tuple<CB.BoardSquare, PieceColor, PieceClass>(new CB.BoardSquare(A_FILE, 6), BL, BISH),
-                    new Tuple<CB.BoardSquare, PieceColor, PieceClass>(new CB.BoardSquare(B_FILE, 4), BL, BISH ),
-                    new Tuple<CB.BoardSquare, PieceColor, PieceClass>(new CB.BoardSquare(B_FILE, 1), BL, QUEN ),
-                    new Tuple<CB.BoardSquare, PieceColor, PieceClass>(new CB.BoardSquare(D_FILE, 7), BL, KNHT ),
-                    new Tuple<CB.BoardSquare, PieceColor, PieceClass>(new CB.BoardSquare(E_FILE, 7), BL, KING ),
-                    new Tuple<CB.BoardSquare, PieceColor, PieceClass>(new CB.BoardSquare(E_FILE, 6), BL, QUEN ),
-                    new Tuple<CB.BoardSquare, PieceColor, PieceClass>(new CB.BoardSquare(E_FILE, 5), BL, PAWN ),
-                    new Tuple<CB.BoardSquare, PieceColor, PieceClass>(new CB.BoardSquare(H_FILE, 6), BL, PAWN ),
+                    new Tuple<BoardSquare, PieceColor, PieceClass>(new BoardSquare(A_FILE, 8), BL, ROOK),
+                    new Tuple<BoardSquare, PieceColor, PieceClass>(new BoardSquare(A_FILE, 7), BL, PAWN),
+                    new Tuple<BoardSquare, PieceColor, PieceClass>(new BoardSquare(A_FILE, 6), BL, BISH),
+                    new Tuple<BoardSquare, PieceColor, PieceClass>(new BoardSquare(B_FILE, 4), BL, BISH ),
+                    new Tuple<BoardSquare, PieceColor, PieceClass>(new BoardSquare(B_FILE, 1), BL, QUEN ),
+                    new Tuple<BoardSquare, PieceColor, PieceClass>(new BoardSquare(D_FILE, 7), BL, KNHT ),
+                    new Tuple<BoardSquare, PieceColor, PieceClass>(new BoardSquare(E_FILE, 7), BL, KING ),
+                    new Tuple<BoardSquare, PieceColor, PieceClass>(new BoardSquare(E_FILE, 6), BL, QUEN ),
+                    new Tuple<BoardSquare, PieceColor, PieceClass>(new BoardSquare(E_FILE, 5), BL, PAWN ),
+                    new Tuple<BoardSquare, PieceColor, PieceClass>(new BoardSquare(H_FILE, 6), BL, PAWN ),
                 };
 
                 // Very similar to NewGame, but we could create many more positions to verify
@@ -737,7 +737,7 @@ namespace AllPawnsMustDieUnitTests
                 testBoard.NewPosition("r5Q1/p2nk3/b3q2p/2P1p3/Pb6/R1N5/2Q2PPP/1q1R2K1 w - - 0 24");
 
                 Trace.WriteLine("Verifying contents of test ChessBoard...");
-                foreach (Tuple<CB.BoardSquare, PieceColor, PieceClass> tuple in positionalBoardData)
+                foreach (Tuple<BoardSquare, PieceColor, PieceClass> tuple in positionalBoardData)
                 {
                     VerifyChessBoardPieces(testBoard, tuple.Item1, tuple.Item2, tuple.Item3);
                 }
@@ -790,8 +790,8 @@ namespace AllPawnsMustDieUnitTests
 
                 // Basic opening pawn move "e2e4"
                 Trace.WriteLine("Applying a basic pawn move...e2e4");
-                ChessBoard.MoveInformation moveInfo = new CB.MoveInformation(
-                    new ChessBoard.BoardSquare(E_FILE, 2), new ChessBoard.BoardSquare(E_FILE, 4), false, testBoard.CurrentFEN);
+                MoveInformation moveInfo = new MoveInformation(
+                    new BoardSquare(E_FILE, 2), new BoardSquare(E_FILE, 4), false, testBoard.CurrentFEN);
                 testBoard.MovePiece(ref moveInfo);
 
                 Trace.WriteLine("Verify pawn is found at new location...");
@@ -843,8 +843,8 @@ namespace AllPawnsMustDieUnitTests
 
                 // Castle White Kingside
                 Trace.WriteLine("Castle White Kingside - e1g1");
-                ChessBoard.MoveInformation moveInfo = new CB.MoveInformation(
-                    new ChessBoard.BoardSquare(E_FILE, 1), new ChessBoard.BoardSquare(G_FILE, 1), false, testBoard.CurrentFEN);
+                MoveInformation moveInfo = new MoveInformation(
+                    new BoardSquare(E_FILE, 1), new BoardSquare(G_FILE, 1), false, testBoard.CurrentFEN);
                 testBoard.MovePiece(ref moveInfo);
 
                 // Verify the rook moved as well
@@ -906,8 +906,8 @@ namespace AllPawnsMustDieUnitTests
                 testBoard.NewPosition("r2k2r1/p2n1P2/b3q2p/2p1p3/Pb1P4/R1N5/1pQ2PPP/3R2K1 w - - 0 22");
 
                 // setup the promotion move f7g8n
-                ChessBoard.MoveInformation moveInfo = new CB.MoveInformation(
-                    new ChessBoard.BoardSquare(F_FILE, 7), new ChessBoard.BoardSquare(G_FILE, 8), false, testBoard.CurrentFEN);
+                MoveInformation moveInfo = new MoveInformation(
+                    new BoardSquare(F_FILE, 7), new BoardSquare(G_FILE, 8), false, testBoard.CurrentFEN);
                 testBoard.PromotePiece(F_FILE, 7, G_FILE, 8, PieceClass.Knight, ref moveInfo);
                 testBoard.MovePiece(ref moveInfo);
 
@@ -957,8 +957,8 @@ namespace AllPawnsMustDieUnitTests
                 testBoard.NewPosition("r4rk1/4bpp1/pqbppnPp/1p6/4P3/P1N1B3/1PPNB1PP/R3QRK1 b - - 0 17");
 
                 // Black queen takes white bishop
-                ChessBoard.MoveInformation moveInfo = new CB.MoveInformation(
-                    new ChessBoard.BoardSquare(B_FILE, 6), new ChessBoard.BoardSquare(E_FILE, 3), false, testBoard.CurrentFEN);
+                MoveInformation moveInfo = new MoveInformation(
+                    new BoardSquare(B_FILE, 6), new BoardSquare(E_FILE, 3), false, testBoard.CurrentFEN);
                 testBoard.MovePiece(ref moveInfo);
 
                 // Verify Properties
